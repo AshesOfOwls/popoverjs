@@ -2,9 +2,10 @@
   "name": "popoverjs",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/popoverjs.js",
   "scripts": {
     "build": "webpack",
+    "build:watch": "webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

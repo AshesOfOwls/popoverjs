@@ -1,4 +1,14 @@
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else if(typeof exports === 'object')
+		exports["popoverjs"] = factory();
+	else
+		root["popoverjs"] = factory();
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -69,61 +79,72 @@
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__main_scss__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__main_scss__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__helpers__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__main_scss__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__main_scss__);
+
+
 
 
 const defaults = {};
 
-let render = null;
+class Popover {
+  constructor() {
+    this.render = this.render.bind(this);
+    this.onDocumentClick = this.onDocumentClick.bind(this);
 
-const getTriggerElement = () => (
-  document.getElementsByClassName('trigger')[0]
-);
-
-const getPopoverElement = () => (
-  document.getElementsByClassName('popoverjs')[0]
-);
-
-const destroyRenderListeners = () => {
-  const target = getTriggerElement();
-  target.removeEventListener('click', render);
-};
-
-const listenForRender = () => {
-  const target = getTriggerElement();
-
-  target.addEventListener('click', render);
-};
-
-const togglePopoverVisiblity = (isVisible = false) => {
-  const popover = getPopoverElement();
-
-  if (isVisible) {
-    return popover.classList.add('is-visible');
+    this.initialize();
   }
 
-  return popover.classList.remove('is-visible');
-};
+  initialize() {
+    this.setUpGlobals();
+    this.listenForRender();
+  }
 
-const showPopover = () => {
-  togglePopoverVisiblity(true);
-};
+  setUpGlobals() {
+    this.isVisible = false;
+    this.triggerElement = document.getElementsByClassName('trigger')[0];
+    this.popoverElement = document.getElementsByClassName('popoverjs')[0];
+  }
 
-const destroy = () => {
-  destroyRenderListeners();
-};
+  listenForRender() {
+    __WEBPACK_IMPORTED_MODULE_0__helpers__["a" /* default */].oneEvent(this.triggerElement, 'click', this.render);
+  }
 
-const main = () => {
-  listenForRender();
-};
+  destroyListeners() {
+    this.triggerElement.removeEventListener('click', this.render);
+    document.body.removeEventListener('click', this.onDocumentClick);
+  }
 
-render = () => {
-  destroyRenderListeners();
-  showPopover();
-};
+  listenForOutsideClick() {
+    document.body.addEventListener('click', this.onDocumentClick);
+  }
 
-main(defaults);
+  onDocumentClick(e) {
+    if (this.popoverElement.contains(e.target)) { return; }
+
+    this.toggleVisibility(false);
+    this.listenForRender();
+  }
+
+  toggleVisibility(isVisible = false) {
+    this.isVisible = isVisible;
+
+    if (isVisible) {
+      return this.popoverElement.classList.add('is-visible');
+    }
+
+    return this.popoverElement.classList.remove('is-visible');
+  }
+
+  render(e) {
+    e.stopImmediatePropagation();
+    this.toggleVisibility(true);
+    this.listenForOutsideClick();
+  }
+}
+
+const pop = new Popover(defaults);
 
 
 /***/ }),
@@ -166,7 +187,7 @@ exports = module.exports = __webpack_require__(3)(undefined);
 
 
 // module
-exports.push([module.i, ".popoverjs {\n  height: 1px;\n  opacity: 0;\n  pointer-events: all;\n  position: absolute;\n  transition: visibility 0.275s, opacity 0.275s linear;\n  visibility: hidden;\n  width: 1px;\n  z-index: 15; }\n  .popoverjs--container--detached {\n    pointer-events: none;\n    position: absolute;\n    z-index: 999; }\n  .popoverjs.is-visible {\n    opacity: 1;\n    visibility: visible; }\n  .popoverjs.is-transitionable {\n    transition: visibility 0.275s, height 0.2s, width 0.2s, opacity 0.275s; }\n  .popoverjs-content {\n    background: white;\n    border-radius: 3px;\n    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.15);\n    box-sizing: border-box;\n    position: absolute; }\n  .popoverjs.is-overflowable .popoverjs-content {\n    overflow: visible; }\n  .popoverjs .dropdown {\n    border: 0;\n    box-shadow: none; }\n", ""]);
+exports.push([module.i, ".popoverjs {\n  height: 1px;\n  opacity: 0;\n  pointer-events: all;\n  position: absolute;\n  transition: visibility 0.275s, opacity 0.275s linear;\n  visibility: hidden;\n  width: 1px;\n  z-index: 15; }\n  .popoverjs.is-visible {\n    opacity: 1;\n    visibility: visible; }\n  .popoverjs.is-transitionable {\n    transition: visibility 0.275s, height 0.2s, width 0.2s, opacity 0.275s; }\n  .popoverjs-content {\n    background: white;\n    border-radius: 3px;\n    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.15);\n    box-sizing: border-box;\n    position: absolute; }\n", ""]);
 
 // exports
 
@@ -707,5 +728,25 @@ module.exports = function (css) {
 };
 
 
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+const Helpers = {};
+
+Helpers.oneEvent = (target, eventType, callback) => {
+  const wrappedCallback = (eventObject) => {
+    target.removeEventListener(eventType, callback);
+    return callback(eventObject);
+  };
+
+  target.addEventListener(eventType, wrappedCallback);
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Helpers);
+
+
 /***/ })
 /******/ ]);
+});

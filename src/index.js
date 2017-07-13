@@ -1,53 +1,63 @@
+import Helpers from './helpers';
+
 import './main.scss';
 
 const defaults = {};
 
-let render = null;
+class Popover {
+  constructor() {
+    this.render = this.render.bind(this);
+    this.onDocumentClick = this.onDocumentClick.bind(this);
 
-const getTriggerElement = () => (
-  document.getElementsByClassName('trigger')[0]
-);
-
-const getPopoverElement = () => (
-  document.getElementsByClassName('popoverjs')[0]
-);
-
-const destroyRenderListeners = () => {
-  const target = getTriggerElement();
-  target.removeEventListener('click', render);
-};
-
-const listenForRender = () => {
-  const target = getTriggerElement();
-
-  target.addEventListener('click', render);
-};
-
-const togglePopoverVisiblity = (isVisible = false) => {
-  const popover = getPopoverElement();
-
-  if (isVisible) {
-    return popover.classList.add('is-visible');
+    this.initialize();
   }
 
-  return popover.classList.remove('is-visible');
-};
+  initialize() {
+    this.setUpGlobals();
+    this.listenForRender();
+  }
 
-const showPopover = () => {
-  togglePopoverVisiblity(true);
-};
+  setUpGlobals() {
+    this.isVisible = false;
+    this.triggerElement = document.getElementsByClassName('trigger')[0];
+    this.popoverElement = document.getElementsByClassName('popoverjs')[0];
+  }
 
-const destroy = () => {
-  destroyRenderListeners();
-};
+  listenForRender() {
+    Helpers.oneEvent(this.triggerElement, 'click', this.render);
+  }
 
-const main = () => {
-  listenForRender();
-};
+  destroyListeners() {
+    this.triggerElement.removeEventListener('click', this.render);
+    document.body.removeEventListener('click', this.onDocumentClick);
+  }
 
-render = () => {
-  destroyRenderListeners();
-  showPopover();
-};
+  listenForOutsideClick() {
+    document.body.addEventListener('click', this.onDocumentClick);
+  }
 
-main(defaults);
+  onDocumentClick(e) {
+    if (this.popoverElement.contains(e.target)) { return; }
+
+    this.toggleVisibility(false);
+    this.listenForRender();
+  }
+
+  toggleVisibility(isVisible = false) {
+    this.isVisible = isVisible;
+
+    if (isVisible) {
+      return this.popoverElement.classList.add('is-visible');
+    }
+
+    return this.popoverElement.classList.remove('is-visible');
+  }
+
+  render(e) {
+    e.stopImmediatePropagation();
+    this.toggleVisibility(true);
+    this.listenForOutsideClick();
+  }
+}
+
+const pop = new Popover(defaults);
