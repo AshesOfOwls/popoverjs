@@ -1,3 +1,38 @@
-body {
-  background: pink;
+// Configuration
+$arrow_size: 16px;
+$arrow_edge_offset: 17px;
+$popover_shadow_color: rgba(0, 0, 0, 0.15);
+$popover_shadow: 0 0 3px 0 $popover_shadow_color;
+
+// Immutable Variables
+$arrow_middle: $arrow_size / 2;
+$arrow_offset: $arrow_middle + $arrow_edge_offset;
+$content_offset: $arrow_middle + 1;
+
+.popoverjs {
+  height: 1px;
+  opacity: 0;
+  pointer-events: all;
+  position: absolute;
+  transition: visibility 0.275s, opacity 0.275s linear;
+  visibility: hidden;
+  width: 1px;
+  z-index: 15;
+
+  &.is-visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &.is-transitionable {
+    transition: visibility 0.275s, height 0.2s, width 0.2s, opacity 0.275s;
+  }
+
+  &-content {
+    background: white;
+    border-radius: 3px;
+    box-shadow: $popover_shadow;
+    box-sizing: border-box;
+    position: absolute;
+  }
 }

@@ -73,11 +73,57 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__main_scss__);
 
 
-const main = () => {
-  alert('Works');
+const defaults = {};
+
+let render = null;
+
+const getTriggerElement = () => (
+  document.getElementsByClassName('trigger')[0]
+);
+
+const getPopoverElement = () => (
+  document.getElementsByClassName('popoverjs')[0]
+);
+
+const destroyRenderListeners = () => {
+  const target = getTriggerElement();
+  target.removeEventListener('click', render);
 };
 
-main();
+const listenForRender = () => {
+  const target = getTriggerElement();
+
+  target.addEventListener('click', render);
+};
+
+const togglePopoverVisiblity = (isVisible = false) => {
+  const popover = getPopoverElement();
+
+  if (isVisible) {
+    return popover.classList.add('is-visible');
+  }
+
+  return popover.classList.remove('is-visible');
+};
+
+const showPopover = () => {
+  togglePopoverVisiblity(true);
+};
+
+const destroy = () => {
+  destroyRenderListeners();
+};
+
+const main = () => {
+  listenForRender();
+};
+
+render = () => {
+  destroyRenderListeners();
+  showPopover();
+};
+
+main(defaults);
 
 
 /***/ }),
@@ -120,7 +166,7 @@ exports = module.exports = __webpack_require__(3)(undefined);
 
 
 // module
-exports.push([module.i, "body {\n  background: pink; }\n", ""]);
+exports.push([module.i, ".popoverjs {\n  height: 1px;\n  opacity: 0;\n  pointer-events: all;\n  position: absolute;\n  transition: visibility 0.275s, opacity 0.275s linear;\n  visibility: hidden;\n  width: 1px;\n  z-index: 15; }\n  .popoverjs--container--detached {\n    pointer-events: none;\n    position: absolute;\n    z-index: 999; }\n  .popoverjs.is-visible {\n    opacity: 1;\n    visibility: visible; }\n  .popoverjs.is-transitionable {\n    transition: visibility 0.275s, height 0.2s, width 0.2s, opacity 0.275s; }\n  .popoverjs-content {\n    background: white;\n    border-radius: 3px;\n    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.15);\n    box-sizing: border-box;\n    position: absolute; }\n  .popoverjs.is-overflowable .popoverjs-content {\n    overflow: visible; }\n  .popoverjs .dropdown {\n    border: 0;\n    box-shadow: none; }\n", ""]);
 
 // exports
 
