@@ -80,16 +80,25 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__helpers__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__main_scss__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__main_scss__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__positioner__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__main_scss__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__main_scss__);
 
 
 
 
-const defaults = {};
+
+const defaults = {
+  constraints: [{
+    popover: 'top left',
+    trigger: 'bottom right',
+  }],
+};
 
 class Popover {
-  constructor() {
+  constructor(options) {
+    this.options = options;
+
     this.render = this.render.bind(this);
     this.onDocumentClick = this.onDocumentClick.bind(this);
 
@@ -141,6 +150,17 @@ class Popover {
     e.stopImmediatePropagation();
     this.toggleVisibility(true);
     this.listenForOutsideClick();
+    this.setUpPositioner();
+  }
+
+  setUpPositioner() {
+    const popoverElement = this.popoverElement;
+    const triggerElement = this.triggerElement;
+
+    this.Positioner = new __WEBPACK_IMPORTED_MODULE_1__positioner__["a" /* default */](Object.assign({}, {
+      popoverElement,
+      triggerElement,
+    }, this.options));
   }
 }
 
@@ -745,6 +765,52 @@ Helpers.oneEvent = (target, eventType, callback) => {
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Helpers);
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+class Positioner {
+  constructor(options) {
+    this.options = options;
+
+    this.initialize();
+  }
+
+  initialize() {
+    this.parseConstraints();
+  }
+
+  parseConstraints() {
+    this.constraint_growths = [];
+
+    this.constraints = this.options.constraints.map((constraint) => {
+      const triggerConstraint = constraint.trigger.split(' ');
+      const popoverConstraint = constraint.popover.split(' ');
+
+      this.constraint_growths.push(constraint.growth);
+
+      return Object.assign({}, {
+        trigger: {
+          primary: triggerConstraint[0],
+          secondary: triggerConstraint[1],
+          string: constraint.trigger,
+        },
+        popover: {
+          primary: popoverConstraint[0],
+          secondary: popoverConstraint[1],
+          string: constraint.popover,
+        },
+      }, constraint, {
+        margin: 0,
+      });
+    });
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Positioner);
 
 
 /***/ })

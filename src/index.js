@@ -1,11 +1,19 @@
 import Helpers from './helpers';
+import Positioner from './positioner';
 
 import './main.scss';
 
-const defaults = {};
+const defaults = {
+  constraints: [{
+    popover: 'top left',
+    trigger: 'bottom right',
+  }],
+};
 
 class Popover {
-  constructor() {
+  constructor(options) {
+    this.options = options;
+
     this.render = this.render.bind(this);
     this.onDocumentClick = this.onDocumentClick.bind(this);
 
@@ -57,6 +65,17 @@ class Popover {
     e.stopImmediatePropagation();
     this.toggleVisibility(true);
     this.listenForOutsideClick();
+    this.setUpPositioner();
+  }
+
+  setUpPositioner() {
+    const popoverElement = this.popoverElement;
+    const triggerElement = this.triggerElement;
+
+    this.Positioner = new Positioner(Object.assign({}, {
+      popoverElement,
+      triggerElement,
+    }, this.options));
   }
 }
 
