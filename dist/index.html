@@ -2,15 +2,35 @@
   <head>
     <title>PopoverJs</title>
   </head>
+  <style>
+    .container {
+      border: 1px solid pink;
+      height: 200px;
+      position: relative;
+      margin: 100px;
+      width: 200px;
+    }
+
+    .content {
+      background: grey;
+      height: 100px;
+      margin: 20px;
+      width: 200px;
+    }
+  </style>
   <body>
     <div class="trigger">
       Click me
     </div>
 
-    <div class="popoverjs">
-      <div class="popoverjs-arrow"></div>
-      <div class="popoverjs-content">
-        This is what a popover looks like.
+    <div class="container">
+      <div class="popoverjs">
+        <div class="popoverjs-arrow"></div>
+        <div class="popoverjs-content">
+          <div class="content">
+            This is what a popover looks like.
+          </div>
+        </div>
       </div>
     </div>
 

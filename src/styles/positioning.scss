@@ -1,0 +1,78 @@
+.popoverjs {
+  // Trigger Positioning
+  &--trigger-primary-bottom {
+    bottom: -1px;
+  }
+  &--trigger-primary-top {
+    top: -1px;
+  }
+  &--trigger-primary-right {
+    right: -1px;
+  }
+  &--trigger-primary-left {
+    left: -1px;
+  }
+
+  &--trigger-secondary-bottom {
+    bottom: 0;
+  }
+  &--trigger-secondary-top {
+    top: 0;
+  }
+  &--trigger-secondary-right {
+    right: 0;
+  }
+  &--trigger-secondary-left {
+    left: 0;
+  }
+
+  &--trigger-primary-top.popoverjs--trigger-secondary-center,
+  &--trigger-primary-bottom.popoverjs--trigger-secondary-center {
+    left: 50%;
+  }
+  &--trigger-primary-left.popoverjs--trigger-secondary-center,
+  &--trigger-primary-right.popoverjs--trigger-secondary-center {
+    top: 50%;
+  }
+
+  // Popover Anchor Positioning
+  &--anchor-primary-bottom > &-content {
+    bottom: $content_offset;
+  }
+  &--anchor-primary-top > &-content {
+    top: $content_offset;
+  }
+  &--anchor-primary-right > &-content {
+    right: $content_offset;
+  }
+  &--anchor-primary-left > &-content {
+    left: $content_offset;
+  }
+
+  &--anchor-secondary-bottom > &-content {
+    margin-top: $arrow_offset;
+    transform: translateY(-100%);
+  }
+  &--anchor-secondary-top > &-content {
+    margin-top: -$arrow_offset;
+    transform: translateY(0%);
+  }
+  &--anchor-secondary-right > &-content {
+    right: -$arrow_offset;
+  }
+  &--anchor-secondary-left > &-content {
+    left: -$arrow_offset;
+  }
+
+  &--anchor-primary-bottom.popoverjs--anchor-secondary-center > &-content,
+  &--anchor-primary-top.popoverjs--anchor-secondary-center > &-content {
+    left: 0;
+    transform: translateX(-50%);
+  }
+
+  &--anchor-primary-left.popoverjs--anchor-secondary-center > &-content,
+  &--anchor-primary-right.popoverjs--anchor-secondary-center > &-content {
+    top: 0;
+    transform: translateY(-50%);
+  }
+}

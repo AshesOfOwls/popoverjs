@@ -81,8 +81,8 @@ return /******/ (function(modules) { // webpackBootstrap
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__helpers__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__positioner__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__main_scss__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__main_scss__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__styles_main_scss__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__styles_main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__styles_main_scss__);
 
 
 
@@ -90,8 +90,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 const defaults = {
   constraints: [{
-    popover: 'top left',
-    trigger: 'bottom right',
+    popover: 'top center',
+    trigger: 'bottom center',
   }],
 };
 
@@ -168,51 +168,8 @@ const pop = new Popover(defaults);
 
 
 /***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(2);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(4)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../node_modules/css-loader/index.js!../node_modules/sass-loader/lib/loader.js!./main.scss", function() {
-			var newContent = require("!!../node_modules/css-loader/index.js!../node_modules/sass-loader/lib/loader.js!./main.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(3)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, ".popoverjs {\n  height: 1px;\n  opacity: 0;\n  pointer-events: all;\n  position: absolute;\n  transition: visibility 0.275s, opacity 0.275s linear;\n  visibility: hidden;\n  width: 1px;\n  z-index: 15; }\n  .popoverjs.is-visible {\n    opacity: 1;\n    visibility: visible; }\n  .popoverjs.is-transitionable {\n    transition: visibility 0.275s, height 0.2s, width 0.2s, opacity 0.275s; }\n  .popoverjs-content {\n    background: white;\n    border-radius: 3px;\n    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.15);\n    box-sizing: border-box;\n    position: absolute; }\n", ""]);
-
-// exports
-
-
-/***/ }),
+/* 1 */,
+/* 2 */,
 /* 3 */
 /***/ (function(module, exports) {
 
@@ -781,6 +738,62 @@ class Positioner {
 
   initialize() {
     this.parseConstraints();
+    this.applyDefaultConstraint();
+  }
+
+  applyDefaultConstraint() {
+    const defaultConstraint = this.constraints[0];
+    this.applyConstraint(defaultConstraint);
+  }
+
+  applyConstraint(constraintObject) {
+    this.applyConstraintClasses(constraintObject);
+  }
+
+  applyConstraintClasses(constraintObject) {
+    if (this.activeConstraintIs(constraintObject)) { return; }
+
+    console.log("Constraint will be", constraintObject);
+
+    this.clearActiveConstraint();
+
+    this.activeConstraint = constraintObject;
+    this.activeConstraintString = JSON.stringify(constraintObject);
+
+    this.getActiveConstraintClasses().forEach(this.addPopoverClass.bind(this));
+  }
+
+  addPopoverClass(className) {
+    this.options.popoverElement.classList.add(className);
+  }
+
+  removePopoverClass(className) {
+    this.options.popoverElement.classList.remove(className);
+  }
+
+  activeConstraintIs(constraintObject) {
+    return this.activeConstraintString === JSON.stringify(constraintObject);
+  }
+
+  clearActiveConstraint() {
+    if (!this.activeConstraint) { return; }
+
+    this.getActiveConstraintClasses().forEach(this.removePopoverClass.bind(this));
+
+    this.activeConstraint = null;
+    this.activeConstraintString = null;
+  }
+
+  getActiveConstraintClasses() {
+    const popoverAnchors = this.activeConstraint.popover;
+    const triggerAnchors = this.activeConstraint.trigger;
+
+    return [
+      `popoverjs--anchor-primary-${popoverAnchors.primary}`,
+      `popoverjs--anchor-secondary-${popoverAnchors.secondary}`,
+      `popoverjs--trigger-primary-${triggerAnchors.primary}`,
+      `popoverjs--trigger-secondary-${triggerAnchors.secondary}`,
+    ];
   }
 
   parseConstraints() {
@@ -792,7 +805,9 @@ class Positioner {
 
       this.constraint_growths.push(constraint.growth);
 
-      return Object.assign({}, {
+      const obj = Object.assign({}, constraint, {
+        margin: 0,
+      }, {
         trigger: {
           primary: triggerConstraint[0],
           secondary: triggerConstraint[1],
@@ -803,14 +818,59 @@ class Positioner {
           secondary: popoverConstraint[1],
           string: constraint.popover,
         },
-      }, constraint, {
-        margin: 0,
       });
+
+      return obj;
     });
   }
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (Positioner);
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(9);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(4)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./main.scss", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./main.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "/**\n  * Local Variables\n  *\n  * $arrow_hypotenuse_to_side_ratio:\n  * The $arrow_hypotenuse_to_side_ratio is important and should not be changed.\n  * In order to get an arrow, we are currently hacking it to be a square rotated\n  * at a 45 degree angle, and cut off via parent container overflow. Because we\n  * can only control the height/width of a box, setting the size of the arrow\n  * becomes difficult when it is rotated (Because the diagnol hypotenuse within\n  * a box is longer than its sides). To fix this, we can instead take the size\n  * which would be the hypotenuse and convert that to be the correct side\n  * length for the box. Since we are dealing with equal length sides, the .707\n  * will be consistent enough for that conversion.\n  */\n.popoverjs-arrow {\n  overflow: hidden;\n  position: absolute;\n  z-index: 5; }\n  .popoverjs-arrow:after {\n    content: \"\";\n    position: absolute;\n    width: 11.312px;\n    height: 11.312px;\n    background: white;\n    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.15);\n    transform: translateX(-50%) translateY(-50%) rotate(45deg);\n    top: 50%;\n    left: 50%; }\n\n.popoverjs--anchor-primary-bottom > .popoverjs-arrow,\n.popoverjs--anchor-primary-top > .popoverjs-arrow {\n  left: -8px;\n  height: 8px;\n  width: 16px; }\n\n.popoverjs--anchor-primary-bottom > .popoverjs-arrow {\n  top: -8px; }\n  .popoverjs--anchor-primary-bottom > .popoverjs-arrow:after {\n    margin-top: -4px; }\n\n.popoverjs--anchor-primary-top > .popoverjs-arrow {\n  bottom: -8px; }\n  .popoverjs--anchor-primary-top > .popoverjs-arrow:after {\n    margin-top: 4px; }\n\n.popoverjs--anchor-primary-left > .popoverjs-arrow,\n.popoverjs--anchor-primary-right > .popoverjs-arrow {\n  bottom: -8px;\n  height: 16px;\n  width: 8px; }\n\n.popoverjs--anchor-primary-right > .popoverjs-arrow {\n  left: -8px; }\n  .popoverjs--anchor-primary-right > .popoverjs-arrow:after {\n    margin-left: -4px; }\n\n.popoverjs--anchor-primary-left > .popoverjs-arrow {\n  right: -8px; }\n  .popoverjs--anchor-primary-left > .popoverjs-arrow:after {\n    margin-left: 4px; }\n\n.popoverjs--trigger-primary-bottom {\n  bottom: -1px; }\n\n.popoverjs--trigger-primary-top {\n  top: -1px; }\n\n.popoverjs--trigger-primary-right {\n  right: -1px; }\n\n.popoverjs--trigger-primary-left {\n  left: -1px; }\n\n.popoverjs--trigger-secondary-bottom {\n  bottom: 0; }\n\n.popoverjs--trigger-secondary-top {\n  top: 0; }\n\n.popoverjs--trigger-secondary-right {\n  right: 0; }\n\n.popoverjs--trigger-secondary-left {\n  left: 0; }\n\n.popoverjs--trigger-primary-top.popoverjs--trigger-secondary-center, .popoverjs--trigger-primary-bottom.popoverjs--trigger-secondary-center {\n  left: 50%; }\n\n.popoverjs--trigger-primary-left.popoverjs--trigger-secondary-center, .popoverjs--trigger-primary-right.popoverjs--trigger-secondary-center {\n  top: 50%; }\n\n.popoverjs--anchor-primary-bottom > .popoverjs-content {\n  bottom: 9px; }\n\n.popoverjs--anchor-primary-top > .popoverjs-content {\n  top: 9px; }\n\n.popoverjs--anchor-primary-right > .popoverjs-content {\n  right: 9px; }\n\n.popoverjs--anchor-primary-left > .popoverjs-content {\n  left: 9px; }\n\n.popoverjs--anchor-secondary-bottom > .popoverjs-content {\n  margin-top: 25px;\n  transform: translateY(-100%); }\n\n.popoverjs--anchor-secondary-top > .popoverjs-content {\n  margin-top: -25px;\n  transform: translateY(0%); }\n\n.popoverjs--anchor-secondary-right > .popoverjs-content {\n  right: -25px; }\n\n.popoverjs--anchor-secondary-left > .popoverjs-content {\n  left: -25px; }\n\n.popoverjs--anchor-primary-bottom.popoverjs--anchor-secondary-center > .popoverjs-content,\n.popoverjs--anchor-primary-top.popoverjs--anchor-secondary-center > .popoverjs-content {\n  left: 0;\n  transform: translateX(-50%); }\n\n.popoverjs--anchor-primary-left.popoverjs--anchor-secondary-center > .popoverjs-content,\n.popoverjs--anchor-primary-right.popoverjs--anchor-secondary-center > .popoverjs-content {\n  top: 0;\n  transform: translateY(-50%); }\n\n.popoverjs {\n  height: 1px;\n  opacity: 0;\n  pointer-events: all;\n  position: absolute;\n  transition: visibility 0.275s, opacity 0.275s linear;\n  visibility: hidden;\n  width: 1px;\n  z-index: 15; }\n  .popoverjs.is-visible {\n    opacity: 1;\n    visibility: visible; }\n  .popoverjs.is-transitionable {\n    transition: visibility 0.275s, height 0.2s, width 0.2s, opacity 0.275s; }\n  .popoverjs-content {\n    background: white;\n    border-radius: 3px;\n    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.15);\n    box-sizing: border-box;\n    position: absolute; }\n", ""]);
+
+// exports
 
 
 /***/ })

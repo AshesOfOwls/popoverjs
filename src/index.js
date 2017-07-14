@@ -1,12 +1,12 @@
 import Helpers from './helpers';
 import Positioner from './positioner';
 
-import './main.scss';
+import './styles/main.scss';
 
 const defaults = {
   constraints: [{
-    popover: 'top left',
-    trigger: 'bottom right',
+    popover: 'top center',
+    trigger: 'bottom center',
   }],
 };
 

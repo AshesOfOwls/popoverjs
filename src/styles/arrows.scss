@@ -1,0 +1,87 @@
+/**
+  * Local Variables
+  *
+  * $arrow_hypotenuse_to_side_ratio:
+  * The $arrow_hypotenuse_to_side_ratio is important and should not be changed.
+  * In order to get an arrow, we are currently hacking it to be a square rotated
+  * at a 45 degree angle, and cut off via parent container overflow. Because we
+  * can only control the height/width of a box, setting the size of the arrow
+  * becomes difficult when it is rotated (Because the diagnol hypotenuse within
+  * a box is longer than its sides). To fix this, we can instead take the size
+  * which would be the hypotenuse and convert that to be the correct side
+  * length for the box. Since we are dealing with equal length sides, the .707
+  * will be consistent enough for that conversion.
+  */
+
+// Immutable Variables
+$arrow_hypotenuse_to_side_ratio: .707;
+$arrow_side: $arrow_size * $arrow_hypotenuse_to_side_ratio;
+$arrow_middle: $arrow_size / 2;
+$arrow_offset: $arrow_middle + $arrow_edge_offset;
+$content_offset: $arrow_middle + 1;
+
+.popoverjs {
+  &-arrow {
+    overflow: hidden;
+    position: absolute;
+    z-index: 5;
+
+    &:after {
+      content: "";
+      position: absolute;
+      width: $arrow_side;
+      height: $arrow_side;
+      background: $bg_color;
+      box-shadow: $popover_shadow;
+      transform: translateX(-50%) translateY(-50%) rotate(45deg);
+      top: 50%;
+      left: 50%;
+    }
+  }
+
+  &--anchor-primary-bottom > &-arrow,
+  &--anchor-primary-top > &-arrow {
+    left: -$arrow_size / 2;
+    height: $arrow_middle;
+    width: $arrow_size;
+  }
+
+  &--anchor-primary-bottom > &-arrow {
+    top: -$arrow_middle;
+
+    &:after {
+      margin-top: -$arrow_middle / 2;
+    }
+  }
+
+  &--anchor-primary-top > &-arrow {
+    bottom: -$arrow_middle;
+
+    &:after {
+      margin-top: $arrow_middle / 2;
+    }
+  }
+
+  &--anchor-primary-left > &-arrow,
+  &--anchor-primary-right > &-arrow {
+    bottom: -$arrow_middle;
+    height: $arrow_size;
+    width: $arrow_middle;
+  }
+
+  &--anchor-primary-right > &-arrow {
+    left: -$arrow_size / 2;
+
+    &:after {
+      margin-left: -$arrow_middle / 2;
+    }
+  }
+
+  &--anchor-primary-left > &-arrow {
+    right: -$arrow_size / 2;
+
+    &:after {
+      margin-left: $arrow_middle / 2;
+    }
+  }
+}
