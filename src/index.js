@@ -9,6 +9,9 @@ const defaults = {
     popover: 'top center',
     trigger: 'bottom center',
   }, {
+    popover: 'left center',
+    trigger: 'right center',
+  }, {
     popover: 'bottom center',
     trigger: 'top center',
   }],
@@ -85,4 +88,4 @@ class Popover {
   }
 }
 
-const pop = new Popover(defaults);
+new Popover(defaults);

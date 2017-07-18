@@ -18,6 +18,8 @@ class Positioner {
     this.popoverContent = this.getPopoverContentElement();
     this.popoverArrow = this.getPopoverArrowElement();
     this.constraintParent = this.getConstraintParent();
+
+    this.setArrowSize();
   }
 
   getPopoverArrowElement() {
@@ -110,7 +112,6 @@ class Positioner {
   }
 
   refreshElementOrigins() {
-    this.origins.popoverArrow = this.getElementOrigin(this.popoverArrow);
     this.origins.popover = this.getElementOrigin(this.popoverContent);
     this.origins.trigger = this.getElementOrigin(this.triggerElement);
   }
@@ -137,8 +138,9 @@ class Positioner {
     if (!constraint) { return false; }
 
     let isOutsideConstraint = this.isConstrainedBySide(constraint.trigger.primary);
+
     if (!isOutsideConstraint) {
-      isOutsideConstraint = this.isConstrainedBySide(constraint, 'secondary');
+      isOutsideConstraint = this.isConstrainedBySide(constraint.trigger.primary);
     }
 
     return !isOutsideConstraint;
@@ -146,21 +148,23 @@ class Positioner {
 
   isConstrainedBySide(side) {
     const originCoordinate = this.origins.trigger[side];
-    const popoverDimensions = this.getPopoverSizeFromSide(side);
+    const popoverSize = this.getPopoverSizeFromSide(side);
 
     if (side === 'left' || side === 'top') {
-      return originCoordinate - popoverDimensions < this.origins.parent[side];
+      return originCoordinate - popoverSize < this.origins.parent[side];
     }
 
-    return originCoordinate + popoverDimensions > this.origins.parent[side];
+    return originCoordinate + popoverSize > this.origins.parent[side];
   }
 
   getPopoverSizeFromSide(side) {
+    const size = this.arrowSize;
+
     if (side === 'top' || side === 'bottom') {
-      return this.origins.popover.height + this.origins.popoverArrow.height;
+      return this.origins.popover.height + size;
     }
 
-    return this.origins.popover.width  + this.origins.popoverArrow.width;
+    return this.origins.popover.width + size;
   }
 
   applyDefaultConstraint() {
@@ -214,6 +218,13 @@ class Positioner {
       `popoverjs--trigger-primary-${triggerAnchors.primary}`,
       `popoverjs--trigger-secondary-${triggerAnchors.secondary}`,
     ];
+  }
+
+  setArrowSize() {
+    this.addPopoverClass('popoverjs--anchor-primary-top');
+    this.arrowSize = this.popoverArrow.clientHeight;
+    console.log("UH", this.arrowSize);
+    this.removePopoverClass('popoverjs--anchor-primary-top');
   }
 
   parseConstraints() {
