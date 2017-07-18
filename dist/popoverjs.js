@@ -89,9 +89,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 const defaults = {
+  constraintParent: 'body',
   constraints: [{
     popover: 'top center',
     trigger: 'bottom center',
+  }, {
+    popover: 'bottom center',
+    trigger: 'top center',
   }],
 };
 
@@ -161,6 +165,8 @@ class Popover {
       popoverElement,
       triggerElement,
     }, this.options));
+
+    this.Positioner.enable();
   }
 }
 
@@ -732,13 +738,166 @@ Helpers.oneEvent = (target, eventType, callback) => {
 class Positioner {
   constructor(options) {
     this.options = options;
+    this.origins = {};
 
     this.initialize();
   }
 
   initialize() {
+    this.setUpElements();
     this.parseConstraints();
     this.applyDefaultConstraint();
+  }
+
+  setUpElements() {
+    this.popoverElement = this.options.popoverElement;
+    this.triggerElement = this.options.triggerElement;
+    this.popoverContent = this.getPopoverContentElement();
+    this.popoverArrow = this.getPopoverArrowElement();
+    this.constraintParent = this.getConstraintParent();
+  }
+
+  getPopoverArrowElement() {
+    return this.popoverElement.querySelector('.popoverjs-arrow');
+  }
+
+  getPopoverContentElement() {
+    return this.popoverElement.querySelector('.popoverjs-content');
+  }
+
+  getConstraintParent() {
+    const constrainedBy = this.options.constrainedBy;
+
+    if (!constrainedBy) {
+      return window;
+    }
+
+    return constrainedBy;
+  }
+
+  enable() {
+    this.listenForResize();
+    this.position();
+  }
+
+  listenForResize() {
+    window.addEventListener('resize', this.onResize.bind(this));
+  }
+
+  destroyListeners() {
+    window.removeEventListener('resize', this.onResize.bind(this));
+  }
+
+  destroy() {
+    this.destroyListeners();
+  }
+
+  onResize() {
+    this.position();
+  }
+
+  disable() {
+    this.destroyListeners();
+  }
+
+  position() {
+    this.checkConstraints();
+  }
+
+  checkConstraints() {
+    this.refreshAllElementData();
+
+    this.constraints.every((constraint = {}) => {
+      if (this.canFitInto(constraint)) {
+        this.applyConstraint(constraint);
+        return false;
+      }
+      return true;
+    });
+  }
+
+  refreshAllElementData() {
+    this.refreshParentOrigin();
+    this.refreshElementOrigins();
+  }
+
+  refreshParentOrigin() {
+    if (this.constraintParent === window) {
+      this.origins.parent = this.getWindowOrigin();
+      return;
+    }
+
+    this.origins.parent = this.getElementOrigin(this.constraintParent);
+  }
+
+  getWindowOrigin() {
+    const height = window.innerHeight;
+    const width = window.innerWidth;
+
+    const origin = {
+      bottom: height,
+      height,
+      left: 0,
+      right: width,
+      top: 0,
+      width,
+    };
+
+    return this.setHalfPointsOnOrigin(origin);
+  }
+
+  refreshElementOrigins() {
+    this.origins.popoverArrow = this.getElementOrigin(this.popoverArrow);
+    this.origins.popover = this.getElementOrigin(this.popoverContent);
+    this.origins.trigger = this.getElementOrigin(this.triggerElement);
+  }
+
+  getElementOrigin(element) {
+    const origin = element.getBoundingClientRect();
+
+    return this.setHalfPointsOnOrigin(origin);
+  }
+
+  setHalfPointsOnOrigin(origin) {
+    const halfHeight = origin.height / 2;
+    const halfWidth = origin.width / 2;
+
+    return Object.assign(origin, {
+      halfHeight,
+      halfWidth,
+      vertical_center: origin.top + halfHeight,
+      horizontal_center: origin.left + halfWidth,
+    });
+  }
+
+  canFitInto(constraint) {
+    if (!constraint) { return false; }
+
+    let isOutsideConstraint = this.isConstrainedBySide(constraint.trigger.primary);
+    if (!isOutsideConstraint) {
+      isOutsideConstraint = this.isConstrainedBySide(constraint, 'secondary');
+    }
+
+    return !isOutsideConstraint;
+  }
+
+  isConstrainedBySide(side) {
+    const originCoordinate = this.origins.trigger[side];
+    const popoverDimensions = this.getPopoverSizeFromSide(side);
+
+    if (side === 'left' || side === 'top') {
+      return originCoordinate - popoverDimensions < this.origins.parent[side];
+    }
+
+    return originCoordinate + popoverDimensions > this.origins.parent[side];
+  }
+
+  getPopoverSizeFromSide(side) {
+    if (side === 'top' || side === 'bottom') {
+      return this.origins.popover.height + this.origins.popoverArrow.height;
+    }
+
+    return this.origins.popover.width  + this.origins.popoverArrow.width;
   }
 
   applyDefaultConstraint() {
@@ -752,8 +911,6 @@ class Positioner {
 
   applyConstraintClasses(constraintObject) {
     if (this.activeConstraintIs(constraintObject)) { return; }
-
-    console.log("Constraint will be", constraintObject);
 
     this.clearActiveConstraint();
 

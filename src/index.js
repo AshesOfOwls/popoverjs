@@ -4,9 +4,13 @@ import Positioner from './positioner';
 import './styles/main.scss';
 
 const defaults = {
+  constraintParent: 'body',
   constraints: [{
     popover: 'top center',
     trigger: 'bottom center',
+  }, {
+    popover: 'bottom center',
+    trigger: 'top center',
   }],
 };
 
@@ -76,6 +80,8 @@ class Popover {
       popoverElement,
       triggerElement,
     }, this.options));
+
+    this.Positioner.enable();
   }
 }
 
