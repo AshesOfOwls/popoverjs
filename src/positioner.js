@@ -223,7 +223,6 @@ class Positioner {
   setArrowSize() {
     this.addPopoverClass('popoverjs--anchor-primary-top');
     this.arrowSize = this.popoverArrow.clientHeight;
-    console.log("UH", this.arrowSize);
     this.removePopoverClass('popoverjs--anchor-primary-top');
   }
 

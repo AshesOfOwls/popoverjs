@@ -88,4 +88,4 @@ class Popover {
   }
 }
 
-new Popover(defaults);
+export default Popover;
