@@ -869,8 +869,8 @@ class Positioner {
     return Object.assign(origin, {
       halfHeight,
       halfWidth,
-      vertical_center: origin.top + halfHeight,
-      horizontal_center: origin.left + halfWidth,
+      verticalCenter: origin.top + halfHeight,
+      horizontalCenter: origin.left + halfWidth,
     });
   }
 
