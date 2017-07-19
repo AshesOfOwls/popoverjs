@@ -1,4 +1,4 @@
-import Positioner from '../src/positioner/';
+import Positioner from '../src/positioner';
 
 let positionerInstance = null;
 let popoverElement = null;
