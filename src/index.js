@@ -1,25 +1,13 @@
 import Helpers from './helpers';
-import Positioner from './positioner';
+import Positioner from './positioner/';
 
 import './styles/main.scss';
 
-const defaults = {
-  constraintParent: 'body',
-  constraints: [{
-    popover: 'top center',
-    trigger: 'bottom center',
-  }, {
-    popover: 'left center',
-    trigger: 'right center',
-  }, {
-    popover: 'bottom center',
-    trigger: 'top center',
-  }],
-};
+const defaults = {};
 
-class Popover {
+class Popoverjs {
   constructor(options) {
-    this.options = options;
+    this.options = Object.assign(defaults, options);
 
     this.render = this.render.bind(this);
     this.onDocumentClick = this.onDocumentClick.bind(this);
@@ -40,6 +28,13 @@ class Popover {
 
   listenForRender() {
     Helpers.oneEvent(this.triggerElement, 'click', this.render);
+  }
+
+  render(e) {
+    e.stopImmediatePropagation();
+    this.toggleVisibility(true);
+    this.listenForOutsideClick();
+    this.setUpPositioner();
   }
 
   destroyListeners() {
@@ -68,13 +63,6 @@ class Popover {
     return this.popoverElement.classList.remove('is-visible');
   }
 
-  render(e) {
-    e.stopImmediatePropagation();
-    this.toggleVisibility(true);
-    this.listenForOutsideClick();
-    this.setUpPositioner();
-  }
-
   setUpPositioner() {
     const popoverElement = this.popoverElement;
     const triggerElement = this.triggerElement;
@@ -88,4 +76,6 @@ class Popover {
   }
 }
 
-export default Popover;
+window.Popoverjs = Popoverjs;
+
+export default Popoverjs;

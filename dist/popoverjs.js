@@ -79,32 +79,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__helpers__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__positioner__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__styles_main_scss__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__helpers__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__positioner___ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__styles_main_scss__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__styles_main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__styles_main_scss__);
 
 
 
 
 
-const defaults = {
-  constraintParent: 'body',
-  constraints: [{
-    popover: 'top center',
-    trigger: 'bottom center',
-  }, {
-    popover: 'left center',
-    trigger: 'right center',
-  }, {
-    popover: 'bottom center',
-    trigger: 'top center',
-  }],
-};
+const defaults = {};
 
-class Popover {
+class Popoverjs {
   constructor(options) {
-    this.options = options;
+    this.options = Object.assign(defaults, options);
 
     this.render = this.render.bind(this);
     this.onDocumentClick = this.onDocumentClick.bind(this);
@@ -125,6 +113,13 @@ class Popover {
 
   listenForRender() {
     __WEBPACK_IMPORTED_MODULE_0__helpers__["a" /* default */].oneEvent(this.triggerElement, 'click', this.render);
+  }
+
+  render(e) {
+    e.stopImmediatePropagation();
+    this.toggleVisibility(true);
+    this.listenForOutsideClick();
+    this.setUpPositioner();
   }
 
   destroyListeners() {
@@ -153,18 +148,11 @@ class Popover {
     return this.popoverElement.classList.remove('is-visible');
   }
 
-  render(e) {
-    e.stopImmediatePropagation();
-    this.toggleVisibility(true);
-    this.listenForOutsideClick();
-    this.setUpPositioner();
-  }
-
   setUpPositioner() {
     const popoverElement = this.popoverElement;
     const triggerElement = this.triggerElement;
 
-    this.Positioner = new __WEBPACK_IMPORTED_MODULE_1__positioner__["a" /* default */](Object.assign({}, {
+    this.Positioner = new __WEBPACK_IMPORTED_MODULE_1__positioner___["a" /* default */](Object.assign({}, {
       popoverElement,
       triggerElement,
     }, this.options));
@@ -173,13 +161,78 @@ class Popover {
   }
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Popover);
+window.Popoverjs = Popoverjs;
+
+/* harmony default export */ __webpack_exports__["default"] = (Popoverjs);
 
 
 /***/ }),
-/* 1 */,
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+const Helpers = {};
+
+Helpers.oneEvent = (target, eventType, callback) => {
+  const wrappedCallback = (eventObject) => {
+    target.removeEventListener(eventType, callback);
+    return callback(eventObject);
+  };
+
+  target.addEventListener(eventType, wrappedCallback);
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Helpers);
+
+
+/***/ }),
 /* 2 */,
 /* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(4);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(6)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./main.scss", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./main.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(5)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "/**\n  * Local Variables\n  *\n  * $arrow_hypotenuse_to_side_ratio:\n  * The $arrow_hypotenuse_to_side_ratio is important and should not be changed.\n  * In order to get an arrow, we are currently hacking it to be a square rotated\n  * at a 45 degree angle, and cut off via parent container overflow. Because we\n  * can only control the height/width of a box, setting the size of the arrow\n  * becomes difficult when it is rotated (Because the diagnol hypotenuse within\n  * a box is longer than its sides). To fix this, we can instead take the size\n  * which would be the hypotenuse and convert that to be the correct side\n  * length for the box. Since we are dealing with equal length sides, the .707\n  * will be consistent enough for that conversion.\n  */\n.popoverjs-arrow {\n  overflow: hidden;\n  position: absolute;\n  z-index: 5; }\n  .popoverjs-arrow:after {\n    content: \"\";\n    position: absolute;\n    width: 11.312px;\n    height: 11.312px;\n    background: white;\n    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.15);\n    transform: translateX(-50%) translateY(-50%) rotate(45deg);\n    top: 50%;\n    left: 50%; }\n\n.popoverjs--anchor-primary-bottom > .popoverjs-arrow,\n.popoverjs--anchor-primary-top > .popoverjs-arrow {\n  left: -8px;\n  height: 8px;\n  width: 16px; }\n\n.popoverjs--anchor-primary-bottom > .popoverjs-arrow {\n  top: -8px; }\n  .popoverjs--anchor-primary-bottom > .popoverjs-arrow:after {\n    margin-top: -4px; }\n\n.popoverjs--anchor-primary-top > .popoverjs-arrow {\n  bottom: -8px; }\n  .popoverjs--anchor-primary-top > .popoverjs-arrow:after {\n    margin-top: 4px; }\n\n.popoverjs--anchor-primary-left > .popoverjs-arrow,\n.popoverjs--anchor-primary-right > .popoverjs-arrow {\n  bottom: -8px;\n  height: 16px;\n  width: 8px; }\n\n.popoverjs--anchor-primary-right > .popoverjs-arrow {\n  left: -8px; }\n  .popoverjs--anchor-primary-right > .popoverjs-arrow:after {\n    margin-left: -4px; }\n\n.popoverjs--anchor-primary-left > .popoverjs-arrow {\n  right: -8px; }\n  .popoverjs--anchor-primary-left > .popoverjs-arrow:after {\n    margin-left: 4px; }\n\n.popoverjs--trigger-primary-bottom {\n  bottom: -1px; }\n\n.popoverjs--trigger-primary-top {\n  top: -1px; }\n\n.popoverjs--trigger-primary-right {\n  right: -1px; }\n\n.popoverjs--trigger-primary-left {\n  left: -1px; }\n\n.popoverjs--trigger-secondary-bottom {\n  bottom: 0; }\n\n.popoverjs--trigger-secondary-top {\n  top: 0; }\n\n.popoverjs--trigger-secondary-right {\n  right: 0; }\n\n.popoverjs--trigger-secondary-left {\n  left: 0; }\n\n.popoverjs--trigger-primary-top.popoverjs--trigger-secondary-center, .popoverjs--trigger-primary-bottom.popoverjs--trigger-secondary-center {\n  left: 50%; }\n\n.popoverjs--trigger-primary-left.popoverjs--trigger-secondary-center, .popoverjs--trigger-primary-right.popoverjs--trigger-secondary-center {\n  top: 50%; }\n\n.popoverjs--anchor-primary-bottom > .popoverjs-content {\n  bottom: 9px; }\n\n.popoverjs--anchor-primary-top > .popoverjs-content {\n  top: 9px; }\n\n.popoverjs--anchor-primary-right > .popoverjs-content {\n  right: 9px; }\n\n.popoverjs--anchor-primary-left > .popoverjs-content {\n  left: 9px; }\n\n.popoverjs--anchor-secondary-bottom > .popoverjs-content {\n  margin-top: 25px;\n  transform: translateY(-100%); }\n\n.popoverjs--anchor-secondary-top > .popoverjs-content {\n  margin-top: -25px;\n  transform: translateY(0%); }\n\n.popoverjs--anchor-secondary-right > .popoverjs-content {\n  right: -25px; }\n\n.popoverjs--anchor-secondary-left > .popoverjs-content {\n  left: -25px; }\n\n.popoverjs--anchor-primary-bottom.popoverjs--anchor-secondary-center > .popoverjs-content,\n.popoverjs--anchor-primary-top.popoverjs--anchor-secondary-center > .popoverjs-content {\n  left: 0;\n  transform: translateX(-50%); }\n\n.popoverjs--anchor-primary-left.popoverjs--anchor-secondary-center > .popoverjs-content,\n.popoverjs--anchor-primary-right.popoverjs--anchor-secondary-center > .popoverjs-content {\n  top: 0;\n  transform: translateY(-50%); }\n\n.popoverjs {\n  height: 1px;\n  opacity: 0;\n  pointer-events: all;\n  position: absolute;\n  transition: visibility 0.275s, opacity 0.275s linear;\n  visibility: hidden;\n  width: 1px;\n  z-index: 15; }\n  .popoverjs.is-visible {\n    opacity: 1;\n    visibility: visible; }\n  .popoverjs.is-transitionable {\n    transition: visibility 0.275s, height 0.2s, width 0.2s, opacity 0.275s; }\n  .popoverjs-content {\n    background: white;\n    border-radius: 3px;\n    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.15);\n    box-sizing: border-box;\n    position: absolute; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports) {
 
 /*
@@ -261,7 +314,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -307,7 +360,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(5);
+var	fixUrls = __webpack_require__(7);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -620,7 +673,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports) {
 
 
@@ -715,32 +768,24 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-const Helpers = {};
-
-Helpers.oneEvent = (target, eventType, callback) => {
-  const wrappedCallback = (eventObject) => {
-    target.removeEventListener(eventType, callback);
-    return callback(eventObject);
-  };
-
-  target.addEventListener(eventType, wrappedCallback);
+const defaults = {
+  constraintParent: 'body',
+  constraints: [{
+    popover: 'top center',
+    trigger: 'bottom center',
+  }, {
+    popover: 'bottom center',
+    trigger: 'top center',
+  }],
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (Helpers);
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 class Positioner {
   constructor(options) {
-    this.options = options;
+    this.options = Object.assign(defaults, options);
     this.origins = {};
 
     this.initialize();
@@ -760,6 +805,32 @@ class Positioner {
     this.constraintParent = this.getConstraintParent();
 
     this.setArrowSize();
+  }
+
+  parseConstraints() {
+    this.constraint_growths = [];
+
+    this.constraints = this.options.constraints.map((constraint) => {
+      const triggerConstraint = constraint.trigger.split(' ');
+      const popoverConstraint = constraint.popover.split(' ');
+
+      this.constraint_growths.push(constraint.growth);
+
+      const obj = Object.assign({}, constraint, {
+        trigger: {
+          primary: triggerConstraint[0],
+          secondary: triggerConstraint[1],
+          string: constraint.trigger,
+        },
+        popover: {
+          primary: popoverConstraint[0],
+          secondary: popoverConstraint[1],
+          string: constraint.popover,
+        },
+      });
+
+      return obj;
+    });
   }
 
   getPopoverArrowElement() {
@@ -965,82 +1036,9 @@ class Positioner {
     this.arrowSize = this.popoverArrow.clientHeight;
     this.removePopoverClass('popoverjs--anchor-primary-top');
   }
-
-  parseConstraints() {
-    this.constraint_growths = [];
-
-    this.constraints = this.options.constraints.map((constraint) => {
-      const triggerConstraint = constraint.trigger.split(' ');
-      const popoverConstraint = constraint.popover.split(' ');
-
-      this.constraint_growths.push(constraint.growth);
-
-      const obj = Object.assign({}, constraint, {
-        margin: 0,
-      }, {
-        trigger: {
-          primary: triggerConstraint[0],
-          secondary: triggerConstraint[1],
-          string: constraint.trigger,
-        },
-        popover: {
-          primary: popoverConstraint[0],
-          secondary: popoverConstraint[1],
-          string: constraint.popover,
-        },
-      });
-
-      return obj;
-    });
-  }
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (Positioner);
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(9);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(4)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./main.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./main.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(3)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "/**\n  * Local Variables\n  *\n  * $arrow_hypotenuse_to_side_ratio:\n  * The $arrow_hypotenuse_to_side_ratio is important and should not be changed.\n  * In order to get an arrow, we are currently hacking it to be a square rotated\n  * at a 45 degree angle, and cut off via parent container overflow. Because we\n  * can only control the height/width of a box, setting the size of the arrow\n  * becomes difficult when it is rotated (Because the diagnol hypotenuse within\n  * a box is longer than its sides). To fix this, we can instead take the size\n  * which would be the hypotenuse and convert that to be the correct side\n  * length for the box. Since we are dealing with equal length sides, the .707\n  * will be consistent enough for that conversion.\n  */\n.popoverjs-arrow {\n  overflow: hidden;\n  position: absolute;\n  z-index: 5; }\n  .popoverjs-arrow:after {\n    content: \"\";\n    position: absolute;\n    width: 11.312px;\n    height: 11.312px;\n    background: white;\n    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.15);\n    transform: translateX(-50%) translateY(-50%) rotate(45deg);\n    top: 50%;\n    left: 50%; }\n\n.popoverjs--anchor-primary-bottom > .popoverjs-arrow,\n.popoverjs--anchor-primary-top > .popoverjs-arrow {\n  left: -8px;\n  height: 8px;\n  width: 16px; }\n\n.popoverjs--anchor-primary-bottom > .popoverjs-arrow {\n  top: -8px; }\n  .popoverjs--anchor-primary-bottom > .popoverjs-arrow:after {\n    margin-top: -4px; }\n\n.popoverjs--anchor-primary-top > .popoverjs-arrow {\n  bottom: -8px; }\n  .popoverjs--anchor-primary-top > .popoverjs-arrow:after {\n    margin-top: 4px; }\n\n.popoverjs--anchor-primary-left > .popoverjs-arrow,\n.popoverjs--anchor-primary-right > .popoverjs-arrow {\n  bottom: -8px;\n  height: 16px;\n  width: 8px; }\n\n.popoverjs--anchor-primary-right > .popoverjs-arrow {\n  left: -8px; }\n  .popoverjs--anchor-primary-right > .popoverjs-arrow:after {\n    margin-left: -4px; }\n\n.popoverjs--anchor-primary-left > .popoverjs-arrow {\n  right: -8px; }\n  .popoverjs--anchor-primary-left > .popoverjs-arrow:after {\n    margin-left: 4px; }\n\n.popoverjs--trigger-primary-bottom {\n  bottom: -1px; }\n\n.popoverjs--trigger-primary-top {\n  top: -1px; }\n\n.popoverjs--trigger-primary-right {\n  right: -1px; }\n\n.popoverjs--trigger-primary-left {\n  left: -1px; }\n\n.popoverjs--trigger-secondary-bottom {\n  bottom: 0; }\n\n.popoverjs--trigger-secondary-top {\n  top: 0; }\n\n.popoverjs--trigger-secondary-right {\n  right: 0; }\n\n.popoverjs--trigger-secondary-left {\n  left: 0; }\n\n.popoverjs--trigger-primary-top.popoverjs--trigger-secondary-center, .popoverjs--trigger-primary-bottom.popoverjs--trigger-secondary-center {\n  left: 50%; }\n\n.popoverjs--trigger-primary-left.popoverjs--trigger-secondary-center, .popoverjs--trigger-primary-right.popoverjs--trigger-secondary-center {\n  top: 50%; }\n\n.popoverjs--anchor-primary-bottom > .popoverjs-content {\n  bottom: 9px; }\n\n.popoverjs--anchor-primary-top > .popoverjs-content {\n  top: 9px; }\n\n.popoverjs--anchor-primary-right > .popoverjs-content {\n  right: 9px; }\n\n.popoverjs--anchor-primary-left > .popoverjs-content {\n  left: 9px; }\n\n.popoverjs--anchor-secondary-bottom > .popoverjs-content {\n  margin-top: 25px;\n  transform: translateY(-100%); }\n\n.popoverjs--anchor-secondary-top > .popoverjs-content {\n  margin-top: -25px;\n  transform: translateY(0%); }\n\n.popoverjs--anchor-secondary-right > .popoverjs-content {\n  right: -25px; }\n\n.popoverjs--anchor-secondary-left > .popoverjs-content {\n  left: -25px; }\n\n.popoverjs--anchor-primary-bottom.popoverjs--anchor-secondary-center > .popoverjs-content,\n.popoverjs--anchor-primary-top.popoverjs--anchor-secondary-center > .popoverjs-content {\n  left: 0;\n  transform: translateX(-50%); }\n\n.popoverjs--anchor-primary-left.popoverjs--anchor-secondary-center > .popoverjs-content,\n.popoverjs--anchor-primary-right.popoverjs--anchor-secondary-center > .popoverjs-content {\n  top: 0;\n  transform: translateY(-50%); }\n\n.popoverjs {\n  height: 1px;\n  opacity: 0;\n  pointer-events: all;\n  position: absolute;\n  transition: visibility 0.275s, opacity 0.275s linear;\n  visibility: hidden;\n  width: 1px;\n  z-index: 15; }\n  .popoverjs.is-visible {\n    opacity: 1;\n    visibility: visible; }\n  .popoverjs.is-transitionable {\n    transition: visibility 0.275s, height 0.2s, width 0.2s, opacity 0.275s; }\n  .popoverjs-content {\n    background: white;\n    border-radius: 3px;\n    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.15);\n    box-sizing: border-box;\n    position: absolute; }\n", ""]);
-
-// exports
 
 
 /***/ })

@@ -1,6 +1,17 @@
+const defaults = {
+  constraintParent: 'body',
+  constraints: [{
+    popover: 'top center',
+    trigger: 'bottom center',
+  }, {
+    popover: 'bottom center',
+    trigger: 'top center',
+  }],
+};
+
 class Positioner {
   constructor(options) {
-    this.options = options;
+    this.options = Object.assign(defaults, options);
     this.origins = {};
 
     this.initialize();
@@ -20,6 +31,32 @@ class Positioner {
     this.constraintParent = this.getConstraintParent();
 
     this.setArrowSize();
+  }
+
+  parseConstraints() {
+    this.constraint_growths = [];
+
+    this.constraints = this.options.constraints.map((constraint) => {
+      const triggerConstraint = constraint.trigger.split(' ');
+      const popoverConstraint = constraint.popover.split(' ');
+
+      this.constraint_growths.push(constraint.growth);
+
+      const obj = Object.assign({}, constraint, {
+        trigger: {
+          primary: triggerConstraint[0],
+          secondary: triggerConstraint[1],
+          string: constraint.trigger,
+        },
+        popover: {
+          primary: popoverConstraint[0],
+          secondary: popoverConstraint[1],
+          string: constraint.popover,
+        },
+      });
+
+      return obj;
+    });
   }
 
   getPopoverArrowElement() {
@@ -224,34 +261,6 @@ class Positioner {
     this.addPopoverClass('popoverjs--anchor-primary-top');
     this.arrowSize = this.popoverArrow.clientHeight;
     this.removePopoverClass('popoverjs--anchor-primary-top');
-  }
-
-  parseConstraints() {
-    this.constraint_growths = [];
-
-    this.constraints = this.options.constraints.map((constraint) => {
-      const triggerConstraint = constraint.trigger.split(' ');
-      const popoverConstraint = constraint.popover.split(' ');
-
-      this.constraint_growths.push(constraint.growth);
-
-      const obj = Object.assign({}, constraint, {
-        margin: 0,
-      }, {
-        trigger: {
-          primary: triggerConstraint[0],
-          secondary: triggerConstraint[1],
-          string: constraint.trigger,
-        },
-        popover: {
-          primary: popoverConstraint[0],
-          secondary: popoverConstraint[1],
-          string: constraint.popover,
-        },
-      });
-
-      return obj;
-    });
   }
 }
 
