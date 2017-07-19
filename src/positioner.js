@@ -1,5 +1,5 @@
 const defaults = {
-  constraintParent: 'body',
+  constraintParent: null,
   constraints: [{
     popover: 'top center',
     trigger: 'bottom center',
@@ -23,6 +23,7 @@ class Positioner {
     this.applyDefaultConstraint();
   }
 
+  // TESTED
   setUpElements() {
     this.popoverElement = this.options.popoverElement;
     this.triggerElement = this.options.triggerElement;
@@ -33,6 +34,7 @@ class Positioner {
     this.setArrowSize();
   }
 
+  // TESTED
   parseConstraints() {
     this.constraint_growths = [];
 
@@ -59,24 +61,28 @@ class Positioner {
     });
   }
 
+  // TESTED
   getPopoverArrowElement() {
     return this.popoverElement.querySelector('.popoverjs-arrow');
   }
 
+  // TESTED
   getPopoverContentElement() {
     return this.popoverElement.querySelector('.popoverjs-content');
   }
 
+  // TESTED
   getConstraintParent() {
-    const constrainedBy = this.options.constrainedBy;
+    const constraintParent = this.options.constraintParent;
 
-    if (!constrainedBy) {
+    if (!constraintParent) {
       return window;
     }
 
-    return constrainedBy;
+    return constraintParent;
   }
 
+  // TESTED
   enable() {
     this.listenForResize();
     this.position();

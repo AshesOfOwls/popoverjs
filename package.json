@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack",
     "build:watch": "webpack --watch",
-    "test": "./node_modules/karma/bin/karma start"
+    "test": "./node_modules/karma/bin/karma start",
+    "test:watch": "./node_modules/karma/bin/karma start"
   },
   "keywords": [],
   "author": "",

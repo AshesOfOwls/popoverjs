@@ -1,5 +1,5 @@
-import Helpers from './helpers';
-import Positioner from './positioner/';
+import Utils from './utils';
+import Positioner from './positioner';
 
 import './styles/main.scss';
 
@@ -22,16 +22,17 @@ class Popoverjs {
 
   setUpGlobals() {
     this.isVisible = false;
-    this.triggerElement = document.getElementsByClassName('trigger')[0];
-    this.popoverElement = document.getElementsByClassName('popoverjs')[0];
+    this.triggerElement = this.options.triggerElement;
+    this.popoverElement = this.options.popoverElement;
   }
 
   listenForRender() {
-    Helpers.oneEvent(this.triggerElement, 'click', this.render);
+    Utils.oneEvent(this.triggerElement, 'click', this.render);
   }
 
   render(e) {
     e.stopImmediatePropagation();
+
     this.toggleVisibility(true);
     this.listenForOutsideClick();
     this.setUpPositioner();

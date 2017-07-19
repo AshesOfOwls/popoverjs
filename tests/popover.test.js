@@ -3,42 +3,65 @@ import Positioner from '../src/positioner/';
 let positionerInstance = null;
 let popoverElement = null;
 let triggerElement = null;
+let arrowElement = null;
+let contentElement = null;
+let constraintElement = null;
+
+const cleanup = () => {
+  if (positionerInstance) {
+    positionerInstance.destroy();
+    positionerInstance = null;
+  }
+};
 
 describe('Positioner', () => {
   beforeEach(() => {
-    const fixture = `<div class='trigger'></div>
+    cleanup();
+
+    const fixture = `<div class='constraintParent'></div>
+                    <div class='trigger'></div>
                     <div class='popoverjs'>
-                      <div class='popoverjs-arrow'></div>
+                      <div class='popoverjs-arrow' style='height: 8px; width: 20px;'></div>
                       <div class='popoverjs-content'></div>
                     </div>`;
 
     document.body.insertAdjacentHTML('afterbegin', fixture);
 
-    if (positionerInstance) { positionerInstance.destroy(); }
-
-    const popoverElement = document.getElementsByClassName('popoverjs')[0];
-    const triggerElement = document.getElementsByClassName('trigger')[0];
-
-    positionerInstance = new Positioner({
-      popoverElement,
-      triggerElement
-    });
+    popoverElement = document.getElementsByClassName('popoverjs')[0];
+    triggerElement = document.getElementsByClassName('trigger')[0];
   });
 
   describe('when setting up', () => {
     beforeEach(() => {
-      const fixture = `<div class='trigger'></div>
-                      <div class='popoverjs'>
-                        <div class='popoverjs-arrow'></div>
-                        <div class='popoverjs-content'></div>
-                      </div>`;
+      cleanup()
 
-      document.body.insertAdjacentHTML('afterbegin', fixture);
+      arrowElement = document.getElementsByClassName('popoverjs-arrow')[0];
+      contentElement = document.getElementsByClassName('popoverjs-content')[0];
+      constraintElement = document.getElementsByClassName('constraintParent')[0];
+    });
 
-      if (positionerInstance) { positionerInstance.destroy(); }
+    it('should retrieve the correct elements', () => {
+      positionerInstance = new Positioner({
+        popoverElement,
+        triggerElement,
+        constraintParent: constraintElement,
+      });
 
-      popoverElement = document.getElementsByClassName('popoverjs')[0];
-      triggerElement = document.getElementsByClassName('trigger')[0];
+      expect(positionerInstance.triggerElement).toEqual(triggerElement);
+      expect(positionerInstance.popoverElement).toEqual(popoverElement);
+      expect(positionerInstance.popoverContent).toEqual(contentElement);
+      expect(positionerInstance.popoverArrow).toEqual(arrowElement);
+      expect(positionerInstance.constraintParent).toEqual(constraintElement);
+    });
+
+    it('should default to window constraint parent', () => {
+      positionerInstance = new Positioner({
+        popoverElement,
+        triggerElement,
+        constraintParent: null,
+      });
+
+      expect(positionerInstance.constraintParent).toEqual(window);
     });
 
     it('should parse constraints', () => {
@@ -54,7 +77,7 @@ describe('Positioner', () => {
         }, {
           popover: 'bottom center',
           trigger: 'top center',
-        }]
+        }],
       });
 
       expect(positionerInstance.constraints).toEqual([{
@@ -91,6 +114,26 @@ describe('Positioner', () => {
           string: 'top center',
         },
       }]);
+    });
+
+    it('should determine the arrow size correctly', () => {
+      positionerInstance = new Positioner({
+        popoverElement,
+        triggerElement,
+      });
+
+      expect(positionerInstance.arrowSize).toEqual(8);
+    });
+
+    it('should determine the arrow size correctly', () => {
+      positionerInstance = new Positioner({
+        popoverElement,
+        triggerElement,
+      });
+
+      positionerInstance.refreshParentOrigin();
+
+      expect(positionerInstance.arrowSize).toEqual(8);
     });
   });
 });

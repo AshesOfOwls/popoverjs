@@ -1,6 +1,6 @@
-const Helpers = {};
+const Utils = {};
 
-Helpers.oneEvent = (target, eventType, callback) => {
+Utils.oneEvent = (target, eventType, callback) => {
   const wrappedCallback = (eventObject) => {
     target.removeEventListener(eventType, callback);
     return callback(eventObject);
@@ -9,4 +9,4 @@ Helpers.oneEvent = (target, eventType, callback) => {
   target.addEventListener(eventType, wrappedCallback);
 };
 
-export default Helpers;
+export default Utils;
