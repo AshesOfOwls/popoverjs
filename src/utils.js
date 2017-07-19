@@ -1,6 +1,4 @@
-const Utils = {};
-
-Utils.oneEvent = (target, eventType, callback) => {
+const oneEvent = (target, eventType, callback) => {
   const wrappedCallback = (eventObject) => {
     target.removeEventListener(eventType, callback);
     return callback(eventObject);
@@ -9,4 +7,16 @@ Utils.oneEvent = (target, eventType, callback) => {
   target.addEventListener(eventType, wrappedCallback);
 };
 
-export default Utils;
+const addClass = (element, className) => {
+  element.classList.add(className);
+};
+
+const removeClass = (element, className) => {
+  element.classList.remove(className);
+};
+
+export {
+  oneEvent,
+  addClass,
+  removeClass,
+};

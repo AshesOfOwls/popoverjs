@@ -112,7 +112,7 @@ class Popoverjs {
   }
 
   listenForRender() {
-    __WEBPACK_IMPORTED_MODULE_0__utils__["a" /* default */].oneEvent(this.triggerElement, 'click', this.render);
+    Object(__WEBPACK_IMPORTED_MODULE_0__utils__["b" /* oneEvent */])(this.triggerElement, 'click', this.render);
   }
 
   render(e) {
@@ -143,10 +143,10 @@ class Popoverjs {
     this.isVisible = isVisible;
 
     if (isVisible) {
-      return this.popoverElement.classList.add('is-visible');
+      return Object(__WEBPACK_IMPORTED_MODULE_0__utils__["a" /* addClass */])(this.popoverElement, 'is-visible');
     }
 
-    return this.popoverElement.classList.remove('is-visible');
+    return Object(__WEBPACK_IMPORTED_MODULE_0__utils__["c" /* removeClass */])(this.popoverElement, 'is-visible');
   }
 
   setUpPositioner() {
@@ -172,9 +172,10 @@ window.Popoverjs = Popoverjs;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-const Utils = {};
-
-Utils.oneEvent = (target, eventType, callback) => {
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return oneEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return addClass; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return removeClass; });
+const oneEvent = (target, eventType, callback) => {
   const wrappedCallback = (eventObject) => {
     target.removeEventListener(eventType, callback);
     return callback(eventObject);
@@ -183,7 +184,15 @@ Utils.oneEvent = (target, eventType, callback) => {
   target.addEventListener(eventType, wrappedCallback);
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (Utils);
+const addClass = (element, className) => {
+  element.classList.add(className);
+};
+
+const removeClass = (element, className) => {
+  element.classList.remove(className);
+};
+
+
 
 
 /***/ }),
@@ -191,6 +200,9 @@ Utils.oneEvent = (target, eventType, callback) => {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(1);
+
+
 const defaults = {
   constraintParent: null,
   constraints: [{
@@ -220,48 +232,18 @@ class Positioner {
   setUpElements() {
     this.popoverElement = this.options.popoverElement;
     this.triggerElement = this.options.triggerElement;
-    this.popoverContent = this.getPopoverContentElement();
-    this.popoverArrow = this.getPopoverArrowElement();
+    this.popoverContent = this.popoverElement.querySelector('.popoverjs-content');
+    this.popoverArrow = this.popoverElement.querySelector('.popoverjs-arrow');
     this.constraintParent = this.getConstraintParent();
 
     this.setArrowSize();
   }
 
   // TESTED
-  parseConstraints() {
-    this.constraint_growths = [];
-
-    this.constraints = this.options.constraints.map((constraint) => {
-      const triggerConstraint = constraint.trigger.split(' ');
-      const popoverConstraint = constraint.popover.split(' ');
-
-      this.constraint_growths.push(constraint.growth);
-
-      const obj = Object.assign({}, constraint, {
-        trigger: {
-          primary: triggerConstraint[0],
-          secondary: triggerConstraint[1],
-          string: constraint.trigger,
-        },
-        popover: {
-          primary: popoverConstraint[0],
-          secondary: popoverConstraint[1],
-          string: constraint.popover,
-        },
-      });
-
-      return obj;
-    });
-  }
-
-  // TESTED
-  getPopoverArrowElement() {
-    return this.popoverElement.querySelector('.popoverjs-arrow');
-  }
-
-  // TESTED
-  getPopoverContentElement() {
-    return this.popoverElement.querySelector('.popoverjs-content');
+  setArrowSize() {
+    Object(__WEBPACK_IMPORTED_MODULE_0__utils__["a" /* addClass */])(this.popoverElement, 'popoverjs--anchor-primary-top');
+    this.arrowSize = this.popoverArrow.clientHeight;
+    Object(__WEBPACK_IMPORTED_MODULE_0__utils__["c" /* removeClass */])(this.popoverElement, 'popoverjs--anchor-primary-top');
   }
 
   // TESTED
@@ -273,6 +255,27 @@ class Positioner {
     }
 
     return constraintParent;
+  }
+
+  // TESTED
+  parseConstraints() {
+    this.constraints = this.options.constraints.map((constraint) => {
+      const triggerConstraint = constraint.trigger.split(' ');
+      const popoverConstraint = constraint.popover.split(' ');
+
+      return Object.assign({}, constraint, {
+        trigger: {
+          primary: triggerConstraint[0],
+          secondary: triggerConstraint[1],
+          string: constraint.trigger,
+        },
+        popover: {
+          primary: popoverConstraint[0],
+          secondary: popoverConstraint[1],
+          string: constraint.popover,
+        },
+      });
+    });
   }
 
   // TESTED
@@ -302,18 +305,21 @@ class Positioner {
   }
 
   position() {
+    this.refreshAllElementData();
     this.checkConstraints();
   }
 
   checkConstraints() {
-    this.refreshAllElementData();
+    this.applyConstraint(this.getActiveConstraint());
+  }
 
-    this.constraints.every((constraint = {}) => {
+  getActiveConstraint() {
+    return this.constraints.find((constraint) => {
       if (this.canFitInto(constraint)) {
-        this.applyConstraint(constraint);
-        return false;
+        return constraint;
       }
-      return true;
+
+      return false;
     });
   }
 
@@ -409,10 +415,6 @@ class Positioner {
   }
 
   applyConstraint(constraintObject) {
-    this.applyConstraintClasses(constraintObject);
-  }
-
-  applyConstraintClasses(constraintObject) {
     if (this.activeConstraintIs(constraintObject)) { return; }
 
     this.clearActiveConstraint();
@@ -420,15 +422,7 @@ class Positioner {
     this.activeConstraint = constraintObject;
     this.activeConstraintString = JSON.stringify(constraintObject);
 
-    this.getActiveConstraintClasses().forEach(this.addPopoverClass.bind(this));
-  }
-
-  addPopoverClass(className) {
-    this.options.popoverElement.classList.add(className);
-  }
-
-  removePopoverClass(className) {
-    this.options.popoverElement.classList.remove(className);
+    this.toggleActiveConstraintClasses(true);
   }
 
   activeConstraintIs(constraintObject) {
@@ -438,10 +432,19 @@ class Positioner {
   clearActiveConstraint() {
     if (!this.activeConstraint) { return; }
 
-    this.getActiveConstraintClasses().forEach(this.removePopoverClass.bind(this));
+    this.toggleActiveConstraintClasses(false);
 
     this.activeConstraint = null;
     this.activeConstraintString = null;
+  }
+
+  toggleActiveConstraintClasses(isToggled) {
+    const popover = this.popoverElement;
+    const method = isToggled ? __WEBPACK_IMPORTED_MODULE_0__utils__["a" /* addClass */] : __WEBPACK_IMPORTED_MODULE_0__utils__["c" /* removeClass */];
+
+    this.getActiveConstraintClasses().forEach((className) => {
+      method(popover, className);
+    });
   }
 
   getActiveConstraintClasses() {
@@ -454,12 +457,6 @@ class Positioner {
       `popoverjs--trigger-primary-${triggerAnchors.primary}`,
       `popoverjs--trigger-secondary-${triggerAnchors.secondary}`,
     ];
-  }
-
-  setArrowSize() {
-    this.addPopoverClass('popoverjs--anchor-primary-top');
-    this.arrowSize = this.popoverArrow.clientHeight;
-    this.removePopoverClass('popoverjs--anchor-primary-top');
   }
 }
 

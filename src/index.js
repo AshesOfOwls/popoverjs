@@ -1,4 +1,4 @@
-import Utils from './utils';
+import { oneEvent, addClass, removeClass } from './utils';
 import Positioner from './positioner';
 
 import './styles/main.scss';
@@ -27,7 +27,7 @@ class Popoverjs {
   }
 
   listenForRender() {
-    Utils.oneEvent(this.triggerElement, 'click', this.render);
+    oneEvent(this.triggerElement, 'click', this.render);
   }
 
   render(e) {
@@ -58,10 +58,10 @@ class Popoverjs {
     this.isVisible = isVisible;
 
     if (isVisible) {
-      return this.popoverElement.classList.add('is-visible');
+      return addClass(this.popoverElement, 'is-visible');
     }
 
-    return this.popoverElement.classList.remove('is-visible');
+    return removeClass(this.popoverElement, 'is-visible');
   }
 
   setUpPositioner() {
