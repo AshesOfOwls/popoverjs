@@ -6,6 +6,11 @@ let triggerElement = null;
 let arrowElement = null;
 let contentElement = null;
 let constraintElement = null;
+const arrowSize = 8;
+const popoverHeight = 200;
+const popoverWidth = 100;
+const popoverHeightFull = popoverHeight + arrowSize;
+const popoverWidthFull = popoverWidth + arrowSize;
 
 const cleanup = () => {
   if (positionerInstance) {
@@ -21,7 +26,7 @@ describe('Positioner', () => {
     const fixture = `<div class='constraintParent'></div>
                     <div class='trigger'></div>
                     <div class='popoverjs'>
-                      <div class='popoverjs-arrow' style='height: 8px; width: 20px;'></div>
+                      <div class='popoverjs-arrow' style='height: ${arrowSize}px; width: 20px;'></div>
                       <div class='popoverjs-content'></div>
                     </div>`;
 
@@ -33,7 +38,7 @@ describe('Positioner', () => {
 
   describe('when setting up', () => {
     beforeEach(() => {
-      cleanup()
+      cleanup();
 
       arrowElement = document.getElementsByClassName('popoverjs-arrow')[0];
       contentElement = document.getElementsByClassName('popoverjs-content')[0];
@@ -122,18 +127,197 @@ describe('Positioner', () => {
         triggerElement,
       });
 
+      positionerInstance.refreshParentOrigin();
+
       expect(positionerInstance.arrowSize).toEqual(8);
     });
 
-    it('should determine the arrow size correctly', () => {
+    it('should retrieve the correct window origin', () => {
       positionerInstance = new Positioner({
         popoverElement,
         triggerElement,
       });
 
-      positionerInstance.refreshParentOrigin();
+      const height = window.innerHeight;
+      const width = window.innerWidth;
+      const phantomWindowOrigin = {
+        bottom: height,
+        halfHeight: height / 2,
+        halfWidth: width / 2,
+        verticalCenter: height / 2,
+        horizontalCenter: width / 2,
+        height,
+        left: 0,
+        right: width,
+        top: 0,
+        width,
+      };
 
-      expect(positionerInstance.arrowSize).toEqual(8);
+      expect(positionerInstance.getWindowOrigin()).toEqual(phantomWindowOrigin);
+    });
+
+    it('should retrieve the correct element origin', () => {
+      positionerInstance = new Positioner({
+        popoverElement,
+        triggerElement,
+      });
+
+      let origin = triggerElement.getBoundingClientRect();
+      origin = Object.assign(origin, {
+        halfHeight: origin.height / 2,
+        halfWidth: origin.width / 2,
+        horizontalCenter: origin.left + (origin.width / 2),
+        verticalCenter: origin.top + (origin.height / 2),
+      });
+
+      expect(positionerInstance.getElementOrigin(triggerElement)).toEqual(origin);
+    });
+
+    it('should return formatted origins when using setHalfPointsOnOrigin', () => {
+      positionerInstance = new Positioner({
+        popoverElement,
+        triggerElement,
+      });
+
+      const origin = {
+        bottom: 500,
+        left: 0,
+        height: 500,
+        right: 500,
+        top: 0,
+        width: 500,
+      };
+
+      const originModified = Object.assign(origin, {
+        halfHeight: 250,
+        halfWidth: 250,
+        verticalCenter: 250,
+        horizontalCenter: 250,
+      });
+
+      expect(positionerInstance.setHalfPointsOnOrigin(origin)).toEqual(originModified);
+    });
+  });
+
+  describe('when testing constraints', () => {
+    beforeEach(() => {
+      cleanup();
+
+      const fixture = `<div class='constraintParent'></div>
+                      <div class='trigger' style='height: 50px; width: 50px;'></div>
+                      <div class='popoverjs'>
+                        <div class='popoverjs-arrow' style='height: ${arrowSize}px; width: 20px;'></div>
+                        <div class='popoverjs-content'>
+                          <div class='inner-content' style='height: ${popoverHeight}px; width: ${popoverWidth}px;'></div>
+                        </div>
+                      </div>`;
+
+      document.body.insertAdjacentHTML('afterbegin', fixture);
+    });
+
+    it('should receive the correct classes from the active constraint', () => {
+      positionerInstance = new Positioner({
+        popoverElement,
+        triggerElement,
+      });
+
+      positionerInstance.activeConstraint = {
+        popover: { primary: 'top', secondary: 'left' },
+        trigger: { primary: 'right', secondary: 'bottom' },
+      };
+
+      const activeClasses = positionerInstance.getActiveConstraintClasses();
+
+      expect(activeClasses).toEqual([
+        'popoverjs--popover-primary-top',
+        'popoverjs--popover-secondary-left',
+        'popoverjs--trigger-primary-right',
+        'popoverjs--trigger-secondary-bottom',
+      ]);
+    });
+
+    describe('when testing constrainment', () => {
+      beforeEach(() => {
+        cleanup();
+
+        positionerInstance = new Positioner({
+          popoverElement,
+          triggerElement,
+        });
+
+        positionerInstance.arrowSize = arrowSize;
+
+        positionerInstance.origins.parent = {
+          height: 1000,
+          width: 1000,
+          left: 0,
+          right: 1000,
+          top: 0,
+          bottom: 1000,
+        };
+
+        positionerInstance.origins.trigger = {
+          height: 50,
+          width: 50,
+          left: 200,
+          right: 250,
+          top: 200,
+          bottom: 250,
+        };
+
+        positionerInstance.origins.popover = {
+          height: popoverHeight,
+          width: popoverWidth,
+        };
+      });
+
+      it('isConstrainedBySide returns true if outside of each side', () => {
+        const parentOrigin = positionerInstance.origins.parent;
+
+        positionerInstance.origins.trigger.left = popoverWidthFull - 1;
+        expect(positionerInstance.isConstrainedBySide('left')).toBe(true);
+
+        positionerInstance.origins.trigger.top = popoverHeightFull - 1;
+        expect(positionerInstance.isConstrainedBySide('top')).toBe(true);
+
+        positionerInstance.origins.trigger.right = parentOrigin.right - popoverWidthFull + 1;
+        expect(positionerInstance.isConstrainedBySide('right')).toBe(true);
+
+        positionerInstance.origins.trigger.bottom = parentOrigin.bottom - popoverHeightFull + 1;
+        expect(positionerInstance.isConstrainedBySide('bottom')).toBe(true);
+      });
+
+      it('isConstrainedBySide returns false if equal distance to each side', () => {
+        const parentOrigin = positionerInstance.origins.parent;
+
+        positionerInstance.origins.trigger.left = popoverWidthFull;
+        expect(positionerInstance.isConstrainedBySide('left')).toBe(false);
+
+        positionerInstance.origins.trigger.top = popoverHeightFull;
+        expect(positionerInstance.isConstrainedBySide('top')).toBe(false);
+
+        positionerInstance.origins.trigger.right = parentOrigin.right - popoverWidthFull;
+        expect(positionerInstance.isConstrainedBySide('right')).toBe(false);
+
+        positionerInstance.origins.trigger.bottom = parentOrigin.bottom - popoverHeightFull;
+        expect(positionerInstance.isConstrainedBySide('bottom')).toBe(false);
+      });
+
+      it('isConstrainedBySide returns true if inside of each side', () => {
+        const parentOrigin = positionerInstance.origins.parent;
+
+        positionerInstance.origins.trigger.left = popoverWidthFull + 1;
+        expect(positionerInstance.isConstrainedBySide('left')).toBe(false);
+
+        positionerInstance.origins.trigger.top = popoverHeightFull + 1;
+        expect(positionerInstance.isConstrainedBySide('top')).toBe(false);
+
+        positionerInstance.origins.trigger.right = parentOrigin.right - popoverWidthFull - 1;
+        expect(positionerInstance.isConstrainedBySide('right')).toBe(false);
+
+        positionerInstance.origins.trigger.bottom = parentOrigin.bottom - popoverHeightFull - 1;
+        expect(positionerInstance.isConstrainedBySide('bottom')).toBe(false);
+      });
     });
   });
 });

@@ -38,9 +38,9 @@ class Positioner {
 
   // TESTED
   setArrowSize() {
-    addClass(this.popoverElement, 'popoverjs--anchor-primary-top');
+    addClass(this.popoverElement, 'popoverjs--popover-primary-top');
     this.arrowSize = this.popoverArrow.clientHeight;
-    removeClass(this.popoverElement, 'popoverjs--anchor-primary-top');
+    removeClass(this.popoverElement, 'popoverjs--popover-primary-top');
   }
 
   // TESTED
@@ -161,6 +161,7 @@ class Positioner {
     return this.setHalfPointsOnOrigin(origin);
   }
 
+  // TESTED
   setHalfPointsOnOrigin(origin) {
     const halfHeight = origin.height / 2;
     const halfWidth = origin.width / 2;
@@ -249,8 +250,8 @@ class Positioner {
     const triggerAnchors = this.activeConstraint.trigger;
 
     return [
-      `popoverjs--anchor-primary-${popoverAnchors.primary}`,
-      `popoverjs--anchor-secondary-${popoverAnchors.secondary}`,
+      `popoverjs--popover-primary-${popoverAnchors.primary}`,
+      `popoverjs--popover-secondary-${popoverAnchors.secondary}`,
       `popoverjs--trigger-primary-${triggerAnchors.primary}`,
       `popoverjs--trigger-secondary-${triggerAnchors.secondary}`,
     ];
