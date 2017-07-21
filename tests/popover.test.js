@@ -129,7 +129,7 @@ describe('Positioner', () => {
 
       positionerInstance.refreshParentOrigin();
 
-      expect(positionerInstance.arrowSize).toEqual(8);
+      expect(positionerInstance.cssCache.arrowSize).toEqual(8);
     });
 
     it('should retrieve the correct window origin', () => {
@@ -271,52 +271,68 @@ describe('Positioner', () => {
         };
       });
 
-      it('isConstrainedBySide returns true if outside of each side', () => {
+      it('isConstrainedByPrimary returns true if outside of each side', () => {
         const parentOrigin = positionerInstance.origins.parent;
 
         positionerInstance.origins.trigger.left = popoverWidthFull - 1;
-        expect(positionerInstance.isConstrainedBySide('left')).toBe(true);
+        expect(positionerInstance.isConstrainedByPrimary('left')).toBe(true);
 
         positionerInstance.origins.trigger.top = popoverHeightFull - 1;
-        expect(positionerInstance.isConstrainedBySide('top')).toBe(true);
+        expect(positionerInstance.isConstrainedByPrimary('top')).toBe(true);
 
         positionerInstance.origins.trigger.right = parentOrigin.right - popoverWidthFull + 1;
-        expect(positionerInstance.isConstrainedBySide('right')).toBe(true);
+        expect(positionerInstance.isConstrainedByPrimary('right')).toBe(true);
 
         positionerInstance.origins.trigger.bottom = parentOrigin.bottom - popoverHeightFull + 1;
-        expect(positionerInstance.isConstrainedBySide('bottom')).toBe(true);
+        expect(positionerInstance.isConstrainedByPrimary('bottom')).toBe(true);
       });
 
-      it('isConstrainedBySide returns false if equal distance to each side', () => {
+      it('isConstrainedByPrimary returns false if equal distance to each side', () => {
         const parentOrigin = positionerInstance.origins.parent;
 
         positionerInstance.origins.trigger.left = popoverWidthFull;
-        expect(positionerInstance.isConstrainedBySide('left')).toBe(false);
+        expect(positionerInstance.isConstrainedByPrimary('left')).toBe(false);
 
         positionerInstance.origins.trigger.top = popoverHeightFull;
-        expect(positionerInstance.isConstrainedBySide('top')).toBe(false);
+        expect(positionerInstance.isConstrainedByPrimary('top')).toBe(false);
 
         positionerInstance.origins.trigger.right = parentOrigin.right - popoverWidthFull;
-        expect(positionerInstance.isConstrainedBySide('right')).toBe(false);
+        expect(positionerInstance.isConstrainedByPrimary('right')).toBe(false);
 
         positionerInstance.origins.trigger.bottom = parentOrigin.bottom - popoverHeightFull;
-        expect(positionerInstance.isConstrainedBySide('bottom')).toBe(false);
+        expect(positionerInstance.isConstrainedByPrimary('bottom')).toBe(false);
       });
 
-      it('isConstrainedBySide returns true if inside of each side', () => {
+      it('isConstrainedByPrimary returns true if inside of each side', () => {
         const parentOrigin = positionerInstance.origins.parent;
 
         positionerInstance.origins.trigger.left = popoverWidthFull + 1;
-        expect(positionerInstance.isConstrainedBySide('left')).toBe(false);
+        expect(positionerInstance.isConstrainedByPrimary('left')).toBe(false);
 
         positionerInstance.origins.trigger.top = popoverHeightFull + 1;
-        expect(positionerInstance.isConstrainedBySide('top')).toBe(false);
+        expect(positionerInstance.isConstrainedByPrimary('top')).toBe(false);
 
         positionerInstance.origins.trigger.right = parentOrigin.right - popoverWidthFull - 1;
-        expect(positionerInstance.isConstrainedBySide('right')).toBe(false);
+        expect(positionerInstance.isConstrainedByPrimary('right')).toBe(false);
 
         positionerInstance.origins.trigger.bottom = parentOrigin.bottom - popoverHeightFull - 1;
-        expect(positionerInstance.isConstrainedBySide('bottom')).toBe(false);
+        expect(positionerInstance.isConstrainedByPrimary('bottom')).toBe(false);
+      });
+
+      it('isConstrainedByPrimary returns true if inside of each side', () => {
+        const parentOrigin = positionerInstance.origins.parent;
+
+        positionerInstance.origins.trigger.left = popoverWidthFull + 1;
+        expect(positionerInstance.isConstrainedByPrimary('left')).toBe(false);
+
+        positionerInstance.origins.trigger.top = popoverHeightFull + 1;
+        expect(positionerInstance.isConstrainedByPrimary('top')).toBe(false);
+
+        positionerInstance.origins.trigger.right = parentOrigin.right - popoverWidthFull - 1;
+        expect(positionerInstance.isConstrainedByPrimary('right')).toBe(false);
+
+        positionerInstance.origins.trigger.bottom = parentOrigin.bottom - popoverHeightFull - 1;
+        expect(positionerInstance.isConstrainedByPrimary('bottom')).toBe(false);
       });
     });
   });
