@@ -443,12 +443,12 @@ class Positioner {
 
   getPopoverSizeOnConstraintSide(constraint, sideToCheck) {
     if (constraint.popover.secondary === 'center') {
-      switch (constraint.trigger.primary === 'center') {
+      switch (sideToCheck) {
       case 'right':
       case 'left':
-        return this.origins.popover.halfHeight;
-      default:
         return this.origins.popover.halfWidth;
+      default:
+        return this.origins.popover.halfHeight;
       }
     }
 
@@ -465,7 +465,7 @@ class Positioner {
       if (sideToCheck === constraint.popover.secondary) {
         return this.cssCache.popoverOffset;
       }
-      return this.origins.popover.width - this.cssCache.popoverOffset;
+      return this.origins.popover.height - this.cssCache.popoverOffset;
     }
   }
 

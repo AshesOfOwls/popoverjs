@@ -334,6 +334,107 @@ describe('Positioner', () => {
         positionerInstance.origins.trigger.bottom = parentOrigin.bottom - popoverHeightFull - 1;
         expect(positionerInstance.isConstrainedByPrimary('bottom')).toBe(false);
       });
+
+      it('getOriginPointForConstraint returns the correct offset amount', () => {
+        const trigger = {
+          left: 10,
+          top: 10,
+          right: 110,
+          bottom: 110,
+          height: 100,
+          halfHeight: 50,
+          halfWidth: 50,
+          width: 100,
+        };
+
+        const cssCache = {
+          popoverOffset: 15,
+          triggerOffset: 25,
+        };
+
+        positionerInstance.origins.trigger = trigger;
+        positionerInstance.cssCache = cssCache;
+
+        expect(positionerInstance.getOriginPointForConstraint({
+          trigger: { primary: 'top', secondary: 'center' }
+        })).toBe(trigger.left + trigger.halfWidth);
+
+        expect(positionerInstance.getOriginPointForConstraint({
+          trigger: { primary: 'top', secondary: 'left' }
+        })).toBe(trigger.left + cssCache.triggerOffset);
+
+        expect(positionerInstance.getOriginPointForConstraint({
+          trigger: { primary: 'top', secondary: 'right' }
+        })).toBe(trigger.right - cssCache.triggerOffset);
+
+        expect(positionerInstance.getOriginPointForConstraint({
+          trigger: { primary: 'left', secondary: 'center' }
+        })).toBe(trigger.top + trigger.halfHeight);
+
+        expect(positionerInstance.getOriginPointForConstraint({
+          trigger: { primary: 'left', secondary: 'top' }
+        })).toBe(trigger.top + cssCache.triggerOffset);
+
+        expect(positionerInstance.getOriginPointForConstraint({
+          trigger: { primary: 'left', secondary: 'bottom' }
+        })).toBe(trigger.bottom - cssCache.triggerOffset);
+      });
+
+      it('getPopoverSizeOnConstraintSide returns the correct popover size for constraint/side', () => {
+        const cssCache = {
+          popoverOffset: 28,
+        };
+
+        const popover = {
+          height: 100,
+          width: 200,
+          halfHeight: 50,
+          halfWidth: 100,
+        };
+
+        positionerInstance.origins.popover = popover;
+        positionerInstance.cssCache = cssCache;
+
+        expect(positionerInstance.getPopoverSizeOnConstraintSide({
+          popover: { primary: 'left', secondary: 'center' }
+        }, 'top')).toBe(popover.halfHeight);
+
+        expect(positionerInstance.getPopoverSizeOnConstraintSide({
+          popover: { primary: 'top', secondary: 'center' }
+        }, 'left')).toBe(popover.halfWidth);
+
+        expect(positionerInstance.getPopoverSizeOnConstraintSide({
+          popover: { primary: 'top', secondary: 'right' }
+        }, 'left')).toBe(popover.width - cssCache.popoverOffset);
+
+        expect(positionerInstance.getPopoverSizeOnConstraintSide({
+          popover: { primary: 'top', secondary: 'right' }
+        }, 'right')).toBe(cssCache.popoverOffset);
+
+        expect(positionerInstance.getPopoverSizeOnConstraintSide({
+          popover: { primary: 'top', secondary: 'left' }
+        }, 'right')).toBe(popover.width - cssCache.popoverOffset);
+
+        expect(positionerInstance.getPopoverSizeOnConstraintSide({
+          popover: { primary: 'top', secondary: 'left' }
+        }, 'left')).toBe(cssCache.popoverOffset);
+
+        expect(positionerInstance.getPopoverSizeOnConstraintSide({
+          popover: { primary: 'left', secondary: 'top' }
+        }, 'top')).toBe(cssCache.popoverOffset);
+
+        expect(positionerInstance.getPopoverSizeOnConstraintSide({
+          popover: { primary: 'left', secondary: 'top' }
+        }, 'bottom')).toBe(popover.height - cssCache.popoverOffset);
+
+        expect(positionerInstance.getPopoverSizeOnConstraintSide({
+          popover: { primary: 'left', secondary: 'bottom' }
+        }, 'bottom')).toBe(cssCache.popoverOffset);
+
+        expect(positionerInstance.getPopoverSizeOnConstraintSide({
+          popover: { primary: 'left', secondary: 'bottom' }
+        }, 'top')).toBe(popover.height - cssCache.popoverOffset);
+      });
     });
   });
 });
