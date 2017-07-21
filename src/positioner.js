@@ -3,11 +3,14 @@ import { addClass, removeClass } from './utils';
 const defaults = {
   constraintParent: null,
   constraints: [{
-    popover: 'top center',
-    trigger: 'bottom center',
+    popover: 'top right',
+    trigger: 'bottom right',
   }, {
     popover: 'bottom center',
-    trigger: 'top center',
+    trigger: 'top right',
+  }, {
+    popover: 'top left',
+    trigger: 'bottom left',
   }],
 };
 
@@ -25,7 +28,6 @@ class Positioner {
     this.applyDefaultConstraint();
   }
 
-  // TESTED
   setUpElements() {
     this.popoverElement = this.options.popoverElement;
     this.triggerElement = this.options.triggerElement;
@@ -33,17 +35,28 @@ class Positioner {
     this.popoverArrow = this.popoverElement.querySelector('.popoverjs-arrow');
     this.constraintParent = this.getConstraintParent();
 
-    this.setArrowSize();
+    this.cacheCssOffsets();
   }
 
-  // TESTED
-  setArrowSize() {
-    addClass(this.popoverElement, 'popoverjs--popover-primary-top');
-    this.arrowSize = this.popoverArrow.clientHeight;
-    removeClass(this.popoverElement, 'popoverjs--popover-primary-top');
+  cacheCssOffsets() {
+    const sizerClasses = [
+      'popoverjs--popover-primary-top',
+      'popoverjs--popover-secondary-left',
+      'popoverjs--trigger-primary-left',
+      'popoverjs--trigger-secondary-bottom',
+    ];
+
+    this.togglePopoverClasses(sizerClasses, true);
+
+    this.cssCache = {
+      arrowSize: Math.abs(this.popoverArrow.clientHeight),
+      triggerOffset: Math.abs(this.popoverElement.offsetLeft),
+      popoverOffset: Math.abs(this.popoverContent.offsetLeft),
+    };
+
+    this.togglePopoverClasses(sizerClasses, false);
   }
 
-  // TESTED
   getConstraintParent() {
     const constraintParent = this.options.constraintParent;
 
@@ -54,7 +67,6 @@ class Positioner {
     return constraintParent;
   }
 
-  // TESTED
   parseConstraints() {
     this.constraints = this.options.constraints.map((constraint) => {
       const triggerConstraint = constraint.trigger.split(' ');
@@ -75,7 +87,6 @@ class Positioner {
     });
   }
 
-  // TESTED
   enable() {
     this.listenForResize();
     this.position();
@@ -161,7 +172,6 @@ class Positioner {
     return this.setHalfPointsOnOrigin(origin);
   }
 
-  // TESTED
   setHalfPointsOnOrigin(origin) {
     const halfHeight = origin.height / 2;
     const halfWidth = origin.width / 2;
@@ -177,16 +187,31 @@ class Positioner {
   canFitInto(constraint) {
     if (!constraint) { return false; }
 
-    let isOutsideConstraint = this.isConstrainedBySide(constraint.trigger.primary);
+    const self = this;
+    let isOutsideConstraint = false;
 
-    if (!isOutsideConstraint) {
-      isOutsideConstraint = this.isConstrainedBySide(constraint.trigger.primary);
-    }
+    ['primary', 'secondary'].forEach((priority) => {
+      if (isOutsideConstraint) { return; }
+
+      isOutsideConstraint = self.isConstrainedBy(constraint, priority);
+    });
 
     return !isOutsideConstraint;
   }
 
-  isConstrainedBySide(side) {
+  isConstrainedBy(constraint, priority) {
+    if (priority === 'primary') {
+      return this.isConstrainedByPrimary(constraint.trigger.primary);
+    }
+
+    if (priority === 'secondary') {
+      return this.isConstrainedBySecondary(constraint, 'left') || this.isConstrainedBySecondary(constraint, 'right');
+    }
+
+    return false;
+  }
+
+  isConstrainedByPrimary(side) {
     const originCoordinate = this.origins.trigger[side];
     const popoverSize = this.getPopoverSizeFromSide(side);
 
@@ -197,8 +222,76 @@ class Positioner {
     return originCoordinate + popoverSize > this.origins.parent[side];
   }
 
+  isConstrainedBySecondary(constraint, sideToCheck) {
+    const parentCoord = this.origins.parent[sideToCheck];
+    const originCoordinate = this.getOriginPointForConstraint(constraint);
+    const popoverSize = this.getPopoverSizeOnConstraintSide(constraint, sideToCheck);
+
+    switch (sideToCheck) {
+    default:
+    case 'top':
+    case 'left':
+      return originCoordinate - popoverSize < parentCoord;
+    case 'right':
+    case 'bottom':
+      return originCoordinate + popoverSize > parentCoord;
+    }
+  }
+
+  getPopoverSizeOnConstraintSide(constraint, sideToCheck) {
+    if (constraint.popover.secondary === 'center') {
+      switch (constraint.trigger.primary === 'center') {
+      case 'right':
+      case 'left':
+        return this.origins.popover.halfHeight;
+      default:
+        return this.origins.popover.halfWidth;
+      }
+    }
+
+    switch (constraint.popover.secondary) {
+    default:
+    case 'right':
+    case 'left':
+      if (sideToCheck === constraint.popover.secondary) {
+        return this.cssCache.popoverOffset;
+      }
+      return this.origins.popover.width - this.cssCache.popoverOffset;
+    case 'top':
+    case 'bottom':
+      if (sideToCheck === constraint.popover.secondary) {
+        return this.cssCache.popoverOffset;
+      }
+      return this.origins.popover.width - this.cssCache.popoverOffset;
+    }
+  }
+
+  getOriginPointForConstraint(constraint) {
+    if (constraint.trigger.secondary === 'center') {
+      switch (constraint.trigger.primary) {
+      case 'top':
+      case 'bottom':
+        return this.origins.trigger.top + this.origins.trigger.halfHeight;
+      default:
+        return this.origins.trigger.left + this.origins.trigger.halfWidth;
+      }
+    }
+
+    switch (constraint.trigger.secondary) {
+    default:
+    case 'left':
+      return this.origins.trigger.left + this.cssCache.triggerOffset;
+    case 'right':
+      return this.origins.trigger.right - this.cssCache.triggerOffset;
+    case 'top':
+      return this.origins.trigger.top + this.cssCache.triggerOffset;
+    case 'bottom':
+      return this.origins.trigger.bottom - this.cssCache.triggerOffset;
+    }
+  }
+
   getPopoverSizeFromSide(side) {
-    const size = this.arrowSize;
+    const size = this.cssCache.arrowSize;
 
     if (side === 'top' || side === 'bottom') {
       return this.origins.popover.height + size;
@@ -220,7 +313,7 @@ class Positioner {
     this.activeConstraint = constraintObject;
     this.activeConstraintString = JSON.stringify(constraintObject);
 
-    this.toggleActiveConstraintClasses(true);
+    this.togglePopoverClasses(this.getActiveConstraintClasses(), true);
   }
 
   activeConstraintIs(constraintObject) {
@@ -230,22 +323,24 @@ class Positioner {
   clearActiveConstraint() {
     if (!this.activeConstraint) { return; }
 
-    this.toggleActiveConstraintClasses(false);
+    this.togglePopoverClasses(this.getActiveConstraintClasses(), false);
 
     this.activeConstraint = null;
     this.activeConstraintString = null;
   }
 
-  toggleActiveConstraintClasses(isToggled) {
+  togglePopoverClasses(classes, isToggled) {
     const popover = this.popoverElement;
     const method = isToggled ? addClass : removeClass;
 
-    this.getActiveConstraintClasses().forEach((className) => {
+    classes.forEach((className) => {
       method(popover, className);
     });
   }
 
   getActiveConstraintClasses() {
+    if (!this.activeConstraint) { return []; }
+
     const popoverAnchors = this.activeConstraint.popover;
     const triggerAnchors = this.activeConstraint.trigger;
 
