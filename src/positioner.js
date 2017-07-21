@@ -130,13 +130,9 @@ class Positioner {
       return false;
     });
 
-    if (!activeConstraint) { return this.getLastConstraint(); }
+    if (!activeConstraint) { return this.activeConstraint; }
 
     return activeConstraint;
-  }
-
-  getLastConstraint() {
-    return this.constraints[this.constraints.length - 1];
   }
 
   refreshAllElementData() {
