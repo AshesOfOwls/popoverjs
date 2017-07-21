@@ -122,13 +122,21 @@ class Positioner {
   }
 
   getActiveConstraint() {
-    return this.constraints.find((constraint) => {
+    const activeConstraint = this.constraints.find((constraint) => {
       if (this.canFitInto(constraint)) {
         return constraint;
       }
 
       return false;
     });
+
+    if (!activeConstraint) { return this.getLastConstraint(); }
+
+    return activeConstraint;
+  }
+
+  getLastConstraint() {
+    return this.constraints[this.constraints.length - 1];
   }
 
   refreshAllElementData() {
