@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -78,8 +78,36 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return oneEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return addClass; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return removeClass; });
+const oneEvent = (target, eventType, callback) => {
+  const wrappedCallback = (eventObject) => {
+    target.removeEventListener(eventType, callback);
+    return callback(eventObject);
+  };
+
+  target.addEventListener(eventType, wrappedCallback);
+};
+
+const addClass = (element, className) => {
+  element.classList.add(className);
+};
+
+const removeClass = (element, className) => {
+  element.classList.remove(className);
+};
+
+
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__positioner__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__styles_main_scss__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__styles_main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__styles_main_scss__);
@@ -168,39 +196,11 @@ window.Popoverjs = Popoverjs;
 
 
 /***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return oneEvent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return addClass; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return removeClass; });
-const oneEvent = (target, eventType, callback) => {
-  const wrappedCallback = (eventObject) => {
-    target.removeEventListener(eventType, callback);
-    return callback(eventObject);
-  };
-
-  target.addEventListener(eventType, wrappedCallback);
-};
-
-const addClass = (element, className) => {
-  element.classList.add(className);
-};
-
-const removeClass = (element, className) => {
-  element.classList.remove(className);
-};
-
-
-
-
-/***/ }),
 /* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(0);
 
 
 const defaults = {
@@ -220,15 +220,20 @@ const defaults = {
 class Positioner {
   constructor(options) {
     this.options = Object.assign(defaults, options);
-    this.origins = {};
 
     this.initialize();
   }
 
   initialize() {
+    this.setUpGlobals();
     this.setUpElements();
     this.parseConstraints();
     this.applyDefaultConstraint();
+  }
+
+  setUpGlobals() {
+    this.origins = {};
+    this.cssCache = {};
   }
 
   setUpElements() {
@@ -271,11 +276,15 @@ class Positioner {
   }
 
   parseConstraints() {
+    let id = 0;
     this.constraints = this.options.constraints.map((constraint) => {
       const triggerConstraint = constraint.trigger.split(' ');
       const popoverConstraint = constraint.popover.split(' ');
 
+      id += 1;
+
       return Object.assign({}, constraint, {
+        id,
         trigger: {
           primary: triggerConstraint[0],
           secondary: triggerConstraint[1],
@@ -398,33 +407,19 @@ class Positioner {
   canFitInto(constraint) {
     if (!constraint) { return false; }
 
-    const self = this;
-    let isOutsideConstraint = false;
+    let isOutsideConstraint = this.isConstrainedByPrimary(constraint.trigger.primary);
 
-    ['primary', 'secondary'].forEach((priority) => {
-      if (isOutsideConstraint) { return; }
-
-      isOutsideConstraint = self.isConstrainedBy(constraint, priority);
-    });
+    if (!isOutsideConstraint) {
+      isOutsideConstraint = this.isConstrainedBySecondary(constraint, 'left') ||
+        this.isConstrainedBySecondary(constraint, 'right');
+    }
 
     return !isOutsideConstraint;
   }
 
-  isConstrainedBy(constraint, priority) {
-    if (priority === 'primary') {
-      return this.isConstrainedByPrimary(constraint.trigger.primary);
-    }
-
-    if (priority === 'secondary') {
-      return this.isConstrainedBySecondary(constraint, 'left') || this.isConstrainedBySecondary(constraint, 'right');
-    }
-
-    return false;
-  }
-
   isConstrainedByPrimary(side) {
     const originCoordinate = this.origins.trigger[side];
-    const popoverSize = this.getPopoverSizeFromSide(side);
+    const popoverSize = this.getPopoverSizeFromSideCheck(side);
 
     if (side === 'left' || side === 'top') {
       return originCoordinate - popoverSize < this.origins.parent[side];
@@ -439,12 +434,10 @@ class Positioner {
     const popoverSize = this.getPopoverSizeOnConstraintSide(constraint, sideToCheck);
 
     switch (sideToCheck) {
-    default:
     case 'top':
     case 'left':
       return originCoordinate - popoverSize < parentCoord;
-    case 'right':
-    case 'bottom':
+    default:
       return originCoordinate + popoverSize > parentCoord;
     }
   }
@@ -461,15 +454,13 @@ class Positioner {
     }
 
     switch (constraint.popover.secondary) {
-    default:
     case 'right':
     case 'left':
       if (sideToCheck === constraint.popover.secondary) {
         return this.cssCache.popoverOffset;
       }
       return this.origins.popover.width - this.cssCache.popoverOffset;
-    case 'top':
-    case 'bottom':
+    default:
       if (sideToCheck === constraint.popover.secondary) {
         return this.cssCache.popoverOffset;
       }
@@ -501,7 +492,7 @@ class Positioner {
     }
   }
 
-  getPopoverSizeFromSide(side) {
+  getPopoverSizeFromSideCheck(side) {
     const size = this.cssCache.arrowSize;
 
     if (side === 'top' || side === 'bottom') {
@@ -520,24 +511,24 @@ class Positioner {
     if (this.activeConstraintIs(constraintObject)) { return; }
 
     this.clearActiveConstraint();
-
     this.activeConstraint = constraintObject;
-    this.activeConstraintString = JSON.stringify(constraintObject);
+    this.toggleActiveConstraints(true);
+  }
 
-    this.togglePopoverClasses(this.getActiveConstraintClasses(), true);
+  toggleActiveConstraints(isToggled) {
+    this.togglePopoverClasses(this.getActiveConstraintClasses(), isToggled);
   }
 
   activeConstraintIs(constraintObject) {
-    return this.activeConstraintString === JSON.stringify(constraintObject);
+    if (!this.activeConstraint) { return false; }
+    return this.activeConstraint.id === constraintObject.id;
   }
 
   clearActiveConstraint() {
     if (!this.activeConstraint) { return; }
 
-    this.togglePopoverClasses(this.getActiveConstraintClasses(), false);
-
+    this.toggleActiveConstraints(false);
     this.activeConstraint = null;
-    this.activeConstraintString = null;
   }
 
   togglePopoverClasses(classes, isToggled) {
