@@ -43,6 +43,36 @@ class Positioner {
     this.cacheCssOffsets();
   }
 
+  setUpContainer() {
+    if (this.options.bodyAttached) {
+      this.createDetachedContainer();
+    }
+  }
+
+  destroyContainer() {
+    if (this.options.bodyAttached) {
+      this.originalContainer.appendChild(this.popoverElement);
+      document.body.removeChild(this.containerElement);
+    }
+  }
+
+  createDetachedContainer() {
+    this.originalContainer = this.popoverElement.parentElement;
+    this.containerElement = document.createElement('div');
+    this.containerElement.classList.add('popoverjs--detatched-container');
+    this.containerElement.appendChild(this.popoverElement);
+    document.body.appendChild(this.containerElement);
+  }
+
+  maintainDetachedContainerPosition() {
+    const origin = this.origins.trigger;
+    delete origin.halfWidth;
+    delete origin.halfHeight;
+    delete origin.verticalCenter;
+    delete origin.horizontalCenter;
+    Object.assign(this.containerElement.style, origin);
+  }
+
   cacheCssOffsets() {
     const sizerClasses = [
       'popoverjs--popover-primary-top',
@@ -98,6 +128,8 @@ class Positioner {
 
   enable() {
     this.listenForResize();
+    this.refreshAllElementData();
+    this.setUpContainer();
     this.position();
   }
 
@@ -111,6 +143,7 @@ class Positioner {
 
   destroy() {
     this.destroyListeners();
+    this.destroyContainer();
   }
 
   onResize() {
@@ -118,11 +151,12 @@ class Positioner {
   }
 
   disable() {
-    this.destroyListeners();
+    this.destroy();
   }
 
   position() {
     this.refreshAllElementData();
+    this.maintainDetachedContainerPosition();
     this.checkConstraints();
   }
 
@@ -132,10 +166,7 @@ class Positioner {
 
   getActiveConstraint() {
     const activeConstraint = this.constraints.find((constraint) => {
-      if (this.canFitInto(constraint)) {
-        return constraint;
-      }
-
+      if (this.canFitInto(constraint)) { return constraint; }
       return false;
     });
 
@@ -184,7 +215,16 @@ class Positioner {
   }
 
   getElementOrigin(element) {
-    const origin = element.getBoundingClientRect();
+    const clientRect = element.getBoundingClientRect();
+
+    const origin = {
+      left: clientRect.left,
+      right: clientRect.right,
+      bottom: clientRect.bottom,
+      top: clientRect.top,
+      height: clientRect.height,
+      width: clientRect.width,
+    };
 
     return this.setHalfPointsOnOrigin(origin);
   }

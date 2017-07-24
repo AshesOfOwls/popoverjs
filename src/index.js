@@ -1,4 +1,4 @@
-import { oneEvent, addClass, removeClass } from './utils';
+import { oneEvent, addClass, removeClass, whichTransitionEvent } from './utils';
 import Positioner from './positioner';
 
 import './styles/main.scss';
@@ -33,9 +33,9 @@ class Popoverjs {
   render(e) {
     e.stopImmediatePropagation();
 
-    this.toggleVisibility(true);
-    this.listenForOutsideClick();
     this.setUpPositioner();
+    this.show()
+    this.listenForOutsideClick();
   }
 
   destroyListeners() {
@@ -50,12 +50,37 @@ class Popoverjs {
   onDocumentClick(e) {
     if (this.popoverElement.contains(e.target)) { return; }
 
+    document.body.removeEventListener('click', this.onDocumentClick);
+    this.hide();
+  }
+
+  listenForToggleEnd() {
+    oneEvent(this.popoverElement,
+      whichTransitionEvent(this.popoverElement),
+      this.onToggleEnd.bind(this),
+      transitionEvent => (transitionEvent.propertyName === 'opacity'),
+    );
+  }
+
+  onToggleEnd() {
+    if (!this.isVisible) {
+      this.Positioner.disable();
+      this.listenForRender();
+    }
+  }
+
+  show() {
+    this.toggleVisibility(true);
+  }
+
+  hide() {
     this.toggleVisibility(false);
-    this.listenForRender();
   }
 
   toggleVisibility(isVisible = false) {
     this.isVisible = isVisible;
+
+    this.listenForToggleEnd();
 
     if (isVisible) {
       return addClass(this.popoverElement, 'is-visible');
