@@ -1,9 +1,11 @@
-import { oneEvent, addClass, removeClass } from './utils';
+import { oneEvent, addClass, removeClass, whichTransitionEvent } from './utils';
 import Positioner from './positioner';
 
 import './styles/main.scss';
 
-const defaults = {};
+const defaults = {
+  showOn: 'mouseenter',
+};
 
 class Popoverjs {
   constructor(options) {
@@ -27,19 +29,19 @@ class Popoverjs {
   }
 
   listenForRender() {
-    oneEvent(this.triggerElement, 'click', this.render);
+    oneEvent(this.triggerElement, this.options.showOn, this.render);
   }
 
   render(e) {
     e.stopImmediatePropagation();
 
-    this.toggleVisibility(true);
-    this.listenForOutsideClick();
     this.setUpPositioner();
+    this.show();
+    this.listenForOutsideClick();
   }
 
   destroyListeners() {
-    this.triggerElement.removeEventListener('click', this.render);
+    this.triggerElement.removeEventListener(this.options.showOn, this.render);
     document.body.removeEventListener('click', this.onDocumentClick);
   }
 
@@ -50,12 +52,37 @@ class Popoverjs {
   onDocumentClick(e) {
     if (this.popoverElement.contains(e.target)) { return; }
 
+    document.body.removeEventListener('click', this.onDocumentClick);
+    this.hide();
+  }
+
+  listenForToggleEnd() {
+    oneEvent(this.popoverElement,
+      whichTransitionEvent(this.popoverElement),
+      this.onToggleEnd.bind(this),
+      transitionEvent => (transitionEvent.propertyName === 'opacity'),
+    );
+  }
+
+  onToggleEnd() {
+    if (!this.isVisible) {
+      this.Positioner.disable();
+      this.listenForRender();
+    }
+  }
+
+  show() {
+    this.toggleVisibility(true);
+  }
+
+  hide() {
     this.toggleVisibility(false);
-    this.listenForRender();
   }
 
   toggleVisibility(isVisible = false) {
     this.isVisible = isVisible;
+
+    this.listenForToggleEnd();
 
     if (isVisible) {
       return addClass(this.popoverElement, 'is-visible');
@@ -65,10 +92,12 @@ class Popoverjs {
   }
 
   setUpPositioner() {
+    const constraintElement = this.constraintElement;
     const popoverElement = this.popoverElement;
     const triggerElement = this.triggerElement;
 
     this.Positioner = new Positioner(Object.assign({}, {
+      constraintElement,
       popoverElement,
       triggerElement,
     }, this.options));

@@ -17,26 +17,37 @@
       margin: 20px;
       width: 200px;
     }
+
+    .container {
+      border: 1px solid pink;
+      height: 80%;
+      margin: 10%;
+      width: 80%;
+    }
   </style>
   <body>
-    <div class="trigger">
-      Click me
+    <div class="container">
+      <div class="trigger">
+        Click me
 
-      <div class="popoverjs">
-        <div class="popoverjs-arrow"></div>
-        <div class="popoverjs-content">
-          <div class="content">
-            This is what a popover looks like.
+        <div class="popoverjs">
+          <div class="popoverjs-arrow"></div>
+          <div class="popoverjs-content">
+            <div class="content">
+              This is what a popover looks like.
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <script src="./popoverjs.js"></script>
+    <script src="../dist/popoverjs.js"></script>
     <script>
       new Popoverjs({
         triggerElement: document.getElementsByClassName('trigger')[0],
         popoverElement: document.getElementsByClassName('popoverjs')[0],
+        constraintElement: document.getElementsByClassName('container')[0],
+        bodyAttached: true,
       })
     </script>
   </body>

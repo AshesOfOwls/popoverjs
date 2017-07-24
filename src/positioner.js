@@ -1,13 +1,13 @@
 import { addClass, removeClass } from './utils';
 
 const defaults = {
-  constraintParent: null,
+  constraintElement: null,
   constraints: [{
     popover: 'top right',
     trigger: 'bottom right',
   }, {
     popover: 'bottom center',
-    trigger: 'top right',
+    trigger: 'top center',
   }, {
     popover: 'top left',
     trigger: 'bottom left',
@@ -17,15 +17,20 @@ const defaults = {
 class Positioner {
   constructor(options) {
     this.options = Object.assign(defaults, options);
-    this.origins = {};
 
     this.initialize();
   }
 
   initialize() {
+    this.setUpGlobals();
     this.setUpElements();
     this.parseConstraints();
     this.applyDefaultConstraint();
+  }
+
+  setUpGlobals() {
+    this.origins = {};
+    this.cssCache = {};
   }
 
   setUpElements() {
@@ -33,9 +38,39 @@ class Positioner {
     this.triggerElement = this.options.triggerElement;
     this.popoverContent = this.popoverElement.querySelector('.popoverjs-content');
     this.popoverArrow = this.popoverElement.querySelector('.popoverjs-arrow');
-    this.constraintParent = this.getConstraintParent();
+    this.constraintElement = this.getConstraintParent();
 
     this.cacheCssOffsets();
+  }
+
+  setUpContainer() {
+    if (this.options.bodyAttached) {
+      this.createDetachedContainer();
+    }
+  }
+
+  destroyContainer() {
+    if (this.options.bodyAttached) {
+      this.originalContainer.appendChild(this.popoverElement);
+      document.body.removeChild(this.containerElement);
+    }
+  }
+
+  createDetachedContainer() {
+    this.originalContainer = this.popoverElement.parentElement;
+    this.containerElement = document.createElement('div');
+    this.containerElement.classList.add('popoverjs--detatched-container');
+    this.containerElement.appendChild(this.popoverElement);
+    document.body.appendChild(this.containerElement);
+  }
+
+  maintainDetachedContainerPosition() {
+    const origin = this.origins.trigger;
+    delete origin.halfWidth;
+    delete origin.halfHeight;
+    delete origin.verticalCenter;
+    delete origin.horizontalCenter;
+    Object.assign(this.containerElement.style, origin);
   }
 
   cacheCssOffsets() {
@@ -58,21 +93,25 @@ class Positioner {
   }
 
   getConstraintParent() {
-    const constraintParent = this.options.constraintParent;
+    const constraintElement = this.options.constraintElement;
 
-    if (!constraintParent) {
+    if (!constraintElement) {
       return window;
     }
 
-    return constraintParent;
+    return constraintElement;
   }
 
   parseConstraints() {
+    let id = 0;
     this.constraints = this.options.constraints.map((constraint) => {
       const triggerConstraint = constraint.trigger.split(' ');
       const popoverConstraint = constraint.popover.split(' ');
 
+      id += 1;
+
       return Object.assign({}, constraint, {
+        id,
         trigger: {
           primary: triggerConstraint[0],
           secondary: triggerConstraint[1],
@@ -89,6 +128,8 @@ class Positioner {
 
   enable() {
     this.listenForResize();
+    this.refreshAllElementData();
+    this.setUpContainer();
     this.position();
   }
 
@@ -102,6 +143,7 @@ class Positioner {
 
   destroy() {
     this.destroyListeners();
+    this.destroyContainer();
   }
 
   onResize() {
@@ -109,11 +151,12 @@ class Positioner {
   }
 
   disable() {
-    this.destroyListeners();
+    this.destroy();
   }
 
   position() {
     this.refreshAllElementData();
+    this.maintainDetachedContainerPosition();
     this.checkConstraints();
   }
 
@@ -123,10 +166,7 @@ class Positioner {
 
   getActiveConstraint() {
     const activeConstraint = this.constraints.find((constraint) => {
-      if (this.canFitInto(constraint)) {
-        return constraint;
-      }
-
+      if (this.canFitInto(constraint)) { return constraint; }
       return false;
     });
 
@@ -141,12 +181,12 @@ class Positioner {
   }
 
   refreshParentOrigin() {
-    if (this.constraintParent === window) {
+    if (this.constraintElement === window) {
       this.origins.parent = this.getWindowOrigin();
       return;
     }
 
-    this.origins.parent = this.getElementOrigin(this.constraintParent);
+    this.origins.parent = this.getElementOrigin(this.constraintElement);
   }
 
   getWindowOrigin() {
@@ -171,7 +211,16 @@ class Positioner {
   }
 
   getElementOrigin(element) {
-    const origin = element.getBoundingClientRect();
+    const clientRect = element.getBoundingClientRect();
+
+    const origin = {
+      left: clientRect.left,
+      right: clientRect.right,
+      bottom: clientRect.bottom,
+      top: clientRect.top,
+      height: clientRect.height,
+      width: clientRect.width,
+    };
 
     return this.setHalfPointsOnOrigin(origin);
   }
@@ -191,33 +240,19 @@ class Positioner {
   canFitInto(constraint) {
     if (!constraint) { return false; }
 
-    const self = this;
-    let isOutsideConstraint = false;
+    let isOutsideConstraint = this.isConstrainedByPrimary(constraint.trigger.primary);
 
-    ['primary', 'secondary'].forEach((priority) => {
-      if (isOutsideConstraint) { return; }
-
-      isOutsideConstraint = self.isConstrainedBy(constraint, priority);
-    });
+    if (!isOutsideConstraint) {
+      isOutsideConstraint = this.isConstrainedBySecondary(constraint, 'left') ||
+        this.isConstrainedBySecondary(constraint, 'right');
+    }
 
     return !isOutsideConstraint;
   }
 
-  isConstrainedBy(constraint, priority) {
-    if (priority === 'primary') {
-      return this.isConstrainedByPrimary(constraint.trigger.primary);
-    }
-
-    if (priority === 'secondary') {
-      return this.isConstrainedBySecondary(constraint, 'left') || this.isConstrainedBySecondary(constraint, 'right');
-    }
-
-    return false;
-  }
-
   isConstrainedByPrimary(side) {
     const originCoordinate = this.origins.trigger[side];
-    const popoverSize = this.getPopoverSizeFromSide(side);
+    const popoverSize = this.getPopoverSizeFromSideCheck(side);
 
     if (side === 'left' || side === 'top') {
       return originCoordinate - popoverSize < this.origins.parent[side];
@@ -232,12 +267,10 @@ class Positioner {
     const popoverSize = this.getPopoverSizeOnConstraintSide(constraint, sideToCheck);
 
     switch (sideToCheck) {
-    default:
     case 'top':
     case 'left':
       return originCoordinate - popoverSize < parentCoord;
-    case 'right':
-    case 'bottom':
+    default:
       return originCoordinate + popoverSize > parentCoord;
     }
   }
@@ -254,15 +287,13 @@ class Positioner {
     }
 
     switch (constraint.popover.secondary) {
-    default:
     case 'right':
     case 'left':
       if (sideToCheck === constraint.popover.secondary) {
         return this.cssCache.popoverOffset;
       }
       return this.origins.popover.width - this.cssCache.popoverOffset;
-    case 'top':
-    case 'bottom':
+    default:
       if (sideToCheck === constraint.popover.secondary) {
         return this.cssCache.popoverOffset;
       }
@@ -275,9 +306,9 @@ class Positioner {
       switch (constraint.trigger.primary) {
       case 'top':
       case 'bottom':
-        return this.origins.trigger.top + this.origins.trigger.halfHeight;
-      default:
         return this.origins.trigger.left + this.origins.trigger.halfWidth;
+      default:
+        return this.origins.trigger.top + this.origins.trigger.halfHeight;
       }
     }
 
@@ -294,7 +325,7 @@ class Positioner {
     }
   }
 
-  getPopoverSizeFromSide(side) {
+  getPopoverSizeFromSideCheck(side) {
     const size = this.cssCache.arrowSize;
 
     if (side === 'top' || side === 'bottom') {
@@ -313,24 +344,24 @@ class Positioner {
     if (this.activeConstraintIs(constraintObject)) { return; }
 
     this.clearActiveConstraint();
-
     this.activeConstraint = constraintObject;
-    this.activeConstraintString = JSON.stringify(constraintObject);
+    this.toggleActiveConstraints(true);
+  }
 
-    this.togglePopoverClasses(this.getActiveConstraintClasses(), true);
+  toggleActiveConstraints(isToggled) {
+    this.togglePopoverClasses(this.getActiveConstraintClasses(), isToggled);
   }
 
   activeConstraintIs(constraintObject) {
-    return this.activeConstraintString === JSON.stringify(constraintObject);
+    if (!this.activeConstraint) { return false; }
+    return this.activeConstraint.id === constraintObject.id;
   }
 
   clearActiveConstraint() {
     if (!this.activeConstraint) { return; }
 
-    this.togglePopoverClasses(this.getActiveConstraintClasses(), false);
-
+    this.toggleActiveConstraints(false);
     this.activeConstraint = null;
-    this.activeConstraintString = null;
   }
 
   togglePopoverClasses(classes, isToggled) {
