@@ -3,7 +3,9 @@ import Positioner from './positioner';
 
 import './styles/main.scss';
 
-const defaults = {};
+const defaults = {
+  showOn: 'mouseenter',
+};
 
 class Popoverjs {
   constructor(options) {
@@ -27,19 +29,19 @@ class Popoverjs {
   }
 
   listenForRender() {
-    oneEvent(this.triggerElement, 'click', this.render);
+    oneEvent(this.triggerElement, this.options.showOn, this.render);
   }
 
   render(e) {
     e.stopImmediatePropagation();
 
     this.setUpPositioner();
-    this.show()
+    this.show();
     this.listenForOutsideClick();
   }
 
   destroyListeners() {
-    this.triggerElement.removeEventListener('click', this.render);
+    this.triggerElement.removeEventListener(this.options.showOn, this.render);
     document.body.removeEventListener('click', this.onDocumentClick);
   }
 

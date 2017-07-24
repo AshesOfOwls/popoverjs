@@ -133,7 +133,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-const defaults = {};
+const defaults = {
+  showOn: 'mouseenter',
+};
 
 class Popoverjs {
   constructor(options) {
@@ -157,19 +159,19 @@ class Popoverjs {
   }
 
   listenForRender() {
-    Object(__WEBPACK_IMPORTED_MODULE_0__utils__["b" /* oneEvent */])(this.triggerElement, 'click', this.render);
+    Object(__WEBPACK_IMPORTED_MODULE_0__utils__["b" /* oneEvent */])(this.triggerElement, this.options.showOn, this.render);
   }
 
   render(e) {
     e.stopImmediatePropagation();
 
     this.setUpPositioner();
-    this.show()
+    this.show();
     this.listenForOutsideClick();
   }
 
   destroyListeners() {
-    this.triggerElement.removeEventListener('click', this.render);
+    this.triggerElement.removeEventListener(this.options.showOn, this.render);
     document.body.removeEventListener('click', this.onDocumentClick);
   }
 
