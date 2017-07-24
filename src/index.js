@@ -65,10 +65,12 @@ class Popoverjs {
   }
 
   setUpPositioner() {
+    const constraintElement = this.constraintElement;
     const popoverElement = this.popoverElement;
     const triggerElement = this.triggerElement;
 
     this.Positioner = new Positioner(Object.assign({}, {
+      constraintElement,
       popoverElement,
       triggerElement,
     }, this.options));

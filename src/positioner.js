@@ -1,13 +1,13 @@
 import { addClass, removeClass } from './utils';
 
 const defaults = {
-  constraintParent: null,
+  constraintElement: null,
   constraints: [{
     popover: 'top right',
     trigger: 'bottom right',
   }, {
     popover: 'bottom center',
-    trigger: 'top right',
+    trigger: 'top center',
   }, {
     popover: 'top left',
     trigger: 'bottom left',
@@ -38,7 +38,7 @@ class Positioner {
     this.triggerElement = this.options.triggerElement;
     this.popoverContent = this.popoverElement.querySelector('.popoverjs-content');
     this.popoverArrow = this.popoverElement.querySelector('.popoverjs-arrow');
-    this.constraintParent = this.getConstraintParent();
+    this.constraintElement = this.getConstraintParent();
 
     this.cacheCssOffsets();
   }
@@ -63,13 +63,13 @@ class Positioner {
   }
 
   getConstraintParent() {
-    const constraintParent = this.options.constraintParent;
+    const constraintElement = this.options.constraintElement;
 
-    if (!constraintParent) {
+    if (!constraintElement) {
       return window;
     }
 
-    return constraintParent;
+    return constraintElement;
   }
 
   parseConstraints() {
@@ -154,12 +154,12 @@ class Positioner {
   }
 
   refreshParentOrigin() {
-    if (this.constraintParent === window) {
+    if (this.constraintElement === window) {
       this.origins.parent = this.getWindowOrigin();
       return;
     }
 
-    this.origins.parent = this.getElementOrigin(this.constraintParent);
+    this.origins.parent = this.getElementOrigin(this.constraintElement);
   }
 
   getWindowOrigin() {
@@ -270,9 +270,9 @@ class Positioner {
       switch (constraint.trigger.primary) {
       case 'top':
       case 'bottom':
-        return this.origins.trigger.top + this.origins.trigger.halfHeight;
-      default:
         return this.origins.trigger.left + this.origins.trigger.halfWidth;
+      default:
+        return this.origins.trigger.top + this.origins.trigger.halfHeight;
       }
     }
 
