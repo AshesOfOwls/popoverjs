@@ -92,12 +92,17 @@ class Positioner {
     this.togglePopoverClasses(sizerClasses, true);
 
     this.cssCache = {
-      arrowSize: Math.abs(this.popoverArrow.clientHeight),
+      arrowSize: this.getArrowSize(),
       triggerOffset: Math.abs(this.popoverElement.offsetLeft),
       popoverOffset: Math.abs(this.popoverContent.offsetLeft),
     };
 
     this.togglePopoverClasses(sizerClasses, false);
+  }
+
+  getArrowSize() {
+    if (!this.popoverArrow) { return 0; }
+    return Math.abs(this.popoverArrow.clientHeight);
   }
 
   getConstraintParent() {
