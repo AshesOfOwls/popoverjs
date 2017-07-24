@@ -44,19 +44,23 @@ class Positioner {
   }
 
   setUpContainer() {
-    if (this.options.bodyAttached) {
-      this.createDetachedContainer();
-    }
+    if (!this.options.bodyAttached) { return; }
+
+    this.createDetachedContainer();
   }
 
   destroyContainer() {
-    if (this.options.bodyAttached) {
-      this.originalContainer.appendChild(this.popoverElement);
-      document.body.removeChild(this.containerElement);
-    }
+    if (!this.options.bodyAttached || !this.hasAttachedContainer) { return; }
+
+    this.hasAttachedContainer = false;
+    this.originalContainer.appendChild(this.popoverElement);
+    document.body.removeChild(this.containerElement);
   }
 
   createDetachedContainer() {
+    if (this.hasAttachedContainer) { return; }
+
+    this.hasAttachedContainer = true;
     this.originalContainer = this.popoverElement.parentElement;
     this.containerElement = document.createElement('div');
     this.containerElement.classList.add('popoverjs--detatched-container');
