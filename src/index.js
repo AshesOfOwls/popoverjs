@@ -5,6 +5,7 @@ import './styles/main.scss';
 
 const defaults = {
   showOn: 'mouseenter',
+  hideOn: 'mouseleave',
 };
 
 class Popoverjs {
@@ -37,21 +38,29 @@ class Popoverjs {
 
     this.setUpPositioner();
     this.show();
-    this.listenForOutsideClick();
+    this.listenForHide();
   }
 
   destroyListeners() {
     this.triggerElement.removeEventListener(this.options.showOn, this.render);
-    document.body.removeEventListener('click', this.onDocumentClick);
+
+    if (this.options.hideOn === 'documentClick') {
+      document.body.removeEventListener('click', this.onDocumentClick);
+    }
   }
 
-  listenForOutsideClick() {
-    document.body.addEventListener('click', this.onDocumentClick);
+  listenForHide() {
+    switch (this.options.hideOn) {
+    case 'documentClick':
+      document.body.addEventListener('click', this.onDocumentClick);
+      break;
+    default:
+      this.triggerElement.addEventListener(this.options.hideOn, this.onDocumentClick);
+    }
   }
 
   onDocumentClick(e) {
     if (this.popoverElement.contains(e.target)) { return; }
-
     document.body.removeEventListener('click', this.onDocumentClick);
     this.hide();
   }
