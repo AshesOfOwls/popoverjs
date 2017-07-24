@@ -4,8 +4,8 @@ import Positioner from './positioner';
 import './styles/main.scss';
 
 const defaults = {
-  showOn: 'mouseenter',
-  hideOn: 'mouseleave',
+  showOn: 'click',
+  hideOn: 'documentClick',
 };
 
 class Popoverjs {
@@ -101,11 +101,13 @@ class Popoverjs {
   }
 
   setUpPositioner() {
+    const attachmentElement = this.attachmentElement;
     const constraintElement = this.constraintElement;
     const popoverElement = this.popoverElement;
     const triggerElement = this.triggerElement;
 
     this.Positioner = new Positioner(Object.assign({}, {
+      attachmentElement,
       constraintElement,
       popoverElement,
       triggerElement,

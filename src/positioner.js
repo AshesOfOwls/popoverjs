@@ -1,6 +1,7 @@
 import { addClass, removeClass } from './utils';
 
 const defaults = {
+  attachmentElement: null,
   constraintElement: null,
   constraints: [{
     popover: 'top right',
@@ -34,6 +35,7 @@ class Positioner {
   }
 
   setUpElements() {
+    this.attachmentElement = this.options.attachmentElement;
     this.popoverElement = this.options.popoverElement;
     this.triggerElement = this.options.triggerElement;
     this.popoverContent = this.popoverElement.querySelector('.popoverjs-content');
@@ -69,7 +71,9 @@ class Positioner {
   }
 
   maintainDetachedContainerPosition() {
-    const origin = this.origins.trigger;
+    if (!this.options.bodyAttached) { return; }
+
+    const origin = this.origins.attachment;
     delete origin.halfWidth;
     delete origin.halfHeight;
     delete origin.verticalCenter;
@@ -211,7 +215,8 @@ class Positioner {
 
   refreshElementOrigins() {
     this.origins.popover = this.getElementOrigin(this.popoverContent);
-    this.origins.trigger = this.getElementOrigin(this.triggerElement);
+    // this.origins.trigger = this.getElementOrigin(this.triggerElement);
+    this.origins.attachment = this.getElementOrigin(this.attachmentElement);
   }
 
   getElementOrigin(element) {
@@ -255,7 +260,7 @@ class Positioner {
   }
 
   isConstrainedByPrimary(side) {
-    const originCoordinate = this.origins.trigger[side];
+    const originCoordinate = this.origins.attachment[side];
     const popoverSize = this.getPopoverSizeFromSideCheck(side);
 
     if (side === 'left' || side === 'top') {
@@ -310,22 +315,22 @@ class Positioner {
       switch (constraint.trigger.primary) {
       case 'top':
       case 'bottom':
-        return this.origins.trigger.left + this.origins.trigger.halfWidth;
+        return this.origins.attachment.left + this.origins.attachment.halfWidth;
       default:
-        return this.origins.trigger.top + this.origins.trigger.halfHeight;
+        return this.origins.attachment.top + this.origins.attachment.halfHeight;
       }
     }
 
     switch (constraint.trigger.secondary) {
     default:
     case 'left':
-      return this.origins.trigger.left + this.cssCache.triggerOffset;
+      return this.origins.attachment.left + this.cssCache.triggerOffset;
     case 'right':
-      return this.origins.trigger.right - this.cssCache.triggerOffset;
+      return this.origins.attachment.right - this.cssCache.triggerOffset;
     case 'top':
-      return this.origins.trigger.top + this.cssCache.triggerOffset;
+      return this.origins.attachment.top + this.cssCache.triggerOffset;
     case 'bottom':
-      return this.origins.trigger.bottom - this.cssCache.triggerOffset;
+      return this.origins.attachment.bottom - this.cssCache.triggerOffset;
     }
   }
 
