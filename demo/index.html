@@ -3,32 +3,46 @@
     <title>PopoverJs</title>
   </head>
   <style>
+    body {
+      background: #EFEFEF;
+      padding: 30px;
+    }
+
     .trigger {
-      border: 1px solid pink;
+      background: green;
       height: 100px;
       position: relative;
-      margin: 300px;
+      margin: 30px;
       width: 200px;
     }
 
     .content {
       background: grey;
-      height: 100px;
-      margin: 20px;
-      width: 200px;
+      height: 90px;
+      margin: 5px;
+      width: 90px;
     }
 
     .container {
-      border: 1px solid pink;
-      height: 80%;
-      margin: 10%;
-      width: 80%;
+      border: 1px solid black;
+      height: 100%;
+      width: 100%;
+    }
+
+    .attachment {
+      border: 1px solid red;
+      height: 300px;
+      margin: 100px 200px;
+      position: relative;
+      width: 300px;
     }
   </style>
   <body>
     <div class="container">
-      <div class="trigger">
-        Click me
+      <div class="attachment">
+        <div class="trigger">
+          Click me
+        </div>
 
         <div class="popoverjs">
           <div class="popoverjs-arrow"></div>
@@ -44,10 +58,11 @@
     <script src="../dist/popoverjs.js"></script>
     <script>
       new Popoverjs({
+        attachmentElement: document.getElementsByClassName('attachment')[0],
         triggerElement: document.getElementsByClassName('trigger')[0],
         popoverElement: document.getElementsByClassName('popoverjs')[0],
         constraintElement: document.getElementsByClassName('container')[0],
-        bodyAttached: true,
+        // bodyAttached: true,
       })
     </script>
   </body>

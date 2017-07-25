@@ -1,12 +1,13 @@
 // Configuration
 $arrow_size: 16px;
-$arrow_edge_offset: 17px;
+$arrow_content_offset: 17px;
+$arrow_attachment_offset: 30px;
 $popover_shadow_color: rgba(0, 0, 0, 0.15);
 $popover_shadow: 0 0 3px 0 $popover_shadow_color;
 
 // Immutable Variables
 $arrow_middle: $arrow_size / 2;
-$arrow_offset: $arrow_middle + $arrow_edge_offset;
+$arrow_offset: $arrow_middle + $arrow_content_offset;
 $content_offset: $arrow_middle + 1;
 
 // Style

@@ -4,14 +4,11 @@ const defaults = {
   attachmentElement: null,
   constraintElement: null,
   constraints: [{
-    popover: 'top right',
+    popover: 'top left',
     trigger: 'bottom right',
   }, {
-    popover: 'bottom center',
-    trigger: 'top center',
-  }, {
-    popover: 'top left',
-    trigger: 'bottom left',
+    popover: 'left top',
+    trigger: 'right top',
   }],
 };
 
@@ -86,15 +83,16 @@ class Positioner {
       'popoverjs--popover-primary-top',
       'popoverjs--popover-secondary-left',
       'popoverjs--trigger-primary-left',
-      'popoverjs--trigger-secondary-bottom',
+      'popoverjs--trigger-secondary-top',
     ];
 
     this.togglePopoverClasses(sizerClasses, true);
 
     this.cssCache = {
       arrowSize: this.getArrowSize(),
+      attachmentOffset: Math.abs(this.popoverElement.offsetTop),
       triggerOffset: Math.abs(this.popoverElement.offsetLeft),
-      popoverOffset: Math.abs(this.popoverContent.offsetLeft),
+      contentOffset: Math.abs(this.popoverContent.offsetLeft),
     };
 
     this.togglePopoverClasses(sizerClasses, false);
@@ -257,8 +255,16 @@ class Positioner {
     let isOutsideConstraint = this.isConstrainedByPrimary(constraint.trigger.primary);
 
     if (!isOutsideConstraint) {
-      isOutsideConstraint = this.isConstrainedBySecondary(constraint, 'left') ||
-        this.isConstrainedBySecondary(constraint, 'right');
+      switch (constraint.trigger.primary) {
+      case 'top':
+      case 'bottom':
+        isOutsideConstraint = this.isConstrainedBySecondary(constraint, 'left') ||
+          this.isConstrainedBySecondary(constraint, 'right');
+        break;
+      default:
+        isOutsideConstraint = this.isConstrainedBySecondary(constraint, 'bottom') ||
+          this.isConstrainedBySecondary(constraint, 'top');
+      }
     }
 
     return !isOutsideConstraint;
@@ -289,6 +295,15 @@ class Positioner {
     }
   }
 
+  getAttachementOffsetForConstraint(constraint) {
+    switch (constraint.popover.secondary) {
+    case 'center':
+      return 0;
+    default:
+      return this.cssCache.attachmentOffset;
+    }
+  }
+
   getPopoverSizeOnConstraintSide(constraint, sideToCheck) {
     if (constraint.popover.secondary === 'center') {
       switch (sideToCheck) {
@@ -304,14 +319,14 @@ class Positioner {
     case 'right':
     case 'left':
       if (sideToCheck === constraint.popover.secondary) {
-        return this.cssCache.popoverOffset;
+        return this.cssCache.contentOffset;
       }
-      return this.origins.popover.width - this.cssCache.popoverOffset;
+      return this.origins.popover.width - this.cssCache.contentOffset;
     default:
       if (sideToCheck === constraint.popover.secondary) {
-        return this.cssCache.popoverOffset;
+        return this.cssCache.contentOffset;
       }
-      return this.origins.popover.height - this.cssCache.popoverOffset;
+      return this.origins.popover.height - this.cssCache.contentOffset;
     }
   }
 
@@ -326,16 +341,18 @@ class Positioner {
       }
     }
 
+    const attachmentOffset = this.getAttachementOffsetForConstraint(constraint);
+
     switch (constraint.trigger.secondary) {
     default:
     case 'left':
-      return this.origins.attachment.left + this.cssCache.triggerOffset;
+      return this.origins.attachment.left + this.cssCache.triggerOffset + attachmentOffset;
     case 'right':
-      return this.origins.attachment.right - this.cssCache.triggerOffset;
+      return this.origins.attachment.right - this.cssCache.triggerOffset - attachmentOffset;
     case 'top':
-      return this.origins.attachment.top + this.cssCache.triggerOffset;
+      return this.origins.attachment.top + this.cssCache.triggerOffset + attachmentOffset;
     case 'bottom':
-      return this.origins.attachment.bottom - this.cssCache.triggerOffset;
+      return this.origins.attachment.bottom - this.cssCache.triggerOffset - attachmentOffset;
     }
   }
 

@@ -14,16 +14,16 @@
   }
 
   &--trigger-secondary-bottom {
-    bottom: 0;
+    bottom: $arrow_attachment_offset;
   }
   &--trigger-secondary-top {
-    top: 0;
+    top: $arrow_attachment_offset;
   }
   &--trigger-secondary-right {
-    right: 0;
+    right: $arrow_attachment_offset;
   }
   &--trigger-secondary-left {
-    left: 0;
+    left: $arrow_attachment_offset;
   }
 
   &--trigger-primary-top.popoverjs--trigger-secondary-center,
