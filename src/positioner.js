@@ -70,11 +70,15 @@ class Positioner {
   maintainDetachedContainerPosition() {
     if (!this.options.bodyAttached) { return; }
 
-    const origin = this.origins.attachment;
-    delete origin.halfWidth;
-    delete origin.halfHeight;
-    delete origin.verticalCenter;
-    delete origin.horizontalCenter;
+    const attachmentOrigin = this.origins.attachment;
+
+    const origin = {
+      height: `${attachmentOrigin.height}px`,
+      width: `${attachmentOrigin.width}px`,
+      left: `${attachmentOrigin.left}px`,
+      top: `${attachmentOrigin.top}px`,
+    };
+
     Object.assign(this.containerElement.style, origin);
   }
 
