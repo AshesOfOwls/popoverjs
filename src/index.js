@@ -10,6 +10,7 @@ const defaults = {
 
 class Popoverjs {
   constructor(options) {
+    console.log('OMG');
     this.options = Object.assign(defaults, options);
 
     this.render = this.render.bind(this);

@@ -68,13 +68,17 @@ class Positioner {
   }
 
   maintainDetachedContainerPosition() {
+    console.log('try');
     if (!this.options.bodyAttached) { return; }
 
+    console.log('success');
     const origin = this.origins.attachment;
     delete origin.halfWidth;
     delete origin.halfHeight;
     delete origin.verticalCenter;
     delete origin.horizontalCenter;
+    console.log('success?', origin);
+    console.log('success??', this.containerElement);
     Object.assign(this.containerElement.style, origin);
   }
 
