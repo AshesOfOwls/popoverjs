@@ -25,6 +25,11 @@ class Popoverjs {
   constructor(options) {
     this.options = Object.assign(defaults, options);
 
+    this.checkForRequiredOptions();
+    this.initialize();
+  }
+
+  checkForRequiredOptions() {
     const optionKeys = Object.keys(this.options);
 
     requiredOptions.forEach((option) => {
@@ -32,8 +37,6 @@ class Popoverjs {
         error(`Must supply ${option} option to Popoverjs`);
       }
     });
-
-    this.initialize();
   }
 
   initialize() {
