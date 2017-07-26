@@ -282,6 +282,11 @@ class Positioner {
       return originCoordinate - popoverSize < this.origins.parent[side];
     }
 
+    if (originCoordinate + popoverSize < this.origins.parent[side]) {
+      console.log("?", originCoordinate, popoverSize, this.origins.parent[side]);
+      debugger
+    }
+
     return originCoordinate + popoverSize > this.origins.parent[side];
   }
 
