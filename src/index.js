@@ -1,6 +1,8 @@
 import Renderer from './renderer';
 import Positioner from './positioner';
 
+import { error } from './utils';
+
 import './styles/main.scss';
 
 const defaults = {
@@ -14,9 +16,22 @@ const defaults = {
   onAfterShow: () => {},
 };
 
+const requiredOptions = [
+  'attachmentElement',
+  'popoverElement',
+];
+
 class Popoverjs {
   constructor(options) {
     this.options = Object.assign(defaults, options);
+
+    const optionKeys = Object.keys(this.options);
+
+    requiredOptions.forEach((option) => {
+      if (!optionKeys.includes(option)) {
+        error(`Must supply ${option} option to Popoverjs`);
+      }
+    });
 
     this.initialize();
   }

@@ -78,13 +78,14 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return oneEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return oneEvent; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return addClass; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return removeClass; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getElementOrigin; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return error; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return removeClass; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getElementOrigin; });
 /* unused harmony export setHalfPointsOnOrigin */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getWindowOrigin; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return whichTransitionEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return getWindowOrigin; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return whichTransitionEvent; });
 const oneEvent = (target, eventType, callback) => {
   const wrappedCallback = (eventObject) => {
     target.removeEventListener(eventType, wrappedCallback);
@@ -160,6 +161,10 @@ const whichTransitionEvent = (element) => {
   return transitions[rendererType];
 };
 
+const error = (message) => {
+  throw new Error(message);
+};
+
 
 
 
@@ -171,8 +176,11 @@ const whichTransitionEvent = (element) => {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__renderer__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__positioner__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__styles_main_scss__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__styles_main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__styles_main_scss__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__styles_main_scss__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__styles_main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__styles_main_scss__);
+
+
 
 
 
@@ -189,9 +197,22 @@ const defaults = {
   onAfterShow: () => {},
 };
 
+const requiredOptions = [
+  'attachmentElement',
+  'popoverElement',
+];
+
 class Popoverjs {
   constructor(options) {
     this.options = Object.assign(defaults, options);
+
+    const optionKeys = Object.keys(this.options);
+
+    requiredOptions.forEach((option) => {
+      if (!optionKeys.includes(option)) {
+        Object(__WEBPACK_IMPORTED_MODULE_2__utils__["b" /* error */])(`Must supply ${option} option to Popoverjs`);
+      }
+    });
 
     this.initialize();
   }
@@ -443,16 +464,16 @@ class Positioner {
 
   refreshParentOrigin() {
     if (this.constraintElement === window) {
-      this.origins.parent = Object(__WEBPACK_IMPORTED_MODULE_0__utils__["c" /* getWindowOrigin */])();
+      this.origins.parent = Object(__WEBPACK_IMPORTED_MODULE_0__utils__["d" /* getWindowOrigin */])();
       return;
     }
 
-    this.origins.parent = Object(__WEBPACK_IMPORTED_MODULE_0__utils__["b" /* getElementOrigin */])(this.constraintElement);
+    this.origins.parent = Object(__WEBPACK_IMPORTED_MODULE_0__utils__["c" /* getElementOrigin */])(this.constraintElement);
   }
 
   refreshElementOrigins() {
-    this.origins.popover = Object(__WEBPACK_IMPORTED_MODULE_0__utils__["b" /* getElementOrigin */])(this.popoverContent);
-    this.origins.attachment = Object(__WEBPACK_IMPORTED_MODULE_0__utils__["b" /* getElementOrigin */])(this.attachmentElement);
+    this.origins.popover = Object(__WEBPACK_IMPORTED_MODULE_0__utils__["c" /* getElementOrigin */])(this.popoverContent);
+    this.origins.attachment = Object(__WEBPACK_IMPORTED_MODULE_0__utils__["c" /* getElementOrigin */])(this.attachmentElement);
   }
 
   canFitInto(constraint) {
@@ -603,7 +624,7 @@ class Positioner {
 
   togglePopoverClasses(classes, isToggled) {
     const popover = this.popoverElement;
-    const method = isToggled ? __WEBPACK_IMPORTED_MODULE_0__utils__["a" /* addClass */] : __WEBPACK_IMPORTED_MODULE_0__utils__["e" /* removeClass */];
+    const method = isToggled ? __WEBPACK_IMPORTED_MODULE_0__utils__["a" /* addClass */] : __WEBPACK_IMPORTED_MODULE_0__utils__["f" /* removeClass */];
 
     classes.forEach((className) => {
       method(popover, className);
@@ -1248,7 +1269,7 @@ class Renderer {
   }
 
   listenForRender() {
-    Object(__WEBPACK_IMPORTED_MODULE_0__utils__["d" /* oneEvent */])(this.triggerElement, this.options.showOn, this.render);
+    Object(__WEBPACK_IMPORTED_MODULE_0__utils__["e" /* oneEvent */])(this.triggerElement, this.options.showOn, this.render);
   }
 
   render(e) {
@@ -1283,8 +1304,8 @@ class Renderer {
   }
 
   listenForToggleEnd() {
-    Object(__WEBPACK_IMPORTED_MODULE_0__utils__["d" /* oneEvent */])(this.popoverElement,
-      Object(__WEBPACK_IMPORTED_MODULE_0__utils__["f" /* whichTransitionEvent */])(this.popoverElement),
+    Object(__WEBPACK_IMPORTED_MODULE_0__utils__["e" /* oneEvent */])(this.popoverElement,
+      Object(__WEBPACK_IMPORTED_MODULE_0__utils__["g" /* whichTransitionEvent */])(this.popoverElement),
       this.onToggleEnd.bind(this),
       transitionEvent => (transitionEvent.propertyName === 'opacity'),
     );
@@ -1343,7 +1364,7 @@ class Renderer {
     if (isVisible) {
       Object(__WEBPACK_IMPORTED_MODULE_0__utils__["a" /* addClass */])(this.popoverElement, 'is-visible');
     } else {
-      Object(__WEBPACK_IMPORTED_MODULE_0__utils__["e" /* removeClass */])(this.popoverElement, 'is-visible');
+      Object(__WEBPACK_IMPORTED_MODULE_0__utils__["f" /* removeClass */])(this.popoverElement, 'is-visible');
     }
   }
 

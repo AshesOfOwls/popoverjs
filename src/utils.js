@@ -73,9 +73,14 @@ const whichTransitionEvent = (element) => {
   return transitions[rendererType];
 };
 
+const error = (message) => {
+  throw new Error(message);
+};
+
 export {
   oneEvent,
   addClass,
+  error,
   removeClass,
   getElementOrigin,
   setHalfPointsOnOrigin,
