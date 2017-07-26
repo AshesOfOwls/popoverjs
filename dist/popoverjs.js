@@ -152,6 +152,8 @@ class Popoverjs {
   }
 
   position() {
+    if (!this.renderer.Positioner) { return; }
+
     this.renderer.Positioner.position();
   }
 }
