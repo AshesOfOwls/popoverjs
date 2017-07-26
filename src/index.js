@@ -10,6 +10,8 @@ const defaults = {
   hideOn: 'documentClick',
   showDelay: 0,
   hideDelay: 200,
+  unecessaryPositioning: false,
+  resizePositioning: true,
   onBeforeHide: () => {},
   onBeforeShow: () => {},
   onAfterHide: () => {},

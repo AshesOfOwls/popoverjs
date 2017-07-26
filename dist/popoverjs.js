@@ -191,6 +191,8 @@ const defaults = {
   hideOn: 'documentClick',
   showDelay: 0,
   hideDelay: 200,
+  unecessaryPositioning: false,
+  resizePositioning: true,
   onBeforeHide: () => {},
   onBeforeShow: () => {},
   onAfterHide: () => {},
@@ -419,6 +421,7 @@ class Positioner {
   }
 
   listenForResize() {
+    if (!this.options.resizePositioning) { return; }
     window.addEventListener('resize', this.onResize.bind(this));
   }
 
@@ -450,6 +453,10 @@ class Positioner {
   }
 
   getActiveConstraint() {
+    if (!this.options.unecessaryPositioning && this.canFitInto(this.activeConstraint)) {
+      return this.activeConstraint;
+    }
+
     const activeConstraint = this.constraints.find((constraint) => {
       if (this.canFitInto(constraint)) { return constraint; }
       return false;
