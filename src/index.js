@@ -10,7 +10,7 @@ const defaults = {
   hideOn: 'documentClick',
   showDelay: 0,
   hideDelay: 200,
-  unecessaryPositioning: false,
+  unnecessaryRepositioning: false,
   resizePositioning: true,
   onBeforeHide: () => {},
   onBeforeShow: () => {},
@@ -25,7 +25,8 @@ const requiredOptions = [
 
 class Popoverjs {
   constructor(options) {
-    this.options = Object.assign(defaults, options);
+    this.options = Object.assign({}, defaults);
+    this.options = Object.assign(this.options, options);
 
     this.checkForRequiredOptions();
     this.initialize();

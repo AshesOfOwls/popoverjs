@@ -14,7 +14,8 @@ const defaults = {
 
 class Positioner {
   constructor(options) {
-    this.options = Object.assign(defaults, options);
+    this.options = Object.assign({}, defaults);
+    this.options = Object.assign(this.options, options);
 
     this.initialize();
   }
@@ -181,7 +182,7 @@ class Positioner {
   }
 
   getActiveConstraint() {
-    if (!this.options.unecessaryPositioning && this.canFitInto(this.activeConstraint)) {
+    if (!this.options.unnecessaryRepositioning && this.canFitInto(this.activeConstraint)) {
       return this.activeConstraint;
     }
 

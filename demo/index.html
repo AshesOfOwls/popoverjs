@@ -10,10 +10,10 @@
 
     .trigger {
       background: green;
-      height: 100px;
+      height: 30px;
       position: relative;
       margin: 30px;
-      width: 200px;
+      width: 100px;
     }
 
     .content {
@@ -40,15 +40,70 @@
   <body>
     <div class="container">
       <div class="attachment">
-        <div class="trigger">
+        <div class="trigger trigger-0">
           Click me
         </div>
 
-        <div class="popoverjs">
+        <div class="popoverjs popover-0">
           <div class="popoverjs-arrow"></div>
           <div class="popoverjs-content">
             <div class="content">
-              This is what a popover looks like.
+            </div>
+          </div>
+        </div>
+
+        <div class="trigger trigger-1">
+          Click me
+        </div>
+
+        <div class="popoverjs popover-1">
+          <div class="popoverjs-arrow"></div>
+          <div class="popoverjs-content">
+            <div class="content">
+              <div class="trigger trigger-2">
+                Click me
+              </div>
+
+              <div class="popoverjs popover-2">
+                <div class="popoverjs-arrow"></div>
+                <div class="popoverjs-content">
+                  <div class="content">
+                    <div class="trigger trigger-3">
+                      Click me
+                    </div>
+
+                    <div class="popoverjs popover-3">
+                      <div class="popoverjs-arrow"></div>
+                      <div class="popoverjs-content">
+                        <div class="content">
+                          <div class="trigger trigger-4">
+                            Click me
+                          </div>
+
+                          <div class="popoverjs popover-4">
+                            <div class="popoverjs-arrow"></div>
+                            <div class="popoverjs-content">
+                              <div class="content">
+                                <div class="trigger trigger-5">
+                                  Click me
+                                </div>
+
+                                <div class="popoverjs popover-5">
+                                  <div class="popoverjs-arrow"></div>
+                                  <div class="popoverjs-content">
+                                    <div class="content">
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -59,14 +114,66 @@
     <script>
       new Popoverjs({
         bodyAttached: true,
+        unnecessaryRepositioning: true,
+        triggerElement: document.getElementsByClassName('trigger-0')[0],
         attachmentElement: document.getElementsByClassName('attachment')[0],
-        popoverElement: document.getElementsByClassName('popoverjs')[0],
+        popoverElement: document.getElementsByClassName('popover-0')[0],
+        constraintElement: document.getElementsByClassName('container')[0],
+        constraints: [{
+          popover: 'top left',
+          trigger: 'bottom left',
+        }, {
+          popover: 'right center',
+          trigger: 'left center',
+        }],
+        onBeforeHide: () => { console.log('onBeforeHide') },
+        onBeforeShow: () => { console.log('onBeforeShow') },
+        onAfterHide: () => { console.log('onAfterHide') },
+        onAfterShow: () => { console.log('onAfterShow') },
+      });
+
+      new Popoverjs({
+        bodyAttached: true,
+        unnecessaryRepositioning: true,
+        triggerElement: document.getElementsByClassName('trigger-1')[0],
+        attachmentElement: document.getElementsByClassName('attachment')[0],
+        popoverElement: document.getElementsByClassName('popover-1')[0],
         constraintElement: document.getElementsByClassName('container')[0],
         onBeforeHide: () => { console.log('onBeforeHide') },
         onBeforeShow: () => { console.log('onBeforeShow') },
         onAfterHide: () => { console.log('onAfterHide') },
         onAfterShow: () => { console.log('onAfterShow') },
-      })
+      });
+
+      console.log("Yars")
+
+      new Popoverjs({
+        bodyAttached: true,
+        unnecessaryRepositioning: true,
+        attachmentElement: document.getElementsByClassName('trigger-2')[0],
+        popoverElement: document.getElementsByClassName('popover-2')[0],
+      });
+
+      new Popoverjs({
+        bodyAttached: true,
+        unnecessaryRepositioning: true,
+        attachmentElement: document.getElementsByClassName('trigger-3')[0],
+        popoverElement: document.getElementsByClassName('popover-3')[0],
+      });
+
+      new Popoverjs({
+        bodyAttached: true,
+        unnecessaryRepositioning: true,
+        attachmentElement: document.getElementsByClassName('trigger-4')[0],
+        popoverElement: document.getElementsByClassName('popover-4')[0],
+      });
+
+      new Popoverjs({
+        bodyAttached: true,
+        unnecessaryRepositioning: true,
+        attachmentElement: document.getElementsByClassName('trigger-5')[0],
+        popoverElement: document.getElementsByClassName('popover-5')[0],
+      });
     </script>
   </body>
 </html>
