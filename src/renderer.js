@@ -1,5 +1,4 @@
 import { oneEvent, addClass, removeClass, whichTransitionEvent } from './utils';
-import Positioner from './positioner';
 
 import './styles/main.scss';
 
@@ -36,7 +35,6 @@ class Renderer {
   render(e) {
     e.stopImmediatePropagation();
 
-    this.setUpPositioner();
     this.show();
     this.listenForHide();
   }
@@ -75,8 +73,8 @@ class Renderer {
 
   onToggleEnd() {
     if (!this.isVisible) {
-      this.Positioner.disable();
       this.listenForRender();
+      this.options.onToggleEnd();
     }
   }
 
@@ -98,28 +96,6 @@ class Renderer {
     }
 
     return removeClass(this.popoverElement, 'is-visible');
-  }
-
-  position() {
-    if (!this.Positioner) { return; }
-
-    this.Positioner.position();
-  }
-
-  setUpPositioner() {
-    const attachmentElement = this.attachmentElement;
-    const constraintElement = this.constraintElement;
-    const popoverElement = this.popoverElement;
-    const triggerElement = this.triggerElement;
-
-    this.Positioner = new Positioner(Object.assign({}, {
-      attachmentElement,
-      constraintElement,
-      popoverElement,
-      triggerElement,
-    }, this.options));
-
-    this.Positioner.enable();
   }
 }
 

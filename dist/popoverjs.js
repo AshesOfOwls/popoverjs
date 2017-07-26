@@ -125,8 +125,10 @@ const whichTransitionEvent = (element) => {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__renderer__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__styles_main_scss__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__styles_main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__styles_main_scss__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__positioner__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__styles_main_scss__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__styles_main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__styles_main_scss__);
+
 
 
 
@@ -144,11 +146,41 @@ class Popoverjs {
   }
 
   initialize() {
-    this.renderer = new __WEBPACK_IMPORTED_MODULE_0__renderer__["a" /* default */](this.options);
+    this.setUpPositioner();
+    this.setUpRenderer();
   }
 
   position() {
-    this.renderer.position();
+    this.Positioner.position();
+  }
+
+  get rendererOptions() {
+    return Object.assign({}, this.options, {
+      onToggleEnd: this.onToggleEnd.bind(this),
+    });
+  }
+
+  onToggleEnd() {
+    this.Positioner.disable();
+  }
+
+  setUpRenderer() {
+    this.renderer = new __WEBPACK_IMPORTED_MODULE_0__renderer__["a" /* default */](this.rendererOptions);
+  }
+
+  setUpPositioner() {
+    this.Positioner = new __WEBPACK_IMPORTED_MODULE_1__positioner__["a" /* default */](this.positionerOptions);
+
+    this.Positioner.enable();
+  }
+
+  get positionerOptions() {
+    return Object.assign({}, {
+      attachmentElement: this.attachmentElement,
+      constraintElement: this.constraintElement,
+      popoverElement: this.popoverElement,
+      triggerElement: this.triggerElement,
+    }, this.options);
   }
 }
 
@@ -1178,10 +1210,8 @@ module.exports = function (css) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__positioner__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__styles_main_scss__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__styles_main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__styles_main_scss__);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__styles_main_scss__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__styles_main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__styles_main_scss__);
 
 
 
@@ -1219,7 +1249,6 @@ class Renderer {
   render(e) {
     e.stopImmediatePropagation();
 
-    this.setUpPositioner();
     this.show();
     this.listenForHide();
   }
@@ -1258,8 +1287,8 @@ class Renderer {
 
   onToggleEnd() {
     if (!this.isVisible) {
-      this.Positioner.disable();
       this.listenForRender();
+      this.options.onToggleEnd();
     }
   }
 
@@ -1281,28 +1310,6 @@ class Renderer {
     }
 
     return Object(__WEBPACK_IMPORTED_MODULE_0__utils__["c" /* removeClass */])(this.popoverElement, 'is-visible');
-  }
-
-  position() {
-    if (!this.Positioner) { return; }
-
-    this.Positioner.position();
-  }
-
-  setUpPositioner() {
-    const attachmentElement = this.attachmentElement;
-    const constraintElement = this.constraintElement;
-    const popoverElement = this.popoverElement;
-    const triggerElement = this.triggerElement;
-
-    this.Positioner = new __WEBPACK_IMPORTED_MODULE_1__positioner__["a" /* default */](Object.assign({}, {
-      attachmentElement,
-      constraintElement,
-      popoverElement,
-      triggerElement,
-    }, this.options));
-
-    this.Positioner.enable();
   }
 }
 
