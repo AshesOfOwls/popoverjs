@@ -6,6 +6,10 @@ import './styles/main.scss';
 const defaults = {
   showOn: 'click',
   hideOn: 'documentClick',
+  onBeforeHide: () => {},
+  onBeforeShow: () => {},
+  onAfterHide: () => {},
+  onAfterShow: () => {},
 };
 
 class Popoverjs {

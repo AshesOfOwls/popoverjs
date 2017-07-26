@@ -181,6 +181,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 const defaults = {
   showOn: 'click',
   hideOn: 'documentClick',
+  onBeforeHide: () => {},
+  onBeforeShow: () => {},
+  onAfterHide: () => {},
+  onAfterShow: () => {},
 };
 
 class Popoverjs {
@@ -1286,31 +1290,38 @@ class Renderer {
     );
   }
 
-  onToggleEnd() {
-    if (!this.isVisible) {
-      this.listenForRender();
-      this.options.onToggleEnd();
-    }
-  }
-
   show() {
+    this.options.onBeforeShow();
     this.toggleVisibility(true);
   }
 
   hide() {
+    this.options.onBeforeHide();
     this.toggleVisibility(false);
   }
 
   toggleVisibility(isVisible = false) {
+    if (this.isVisible === isVisible) { return; }
+
     this.isVisible = isVisible;
 
     this.listenForToggleEnd();
 
     if (isVisible) {
-      return Object(__WEBPACK_IMPORTED_MODULE_0__utils__["a" /* addClass */])(this.popoverElement, 'is-visible');
+      Object(__WEBPACK_IMPORTED_MODULE_0__utils__["a" /* addClass */])(this.popoverElement, 'is-visible');
+    } else {
+      Object(__WEBPACK_IMPORTED_MODULE_0__utils__["e" /* removeClass */])(this.popoverElement, 'is-visible');
     }
+  }
 
-    return Object(__WEBPACK_IMPORTED_MODULE_0__utils__["e" /* removeClass */])(this.popoverElement, 'is-visible');
+  onToggleEnd() {
+    if (!this.isVisible) {
+      this.options.onAfterHide();
+      this.options.onToggleEnd();
+      this.listenForRender();
+    } else {
+      this.options.onAfterShow();
+    }
   }
 }
 

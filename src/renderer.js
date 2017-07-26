@@ -71,31 +71,38 @@ class Renderer {
     );
   }
 
-  onToggleEnd() {
-    if (!this.isVisible) {
-      this.listenForRender();
-      this.options.onToggleEnd();
-    }
-  }
-
   show() {
+    this.options.onBeforeShow();
     this.toggleVisibility(true);
   }
 
   hide() {
+    this.options.onBeforeHide();
     this.toggleVisibility(false);
   }
 
   toggleVisibility(isVisible = false) {
+    if (this.isVisible === isVisible) { return; }
+
     this.isVisible = isVisible;
 
     this.listenForToggleEnd();
 
     if (isVisible) {
-      return addClass(this.popoverElement, 'is-visible');
+      addClass(this.popoverElement, 'is-visible');
+    } else {
+      removeClass(this.popoverElement, 'is-visible');
     }
+  }
 
-    return removeClass(this.popoverElement, 'is-visible');
+  onToggleEnd() {
+    if (!this.isVisible) {
+      this.options.onAfterHide();
+      this.options.onToggleEnd();
+      this.listenForRender();
+    } else {
+      this.options.onAfterShow();
+    }
   }
 }
 
