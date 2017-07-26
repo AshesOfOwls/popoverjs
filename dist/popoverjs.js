@@ -444,10 +444,10 @@ class Positioner {
     const popoverSize = this.getPopoverSizeFromSideCheck(side);
 
     if (side === 'left' || side === 'top') {
-      return originCoordinate - popoverSize < this.origins.parent[side];
+      return originCoordinate - popoverSize <= this.origins.parent[side];
     }
 
-    return originCoordinate + popoverSize > this.origins.parent[side];
+    return originCoordinate + popoverSize >= this.origins.parent[side];
   }
 
   isConstrainedBySecondary(constraint, sideToCheck) {
@@ -458,9 +458,9 @@ class Positioner {
     switch (sideToCheck) {
     case 'top':
     case 'left':
-      return originCoordinate - popoverSize < parentCoord;
+      return originCoordinate - popoverSize <= parentCoord;
     default:
-      return originCoordinate + popoverSize > parentCoord;
+      return originCoordinate + popoverSize >= parentCoord;
     }
   }
 
