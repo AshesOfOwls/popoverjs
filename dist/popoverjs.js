@@ -144,17 +144,11 @@ class Popoverjs {
   }
 
   initialize() {
-    this.enableRenderer();
-  }
-
-  enableRenderer() {
     this.renderer = new __WEBPACK_IMPORTED_MODULE_0__renderer__["a" /* default */](this.options);
   }
 
   position() {
-    if (!this.renderer.Positioner) { return; }
-
-    this.renderer.Positioner.position();
+    this.renderer.position();
   }
 }
 
@@ -1287,6 +1281,12 @@ class Renderer {
     }
 
     return Object(__WEBPACK_IMPORTED_MODULE_0__utils__["c" /* removeClass */])(this.popoverElement, 'is-visible');
+  }
+
+  position() {
+    if (!this.Positioner) { return; }
+
+    this.Positioner.position();
   }
 
   setUpPositioner() {

@@ -15,17 +15,11 @@ class Popoverjs {
   }
 
   initialize() {
-    this.enableRenderer();
-  }
-
-  enableRenderer() {
     this.renderer = new Renderer(this.options);
   }
 
   position() {
-    if (!this.renderer.Positioner) { return; }
-
-    this.renderer.Positioner.position();
+    this.renderer.position();
   }
 }
 

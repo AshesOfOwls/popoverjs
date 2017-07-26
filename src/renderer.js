@@ -100,6 +100,12 @@ class Renderer {
     return removeClass(this.popoverElement, 'is-visible');
   }
 
+  position() {
+    if (!this.Positioner) { return; }
+
+    this.Positioner.position();
+  }
+
   setUpPositioner() {
     const attachmentElement = this.attachmentElement;
     const constraintElement = this.constraintElement;
