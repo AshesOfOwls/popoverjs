@@ -197,8 +197,15 @@ class Popoverjs {
   }
 
   initialize() {
+    this.setUpGlobals();
     this.setUpPositioner();
     this.setUpRenderer();
+  }
+
+  setUpGlobals() {
+    if (!this.options.triggerElement) {
+      this.options.triggerElement = this.options.attachmentElement;
+    }
   }
 
   position() {
@@ -220,18 +227,9 @@ class Popoverjs {
   }
 
   setUpPositioner() {
-    this.Positioner = new __WEBPACK_IMPORTED_MODULE_1__positioner__["a" /* default */](this.positionerOptions);
+    this.Positioner = new __WEBPACK_IMPORTED_MODULE_1__positioner__["a" /* default */](this.options);
 
     this.Positioner.enable();
-  }
-
-  get positionerOptions() {
-    return Object.assign({}, {
-      attachmentElement: this.attachmentElement,
-      constraintElement: this.constraintElement,
-      popoverElement: this.popoverElement,
-      triggerElement: this.triggerElement,
-    }, this.options);
   }
 }
 

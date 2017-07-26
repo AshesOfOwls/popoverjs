@@ -22,8 +22,15 @@ class Popoverjs {
   }
 
   initialize() {
+    this.setUpGlobals();
     this.setUpPositioner();
     this.setUpRenderer();
+  }
+
+  setUpGlobals() {
+    if (!this.options.triggerElement) {
+      this.options.triggerElement = this.options.attachmentElement;
+    }
   }
 
   position() {
@@ -45,18 +52,9 @@ class Popoverjs {
   }
 
   setUpPositioner() {
-    this.Positioner = new Positioner(this.positionerOptions);
+    this.Positioner = new Positioner(this.options);
 
     this.Positioner.enable();
-  }
-
-  get positionerOptions() {
-    return Object.assign({}, {
-      attachmentElement: this.attachmentElement,
-      constraintElement: this.constraintElement,
-      popoverElement: this.popoverElement,
-      triggerElement: this.triggerElement,
-    }, this.options);
   }
 }
 
