@@ -1,4 +1,4 @@
-import { addClass, removeClass } from './utils';
+import { addClass, removeClass, getElementOrigin, getWindowOrigin } from './utils';
 
 const defaults = {
   attachmentElement: null,
@@ -197,60 +197,16 @@ class Positioner {
 
   refreshParentOrigin() {
     if (this.constraintElement === window) {
-      this.origins.parent = this.getWindowOrigin();
+      this.origins.parent = getWindowOrigin();
       return;
     }
 
-    this.origins.parent = this.getElementOrigin(this.constraintElement);
-  }
-
-  getWindowOrigin() {
-    const height = window.innerHeight;
-    const width = window.innerWidth;
-
-    const origin = {
-      bottom: height,
-      height,
-      left: 0,
-      right: width,
-      top: 0,
-      width,
-    };
-
-    return this.setHalfPointsOnOrigin(origin);
+    this.origins.parent = getElementOrigin(this.constraintElement);
   }
 
   refreshElementOrigins() {
-    this.origins.popover = this.getElementOrigin(this.popoverContent);
-    // this.origins.trigger = this.getElementOrigin(this.triggerElement);
-    this.origins.attachment = this.getElementOrigin(this.attachmentElement);
-  }
-
-  getElementOrigin(element) {
-    const clientRect = element.getBoundingClientRect();
-
-    const origin = {
-      left: clientRect.left,
-      right: clientRect.right,
-      bottom: clientRect.bottom,
-      top: clientRect.top,
-      height: clientRect.height,
-      width: clientRect.width,
-    };
-
-    return this.setHalfPointsOnOrigin(origin);
-  }
-
-  setHalfPointsOnOrigin(origin) {
-    const halfHeight = origin.height / 2;
-    const halfWidth = origin.width / 2;
-
-    return Object.assign(origin, {
-      halfHeight,
-      halfWidth,
-      verticalCenter: origin.top + halfHeight,
-      horizontalCenter: origin.left + halfWidth,
-    });
+    this.origins.popover = getElementOrigin(this.popoverContent);
+    this.origins.attachment = getElementOrigin(this.attachmentElement);
   }
 
   canFitInto(constraint) {

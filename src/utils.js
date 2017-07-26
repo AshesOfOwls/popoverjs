@@ -15,7 +15,49 @@ const removeClass = (element, className) => {
   element.classList.remove(className);
 };
 
-/* From Modernizr */
+const setHalfPointsOnOrigin = (origin) => {
+  const halfHeight = origin.height / 2;
+  const halfWidth = origin.width / 2;
+
+  return Object.assign(origin, {
+    halfHeight,
+    halfWidth,
+    verticalCenter: origin.top + halfHeight,
+    horizontalCenter: origin.left + halfWidth,
+  });
+};
+
+const getWindowOrigin = () => {
+  const height = window.innerHeight;
+  const width = window.innerWidth;
+
+  const origin = {
+    bottom: height,
+    height,
+    left: 0,
+    right: width,
+    top: 0,
+    width,
+  };
+
+  return setHalfPointsOnOrigin(origin);
+};
+
+const getElementOrigin = (element) => {
+  const clientRect = element.getBoundingClientRect();
+
+  const origin = {
+    left: clientRect.left,
+    right: clientRect.right,
+    bottom: clientRect.bottom,
+    top: clientRect.top,
+    height: clientRect.height,
+    width: clientRect.width,
+  };
+
+  return setHalfPointsOnOrigin(origin);
+};
+
 const whichTransitionEvent = (element) => {
   const transitions = {
     transition: 'transitionend',
@@ -35,5 +77,8 @@ export {
   oneEvent,
   addClass,
   removeClass,
+  getElementOrigin,
+  setHalfPointsOnOrigin,
+  getWindowOrigin,
   whichTransitionEvent,
 };

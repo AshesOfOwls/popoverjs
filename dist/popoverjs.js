@@ -78,10 +78,13 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return oneEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return oneEvent; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return addClass; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return removeClass; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return whichTransitionEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return removeClass; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getElementOrigin; });
+/* unused harmony export setHalfPointsOnOrigin */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getWindowOrigin; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return whichTransitionEvent; });
 const oneEvent = (target, eventType, callback) => {
   const wrappedCallback = (eventObject) => {
     target.removeEventListener(eventType, wrappedCallback);
@@ -99,7 +102,49 @@ const removeClass = (element, className) => {
   element.classList.remove(className);
 };
 
-/* From Modernizr */
+const setHalfPointsOnOrigin = (origin) => {
+  const halfHeight = origin.height / 2;
+  const halfWidth = origin.width / 2;
+
+  return Object.assign(origin, {
+    halfHeight,
+    halfWidth,
+    verticalCenter: origin.top + halfHeight,
+    horizontalCenter: origin.left + halfWidth,
+  });
+};
+
+const getWindowOrigin = () => {
+  const height = window.innerHeight;
+  const width = window.innerWidth;
+
+  const origin = {
+    bottom: height,
+    height,
+    left: 0,
+    right: width,
+    top: 0,
+    width,
+  };
+
+  return setHalfPointsOnOrigin(origin);
+};
+
+const getElementOrigin = (element) => {
+  const clientRect = element.getBoundingClientRect();
+
+  const origin = {
+    left: clientRect.left,
+    right: clientRect.right,
+    bottom: clientRect.bottom,
+    top: clientRect.top,
+    height: clientRect.height,
+    width: clientRect.width,
+  };
+
+  return setHalfPointsOnOrigin(origin);
+};
+
 const whichTransitionEvent = (element) => {
   const transitions = {
     transition: 'transitionend',
@@ -394,60 +439,16 @@ class Positioner {
 
   refreshParentOrigin() {
     if (this.constraintElement === window) {
-      this.origins.parent = this.getWindowOrigin();
+      this.origins.parent = Object(__WEBPACK_IMPORTED_MODULE_0__utils__["c" /* getWindowOrigin */])();
       return;
     }
 
-    this.origins.parent = this.getElementOrigin(this.constraintElement);
-  }
-
-  getWindowOrigin() {
-    const height = window.innerHeight;
-    const width = window.innerWidth;
-
-    const origin = {
-      bottom: height,
-      height,
-      left: 0,
-      right: width,
-      top: 0,
-      width,
-    };
-
-    return this.setHalfPointsOnOrigin(origin);
+    this.origins.parent = Object(__WEBPACK_IMPORTED_MODULE_0__utils__["b" /* getElementOrigin */])(this.constraintElement);
   }
 
   refreshElementOrigins() {
-    this.origins.popover = this.getElementOrigin(this.popoverContent);
-    // this.origins.trigger = this.getElementOrigin(this.triggerElement);
-    this.origins.attachment = this.getElementOrigin(this.attachmentElement);
-  }
-
-  getElementOrigin(element) {
-    const clientRect = element.getBoundingClientRect();
-
-    const origin = {
-      left: clientRect.left,
-      right: clientRect.right,
-      bottom: clientRect.bottom,
-      top: clientRect.top,
-      height: clientRect.height,
-      width: clientRect.width,
-    };
-
-    return this.setHalfPointsOnOrigin(origin);
-  }
-
-  setHalfPointsOnOrigin(origin) {
-    const halfHeight = origin.height / 2;
-    const halfWidth = origin.width / 2;
-
-    return Object.assign(origin, {
-      halfHeight,
-      halfWidth,
-      verticalCenter: origin.top + halfHeight,
-      horizontalCenter: origin.left + halfWidth,
-    });
+    this.origins.popover = Object(__WEBPACK_IMPORTED_MODULE_0__utils__["b" /* getElementOrigin */])(this.popoverContent);
+    this.origins.attachment = Object(__WEBPACK_IMPORTED_MODULE_0__utils__["b" /* getElementOrigin */])(this.attachmentElement);
   }
 
   canFitInto(constraint) {
@@ -598,7 +599,7 @@ class Positioner {
 
   togglePopoverClasses(classes, isToggled) {
     const popover = this.popoverElement;
-    const method = isToggled ? __WEBPACK_IMPORTED_MODULE_0__utils__["a" /* addClass */] : __WEBPACK_IMPORTED_MODULE_0__utils__["c" /* removeClass */];
+    const method = isToggled ? __WEBPACK_IMPORTED_MODULE_0__utils__["a" /* addClass */] : __WEBPACK_IMPORTED_MODULE_0__utils__["e" /* removeClass */];
 
     classes.forEach((className) => {
       method(popover, className);
@@ -1243,7 +1244,7 @@ class Renderer {
   }
 
   listenForRender() {
-    Object(__WEBPACK_IMPORTED_MODULE_0__utils__["b" /* oneEvent */])(this.triggerElement, this.options.showOn, this.render);
+    Object(__WEBPACK_IMPORTED_MODULE_0__utils__["d" /* oneEvent */])(this.triggerElement, this.options.showOn, this.render);
   }
 
   render(e) {
@@ -1278,8 +1279,8 @@ class Renderer {
   }
 
   listenForToggleEnd() {
-    Object(__WEBPACK_IMPORTED_MODULE_0__utils__["b" /* oneEvent */])(this.popoverElement,
-      Object(__WEBPACK_IMPORTED_MODULE_0__utils__["d" /* whichTransitionEvent */])(this.popoverElement),
+    Object(__WEBPACK_IMPORTED_MODULE_0__utils__["d" /* oneEvent */])(this.popoverElement,
+      Object(__WEBPACK_IMPORTED_MODULE_0__utils__["f" /* whichTransitionEvent */])(this.popoverElement),
       this.onToggleEnd.bind(this),
       transitionEvent => (transitionEvent.propertyName === 'opacity'),
     );
@@ -1309,7 +1310,7 @@ class Renderer {
       return Object(__WEBPACK_IMPORTED_MODULE_0__utils__["a" /* addClass */])(this.popoverElement, 'is-visible');
     }
 
-    return Object(__WEBPACK_IMPORTED_MODULE_0__utils__["c" /* removeClass */])(this.popoverElement, 'is-visible');
+    return Object(__WEBPACK_IMPORTED_MODULE_0__utils__["e" /* removeClass */])(this.popoverElement, 'is-visible');
   }
 }
 
