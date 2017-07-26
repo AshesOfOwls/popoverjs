@@ -6,6 +6,8 @@ import './styles/main.scss';
 const defaults = {
   showOn: 'click',
   hideOn: 'documentClick',
+  showDelay: 0,
+  hideDelay: 200,
   onBeforeHide: () => {},
   onBeforeShow: () => {},
   onAfterHide: () => {},

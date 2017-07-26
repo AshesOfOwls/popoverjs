@@ -181,6 +181,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 const defaults = {
   showOn: 'click',
   hideOn: 'documentClick',
+  showDelay: 0,
+  hideDelay: 200,
   onBeforeHide: () => {},
   onBeforeShow: () => {},
   onAfterHide: () => {},
@@ -1254,7 +1256,7 @@ class Renderer {
   render(e) {
     e.stopImmediatePropagation();
 
-    this.show();
+    this.shouldShow();
     this.listenForHide();
   }
 
@@ -1290,9 +1292,42 @@ class Renderer {
     );
   }
 
+  clearDelayTimeouts() {
+    clearTimeout(this.hideTimeout);
+    clearTimeout(this.showTimeout);
+  }
+
+  shouldShow() {
+    if (this.isVisible || this.isForceClosing) { return; }
+
+    this.clearDelayTimeouts();
+
+    if (this.options.showDelay > 0) {
+      this.showTimeout = setTimeout(() => {
+        this.show();
+      }, this.options.showDelay);
+    } else {
+      this.show();
+    }
+  }
+
   show() {
     this.options.onBeforeShow();
     this.toggleVisibility(true);
+  }
+
+  shouldHide() {
+    if (!this.isVisible) { return; }
+
+    this.clearDelayTimeouts();
+
+    if (this.options.hideDelay > 0) {
+      this.hideTimeout = setTimeout(() => {
+        this.hide();
+      }, this.options.hideDelay);
+    } else {
+      this.hide();
+    }
   }
 
   hide() {
