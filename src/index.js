@@ -1,3 +1,4 @@
+import './polyfills';
 import Renderer from './renderer';
 import Positioner from './positioner';
 
