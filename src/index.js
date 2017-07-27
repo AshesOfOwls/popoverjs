@@ -25,6 +25,7 @@ const requiredOptions = [
 
 class Popoverjs {
   constructor(options) {
+    console.log("YAYAY");
     this.options = Object.assign({}, defaults);
     this.options = Object.assign(this.options, options);
 

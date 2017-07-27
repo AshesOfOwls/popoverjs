@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/index.js',
+  entry: ['babel-polyfill', './src/index.js'],
   output: {
     filename: 'popoverjs.js',
     path: path.resolve(__dirname, 'dist'),
@@ -9,6 +9,12 @@ module.exports = {
     libraryTarget: 'umd',
   },
   module: {
+    loaders: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader?presets[]=es2015',
+      },
+    ],
     rules: [{
       test: /\.scss$/,
       use: [{
@@ -18,10 +24,6 @@ module.exports = {
       }, {
         loader: 'sass-loader', // compiles Sass to CSS
       }],
-    }, {
-      test: /\.js$/,
-      loader: 'babel-loader',
-      options: { presets: ['es2015'] },
     }],
   },
 };
