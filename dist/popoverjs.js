@@ -175,7 +175,7 @@ const error = (message) => {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(6);
+var content = __webpack_require__(4);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -183,7 +183,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(8)(content, options);
+var update = __webpack_require__(6)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -201,25 +201,15 @@ if(false) {
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(3);
-
-
-/***/ }),
-/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polyfills__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polyfills___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__polyfills__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__renderer__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__positioner__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__styles_main_scss__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__styles_main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__styles_main_scss__);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__renderer__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__positioner__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__styles_main_scss__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__styles_main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__styles_main_scss__);
 
 
 
@@ -247,7 +237,6 @@ const requiredOptions = [
 
 class Popoverjs {
   constructor(options) {
-    console.log("YAYAY");
     this.options = Object.assign({}, defaults);
     this.options = Object.assign(this.options, options);
 
@@ -260,7 +249,7 @@ class Popoverjs {
 
     requiredOptions.forEach((option) => {
       if (!optionKeys.includes(option)) {
-        Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* error */])(`Must supply ${option} option to Popoverjs`);
+        Object(__WEBPACK_IMPORTED_MODULE_2__utils__["b" /* error */])(`Must supply ${option} option to Popoverjs`);
       }
     });
   }
@@ -292,11 +281,11 @@ class Popoverjs {
   }
 
   setUpRenderer() {
-    this.renderer = new __WEBPACK_IMPORTED_MODULE_1__renderer__["a" /* default */](this.rendererOptions);
+    this.renderer = new __WEBPACK_IMPORTED_MODULE_0__renderer__["a" /* default */](this.rendererOptions);
   }
 
   setUpPositioner() {
-    this.Positioner = new __WEBPACK_IMPORTED_MODULE_2__positioner__["a" /* default */](this.options);
+    this.Positioner = new __WEBPACK_IMPORTED_MODULE_1__positioner__["a" /* default */](this.options);
 
     this.Positioner.enable();
   }
@@ -308,37 +297,7 @@ window.Popoverjs = Popoverjs;
 
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-if (typeof Object.assign != 'function') {
-  Object.assign = function(target, varArgs) { // .length of function is 2
-    'use strict';
-    if (target == null) { // TypeError if undefined or null
-      throw new TypeError('Cannot convert undefined or null to object');
-    }
-
-    var to = Object(target);
-
-    for (var index = 1; index < arguments.length; index++) {
-      var nextSource = arguments[index];
-
-      if (nextSource != null) { // Skip over if undefined or null
-        for (var nextKey in nextSource) {
-          // Avoid bugs when hasOwnProperty is shadowed
-          if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
-            to[nextKey] = nextSource[nextKey];
-          }
-        }
-      }
-    }
-    return to;
-  };
-}
-
-
-/***/ }),
-/* 5 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -490,10 +449,10 @@ class Renderer {
 
 
 /***/ }),
-/* 6 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(7)(undefined);
+exports = module.exports = __webpack_require__(5)(undefined);
 // imports
 
 
@@ -504,7 +463,7 @@ exports.push([module.i, "/**\n  * Local Variables\n  *\n  * $arrow_hypotenuse_to
 
 
 /***/ }),
-/* 7 */
+/* 5 */
 /***/ (function(module, exports) {
 
 /*
@@ -586,7 +545,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 8 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -632,7 +591,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(9);
+var	fixUrls = __webpack_require__(7);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -945,7 +904,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 9 */
+/* 7 */
 /***/ (function(module, exports) {
 
 
@@ -1040,7 +999,7 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 10 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
