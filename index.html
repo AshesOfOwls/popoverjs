@@ -123,13 +123,13 @@
           popover: 'top left',
           trigger: 'bottom left',
         }, {
-          popover: 'right center',
+          popover: 'left center',
           trigger: 'left center',
         }],
-        onBeforeHide: () => { console.log('onBeforeHide') },
-        onBeforeShow: () => { console.log('onBeforeShow') },
-        onAfterHide: () => { console.log('onAfterHide') },
-        onAfterShow: () => { console.log('onAfterShow') },
+        onBeforeHide: function() { console.log('onBeforeHide') },
+        onBeforeShow: function() { console.log('onBeforeShow') },
+        onAfterHide: function() { console.log('onAfterHide') },
+        onAfterShow: function() { console.log('onAfterShow') },
       });
 
       new Popoverjs({
@@ -139,10 +139,10 @@
         attachmentElement: document.getElementsByClassName('attachment')[0],
         popoverElement: document.getElementsByClassName('popover-1')[0],
         constraintElement: document.getElementsByClassName('container')[0],
-        onBeforeHide: () => { console.log('onBeforeHide') },
-        onBeforeShow: () => { console.log('onBeforeShow') },
-        onAfterHide: () => { console.log('onAfterHide') },
-        onAfterShow: () => { console.log('onAfterShow') },
+        onBeforeHide: function() { console.log('onBeforeHide') },
+        onBeforeShow: function() { console.log('onBeforeShow') },
+        onAfterHide: function() { console.log('onAfterHide') },
+        onAfterShow: function() { console.log('onAfterShow') },
       });
 
       console.log("Yars")
