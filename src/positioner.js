@@ -22,6 +22,7 @@ class Positioner {
   initialize() {
     this.setUpGlobals();
     this.setUpElements();
+    this.resetClasses();
     this.parseConstraints();
     this.applyDefaultConstraint();
   }
@@ -146,6 +147,10 @@ class Positioner {
     this.refreshAllElementData();
     this.setUpContainer();
     this.position();
+  }
+
+  resetClasses() {
+    this.popoverElement.className = 'popoverjs';
   }
 
   listenForResize() {

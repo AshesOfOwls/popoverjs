@@ -75,16 +75,19 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var oneEvent = function oneEvent(target, eventType, callback) {
-  var wrappedCallback = function wrappedCallback(eventObject) {
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return oneEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return addClass; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return error; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return removeClass; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getElementOrigin; });
+/* unused harmony export setHalfPointsOnOrigin */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return getWindowOrigin; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return whichTransitionEvent; });
+const oneEvent = (target, eventType, callback) => {
+  const wrappedCallback = (eventObject) => {
     target.removeEventListener(eventType, wrappedCallback);
     return callback(eventObject);
   };
@@ -92,86 +95,78 @@ var oneEvent = function oneEvent(target, eventType, callback) {
   target.addEventListener(eventType, wrappedCallback);
 };
 
-var addClass = function addClass(element, className) {
+const addClass = (element, className) => {
   element.classList.add(className);
 };
 
-var removeClass = function removeClass(element, className) {
+const removeClass = (element, className) => {
   element.classList.remove(className);
 };
 
-var setHalfPointsOnOrigin = function setHalfPointsOnOrigin(origin) {
-  var halfHeight = origin.height / 2;
-  var halfWidth = origin.width / 2;
+const setHalfPointsOnOrigin = (origin) => {
+  const halfHeight = origin.height / 2;
+  const halfWidth = origin.width / 2;
 
   return Object.assign(origin, {
-    halfHeight: halfHeight,
-    halfWidth: halfWidth,
+    halfHeight,
+    halfWidth,
     verticalCenter: origin.top + halfHeight,
-    horizontalCenter: origin.left + halfWidth
+    horizontalCenter: origin.left + halfWidth,
   });
 };
 
-var getWindowOrigin = function getWindowOrigin() {
-  var height = window.innerHeight;
-  var width = window.innerWidth;
+const getWindowOrigin = () => {
+  const height = window.innerHeight;
+  const width = window.innerWidth;
 
-  var origin = {
+  const origin = {
     bottom: height,
-    height: height,
+    height,
     left: 0,
     right: width,
     top: 0,
-    width: width
+    width,
   };
 
   return setHalfPointsOnOrigin(origin);
 };
 
-var getElementOrigin = function getElementOrigin(element) {
-  var clientRect = element.getBoundingClientRect();
+const getElementOrigin = (element) => {
+  const clientRect = element.getBoundingClientRect();
 
-  var origin = {
+  const origin = {
     left: clientRect.left,
     right: clientRect.right,
     bottom: clientRect.bottom,
     top: clientRect.top,
     height: clientRect.height,
-    width: clientRect.width
+    width: clientRect.width,
   };
 
   return setHalfPointsOnOrigin(origin);
 };
 
-var whichTransitionEvent = function whichTransitionEvent(element) {
-  var transitions = {
+const whichTransitionEvent = (element) => {
+  const transitions = {
     transition: 'transitionend',
     OTransition: 'oTransitionEnd',
     MozTransition: 'transitionend',
-    WebkitTransition: 'webkitTransitionEnd'
+    WebkitTransition: 'webkitTransitionEnd',
   };
 
-  var elementStyle = element.style;
+  const elementStyle = element.style;
 
-  var rendererType = Object.keys(transitions).find(function (type) {
-    return elementStyle[type] !== undefined;
-  });
+  const rendererType = Object.keys(transitions).find(type => elementStyle[type] !== undefined);
 
   return transitions[rendererType];
 };
 
-var error = function error(message) {
+const error = (message) => {
   throw new Error(message);
 };
 
-exports.oneEvent = oneEvent;
-exports.addClass = addClass;
-exports.error = error;
-exports.removeClass = removeClass;
-exports.getElementOrigin = getElementOrigin;
-exports.setHalfPointsOnOrigin = setHalfPointsOnOrigin;
-exports.getWindowOrigin = getWindowOrigin;
-exports.whichTransitionEvent = whichTransitionEvent;
+
+
 
 /***/ }),
 /* 1 */
@@ -180,7 +175,7 @@ exports.whichTransitionEvent = whichTransitionEvent;
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(5);
+var content = __webpack_require__(4);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -188,7 +183,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(7)(content, options);
+var update = __webpack_require__(6)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -206,511 +201,132 @@ if(false) {
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polyfills__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polyfills___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__polyfills__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__renderer__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__positioner__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__styles_main_scss__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__styles_main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__styles_main_scss__);
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-__webpack_require__(3);
 
-var _renderer = __webpack_require__(4);
 
-var _renderer2 = _interopRequireDefault(_renderer);
 
-var _positioner = __webpack_require__(9);
 
-var _positioner2 = _interopRequireDefault(_positioner);
 
-var _utils = __webpack_require__(0);
-
-__webpack_require__(1);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var defaults = {
+const defaults = {
   showOn: 'click',
   hideOn: 'documentClick',
   showDelay: 0,
   hideDelay: 200,
   unnecessaryRepositioning: false,
   resizePositioning: true,
-  onBeforeHide: function onBeforeHide() {},
-  onBeforeShow: function onBeforeShow() {},
-  onAfterHide: function onAfterHide() {},
-  onAfterShow: function onAfterShow() {}
+  onBeforeHide: () => {},
+  onBeforeShow: () => {},
+  onAfterHide: () => {},
+  onAfterShow: () => {},
 };
 
-var requiredOptions = ['attachmentElement', 'popoverElement'];
+const requiredOptions = [
+  'attachmentElement',
+  'popoverElement',
+];
 
-var Popoverjs = function () {
-  function Popoverjs(options) {
-    _classCallCheck(this, Popoverjs);
-
+class Popoverjs {
+  constructor(options) {
     this.options = Object.assign({}, defaults, options);
 
     this.checkForRequiredOptions();
     this.initialize();
   }
 
-  _createClass(Popoverjs, [{
-    key: 'checkForRequiredOptions',
-    value: function checkForRequiredOptions() {
-      var optionKeys = Object.keys(this.options);
+  checkForRequiredOptions() {
+    const optionKeys = Object.keys(this.options);
 
-      requiredOptions.forEach(function (option) {
-        if (!optionKeys.includes(option)) {
-          (0, _utils.error)('Must supply ' + option + ' option to Popoverjs');
-        }
-      });
-    }
-  }, {
-    key: 'initialize',
-    value: function initialize() {
-      this.setUpGlobals();
-      this.setUpRenderer();
-    }
-  }, {
-    key: 'setUpGlobals',
-    value: function setUpGlobals() {
-      if (!this.options.triggerElement) {
-        this.options.triggerElement = this.options.attachmentElement;
+    requiredOptions.forEach((option) => {
+      if (!optionKeys.includes(option)) {
+        Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* error */])(`Must supply ${option} option to Popoverjs`);
       }
-    }
-  }, {
-    key: 'position',
-    value: function position() {
-      this.Positioner.position();
-    }
-  }, {
-    key: 'onToggleEnd',
-    value: function onToggleEnd() {
-      this.Positioner.disable();
-    }
-  }, {
-    key: 'onRender',
-    value: function onRender() {
-      this.setUpPositioner();
-    }
-  }, {
-    key: 'setUpRenderer',
-    value: function setUpRenderer() {
-      console.log();
-      this.renderer = new _renderer2.default(this.rendererOptions);
-    }
-  }, {
-    key: 'setUpPositioner',
-    value: function setUpPositioner() {
-      this.Positioner = new _positioner2.default(this.positionerOptions);
-      this.Positioner.enable();
-    }
-  }, {
-    key: 'rendererOptions',
-    get: function get() {
-      return Object.assign({}, this.options, {
-        onToggleEnd: this.onToggleEnd.bind(this),
-        onRender: this.onRender.bind(this)
-      });
-    }
-  }, {
-    key: 'positionerOptions',
-    get: function get() {
-      return Object.assign({}, this.options);
-    }
-  }]);
+    });
+  }
 
-  return Popoverjs;
-}();
+  initialize() {
+    this.setUpGlobals();
+    this.setUpRenderer();
+  }
+
+  setUpGlobals() {
+    if (!this.options.triggerElement) {
+      this.options.triggerElement = this.options.attachmentElement;
+    }
+  }
+
+  position() {
+    this.Positioner.position();
+  }
+
+  get rendererOptions() {
+    return Object.assign({}, this.options, {
+      onToggleEnd: this.onToggleEnd.bind(this),
+      onRender: this.onRender.bind(this),
+    });
+  }
+
+  onToggleEnd() {
+    this.Positioner.disable();
+  }
+
+  onRender() {
+    this.setUpPositioner();
+  }
+
+  setUpRenderer() {
+    console.log();
+    this.renderer = new __WEBPACK_IMPORTED_MODULE_1__renderer__["a" /* default */](this.rendererOptions);
+  }
+
+  get positionerOptions() {
+    return Object.assign({}, this.options);
+  }
+
+  setUpPositioner() {
+    this.Positioner = new __WEBPACK_IMPORTED_MODULE_2__positioner__["a" /* default */](this.positionerOptions);
+    this.Positioner.enable();
+  }
+}
 
 console.log("RAN RAN RAN???");
 window.Popoverjs = Popoverjs;
 
-exports.default = Popoverjs;
+/* harmony default export */ __webpack_exports__["default"] = (Popoverjs);
+
 
 /***/ }),
 /* 3 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__styles_main_scss__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__styles_main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__styles_main_scss__);
 
 
-if (typeof Object.assign != 'function') {
-	Object.assign = function (target, varArgs) {
-		// .length of function is 2
-		'use strict';
-
-		if (target == null) {
-			// TypeError if undefined or null
-			throw new TypeError('Cannot convert undefined or null to object');
-		}
-
-		var to = Object(target);
-
-		for (var index = 1; index < arguments.length; index++) {
-			var nextSource = arguments[index];
-
-			if (nextSource != null) {
-				// Skip over if undefined or null
-				for (var nextKey in nextSource) {
-					// Avoid bugs when hasOwnProperty is shadowed
-					if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
-						to[nextKey] = nextSource[nextKey];
-					}
-				}
-			}
-		}
-		return to;
-	};
-}
-
-// https://tc39.github.io/ecma262/#sec-array.prototype.find
-if (!Array.prototype.find) {
-	Object.defineProperty(Array.prototype, 'find', {
-		value: function value(predicate) {
-			// 1. Let O be ? ToObject(this value).
-			if (this == null) {
-				throw new TypeError('"this" is null or not defined');
-			}
-
-			var o = Object(this);
-
-			// 2. Let len be ? ToLength(? Get(O, "length")).
-			var len = o.length >>> 0;
-
-			// 3. If IsCallable(predicate) is false, throw a TypeError exception.
-			if (typeof predicate !== 'function') {
-				throw new TypeError('predicate must be a function');
-			}
-
-			// 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
-			var thisArg = arguments[1];
-
-			// 5. Let k be 0.
-			var k = 0;
-
-			// 6. Repeat, while k < len
-			while (k < len) {
-				// a. Let Pk be ! ToString(k).
-				// b. Let kValue be ? Get(O, Pk).
-				// c. Let testResult be ToBoolean(? Call(predicate, T, « kValue, k, O »)).
-				// d. If testResult is true, return kValue.
-				var kValue = o[k];
-				if (predicate.call(thisArg, kValue, k, o)) {
-					return kValue;
-				}
-				// e. Increase k by 1.
-				k++;
-			}
-
-			// 7. Return undefined.
-			return undefined;
-		}
-	});
-}
-
-// https://tc39.github.io/ecma262/#sec-array.prototype.includes
-if (!Array.prototype.includes) {
-	Object.defineProperty(Array.prototype, 'includes', {
-		value: function value(searchElement, fromIndex) {
-
-			// 1. Let O be ? ToObject(this value).
-			if (this == null) {
-				throw new TypeError('"this" is null or not defined');
-			}
-
-			var o = Object(this);
-
-			// 2. Let len be ? ToLength(? Get(O, "length")).
-			var len = o.length >>> 0;
-
-			// 3. If len is 0, return false.
-			if (len === 0) {
-				return false;
-			}
-
-			// 4. Let n be ? ToInteger(fromIndex).
-			//    (If fromIndex is undefined, this step produces the value 0.)
-			var n = fromIndex | 0;
-
-			// 5. If n ≥ 0, then
-			//  a. Let k be n.
-			// 6. Else n < 0,
-			//  a. Let k be len + n.
-			//  b. If k < 0, let k be 0.
-			var k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
-
-			function sameValueZero(x, y) {
-				return x === y || typeof x === 'number' && typeof y === 'number' && isNaN(x) && isNaN(y);
-			}
-
-			// 7. Repeat, while k < len
-			while (k < len) {
-				// a. Let elementK be the result of ? Get(O, ! ToString(k)).
-				// b. If SameValueZero(searchElement, elementK) is true, return true.
-				// c. Increase k by 1.
-				if (sameValueZero(o[k], searchElement)) {
-					return true;
-				}
-				k++;
-			}
-
-			// 8. Return false
-			return false;
-		}
-	});
-}
-
-/*
- * classList.js: Cross-browser full element.classList implementation.
- * 1.1.20170427
- *
- * By Eli Grey, http://eligrey.com
- * License: Dedicated to the public domain.
- *   See https://github.com/eligrey/classList.js/blob/master/LICENSE.md
- */
-
-/*global self, document, DOMException */
-
-/*! @source http://purl.eligrey.com/github/classList.js/blob/master/classList.js */
-
-if ("document" in self) {
-
-	// Full polyfill for browsers with no classList support
-	// Including IE < Edge missing SVGElement.classList
-	if (!("classList" in document.createElement("_")) || document.createElementNS && !("classList" in document.createElementNS("http://www.w3.org/2000/svg", "g"))) {
-
-		(function (view) {
-
-			"use strict";
-
-			if (!('Element' in view)) return;
-
-			var classListProp = "classList",
-			    protoProp = "prototype",
-			    elemCtrProto = view.Element[protoProp],
-			    objCtr = Object,
-			    strTrim = String[protoProp].trim || function () {
-				return this.replace(/^\s+|\s+$/g, "");
-			},
-			    arrIndexOf = Array[protoProp].indexOf || function (item) {
-				var i = 0,
-				    len = this.length;
-				for (; i < len; i++) {
-					if (i in this && this[i] === item) {
-						return i;
-					}
-				}
-				return -1;
-			}
-			// Vendors: please allow content code to instantiate DOMExceptions
-			,
-			    DOMEx = function DOMEx(type, message) {
-				this.name = type;
-				this.code = DOMException[type];
-				this.message = message;
-			},
-			    checkTokenAndGetIndex = function checkTokenAndGetIndex(classList, token) {
-				if (token === "") {
-					throw new DOMEx("SYNTAX_ERR", "An invalid or illegal string was specified");
-				}
-				if (/\s/.test(token)) {
-					throw new DOMEx("INVALID_CHARACTER_ERR", "String contains an invalid character");
-				}
-				return arrIndexOf.call(classList, token);
-			},
-			    ClassList = function ClassList(elem) {
-				var trimmedClasses = strTrim.call(elem.getAttribute("class") || ""),
-				    classes = trimmedClasses ? trimmedClasses.split(/\s+/) : [],
-				    i = 0,
-				    len = classes.length;
-				for (; i < len; i++) {
-					this.push(classes[i]);
-				}
-				this._updateClassName = function () {
-					elem.setAttribute("class", this.toString());
-				};
-			},
-			    classListProto = ClassList[protoProp] = [],
-			    classListGetter = function classListGetter() {
-				return new ClassList(this);
-			};
-			// Most DOMException implementations don't allow calling DOMException's toString()
-			// on non-DOMExceptions. Error's toString() is sufficient here.
-			DOMEx[protoProp] = Error[protoProp];
-			classListProto.item = function (i) {
-				return this[i] || null;
-			};
-			classListProto.contains = function (token) {
-				token += "";
-				return checkTokenAndGetIndex(this, token) !== -1;
-			};
-			classListProto.add = function () {
-				var tokens = arguments,
-				    i = 0,
-				    l = tokens.length,
-				    token,
-				    updated = false;
-				do {
-					token = tokens[i] + "";
-					if (checkTokenAndGetIndex(this, token) === -1) {
-						this.push(token);
-						updated = true;
-					}
-				} while (++i < l);
-
-				if (updated) {
-					this._updateClassName();
-				}
-			};
-			classListProto.remove = function () {
-				var tokens = arguments,
-				    i = 0,
-				    l = tokens.length,
-				    token,
-				    updated = false,
-				    index;
-				do {
-					token = tokens[i] + "";
-					index = checkTokenAndGetIndex(this, token);
-					while (index !== -1) {
-						this.splice(index, 1);
-						updated = true;
-						index = checkTokenAndGetIndex(this, token);
-					}
-				} while (++i < l);
-
-				if (updated) {
-					this._updateClassName();
-				}
-			};
-			classListProto.toggle = function (token, force) {
-				token += "";
-
-				var result = this.contains(token),
-				    method = result ? force !== true && "remove" : force !== false && "add";
-
-				if (method) {
-					this[method](token);
-				}
-
-				if (force === true || force === false) {
-					return force;
-				} else {
-					return !result;
-				}
-			};
-			classListProto.toString = function () {
-				return this.join(" ");
-			};
-
-			if (objCtr.defineProperty) {
-				var classListPropDesc = {
-					get: classListGetter,
-					enumerable: true,
-					configurable: true
-				};
-				try {
-					objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
-				} catch (ex) {
-					// IE 8 doesn't support enumerable:true
-					// adding undefined to fight this issue https://github.com/eligrey/classList.js/issues/36
-					// modernie IE8-MSW7 machine has IE8 8.0.6001.18702 and is affected
-					if (ex.number === undefined || ex.number === -0x7FF5EC54) {
-						classListPropDesc.enumerable = false;
-						objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
-					}
-				}
-			} else if (objCtr[protoProp].__defineGetter__) {
-				elemCtrProto.__defineGetter__(classListProp, classListGetter);
-			}
-		})(self);
-	}
-
-	// There is full or partial native classList support, so just check if we need
-	// to normalize the add/remove and toggle APIs.
-
-	(function () {
-		"use strict";
-
-		var testElement = document.createElement("_");
-
-		testElement.classList.add("c1", "c2");
-
-		// Polyfill for IE 10/11 and Firefox <26, where classList.add and
-		// classList.remove exist but support only one argument at a time.
-		if (!testElement.classList.contains("c2")) {
-			var createMethod = function createMethod(method) {
-				var original = DOMTokenList.prototype[method];
-
-				DOMTokenList.prototype[method] = function (token) {
-					var i,
-					    len = arguments.length;
-
-					for (i = 0; i < len; i++) {
-						token = arguments[i];
-						original.call(this, token);
-					}
-				};
-			};
-			createMethod('add');
-			createMethod('remove');
-		}
-
-		testElement.classList.toggle("c3", false);
-
-		// Polyfill for IE 10 and Firefox <24, where classList.toggle does not
-		// support the second argument.
-		if (testElement.classList.contains("c3")) {
-			var _toggle = DOMTokenList.prototype.toggle;
-
-			DOMTokenList.prototype.toggle = function (token, force) {
-				if (1 in arguments && !this.contains(token) === !force) {
-					return force;
-				} else {
-					return _toggle.call(this, token);
-				}
-			};
-		}
-
-		testElement = null;
-	})();
-}
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _utils = __webpack_require__(0);
-
-__webpack_require__(1);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var defaults = {
+const defaults = {
   showOn: 'click',
-  hideOn: 'documentClick'
+  hideOn: 'documentClick',
 };
 
-var Renderer = function () {
-  function Renderer(options) {
-    _classCallCheck(this, Renderer);
-
+class Renderer {
+  constructor(options) {
     this.options = Object.assign({}, defaults, options);
 
     this.render = this.render.bind(this);
@@ -719,167 +335,137 @@ var Renderer = function () {
     this.initialize();
   }
 
-  _createClass(Renderer, [{
-    key: 'initialize',
-    value: function initialize() {
-      this.setUpGlobals();
-      this.listenForRender();
-    }
-  }, {
-    key: 'setUpGlobals',
-    value: function setUpGlobals() {
-      this.isVisible = false;
-      this.triggerElement = this.options.triggerElement;
-      this.popoverElement = this.options.popoverElement;
-    }
-  }, {
-    key: 'listenForRender',
-    value: function listenForRender() {
-      (0, _utils.oneEvent)(this.triggerElement, this.options.showOn, this.render);
-    }
-  }, {
-    key: 'render',
-    value: function render(e) {
-      e.stopImmediatePropagation();
+  initialize() {
+    this.setUpGlobals();
+    this.listenForRender();
+  }
 
-      this.options.onRender();
-      this.shouldShow();
-      this.listenForHide();
-    }
-  }, {
-    key: 'destroyListeners',
-    value: function destroyListeners() {
-      this.triggerElement.removeEventListener(this.options.showOn, this.render);
+  setUpGlobals() {
+    this.isVisible = false;
+    this.triggerElement = this.options.triggerElement;
+    this.popoverElement = this.options.popoverElement;
+  }
 
-      if (this.options.hideOn === 'documentClick') {
-        document.body.removeEventListener('click', this.onDocumentClick);
-      }
-    }
-  }, {
-    key: 'listenForHide',
-    value: function listenForHide() {
-      switch (this.options.hideOn) {
-        case 'documentClick':
-          document.body.addEventListener('click', this.onDocumentClick);
-          break;
-        default:
-          this.triggerElement.addEventListener(this.options.hideOn, this.onDocumentClick);
-      }
-    }
-  }, {
-    key: 'onDocumentClick',
-    value: function onDocumentClick(e) {
-      if (this.popoverElement.contains(e.target)) {
-        return;
-      }
+  listenForRender() {
+    Object(__WEBPACK_IMPORTED_MODULE_0__utils__["e" /* oneEvent */])(this.triggerElement, this.options.showOn, this.render);
+  }
+
+  render(e) {
+    e.stopImmediatePropagation();
+
+    this.options.onRender();
+    this.shouldShow();
+    this.listenForHide();
+  }
+
+  destroyListeners() {
+    this.triggerElement.removeEventListener(this.options.showOn, this.render);
+
+    if (this.options.hideOn === 'documentClick') {
       document.body.removeEventListener('click', this.onDocumentClick);
+    }
+  }
+
+  listenForHide() {
+    switch (this.options.hideOn) {
+    case 'documentClick':
+      document.body.addEventListener('click', this.onDocumentClick);
+      break;
+    default:
+      this.triggerElement.addEventListener(this.options.hideOn, this.onDocumentClick);
+    }
+  }
+
+  onDocumentClick(e) {
+    if (this.popoverElement.contains(e.target)) { return; }
+    document.body.removeEventListener('click', this.onDocumentClick);
+    this.hide();
+  }
+
+  listenForToggleEnd() {
+    Object(__WEBPACK_IMPORTED_MODULE_0__utils__["e" /* oneEvent */])(this.popoverElement,
+      Object(__WEBPACK_IMPORTED_MODULE_0__utils__["g" /* whichTransitionEvent */])(this.popoverElement),
+      this.onToggleEnd.bind(this),
+      transitionEvent => (transitionEvent.propertyName === 'opacity'),
+    );
+  }
+
+  clearDelayTimeouts() {
+    clearTimeout(this.hideTimeout);
+    clearTimeout(this.showTimeout);
+  }
+
+  shouldShow() {
+    if (this.isVisible || this.isForceClosing) { return; }
+
+    this.clearDelayTimeouts();
+
+    if (this.options.showDelay > 0) {
+      this.showTimeout = setTimeout(() => {
+        this.show();
+      }, this.options.showDelay);
+    } else {
+      this.show();
+    }
+  }
+
+  show() {
+    this.options.onBeforeShow();
+    this.toggleVisibility(true);
+  }
+
+  shouldHide() {
+    if (!this.isVisible) { return; }
+
+    this.clearDelayTimeouts();
+
+    if (this.options.hideDelay > 0) {
+      this.hideTimeout = setTimeout(() => {
+        this.hide();
+      }, this.options.hideDelay);
+    } else {
       this.hide();
     }
-  }, {
-    key: 'listenForToggleEnd',
-    value: function listenForToggleEnd() {
-      (0, _utils.oneEvent)(this.popoverElement, (0, _utils.whichTransitionEvent)(this.popoverElement), this.onToggleEnd.bind(this), function (transitionEvent) {
-        return transitionEvent.propertyName === 'opacity';
-      });
+  }
+
+  hide() {
+    this.options.onBeforeHide();
+    this.toggleVisibility(false);
+  }
+
+  toggleVisibility(isVisible = false) {
+    if (this.isVisible === isVisible) { return; }
+
+    this.isVisible = isVisible;
+
+    this.listenForToggleEnd();
+
+    if (isVisible) {
+      Object(__WEBPACK_IMPORTED_MODULE_0__utils__["a" /* addClass */])(this.popoverElement, 'is-visible');
+    } else {
+      Object(__WEBPACK_IMPORTED_MODULE_0__utils__["f" /* removeClass */])(this.popoverElement, 'is-visible');
     }
-  }, {
-    key: 'clearDelayTimeouts',
-    value: function clearDelayTimeouts() {
-      clearTimeout(this.hideTimeout);
-      clearTimeout(this.showTimeout);
+  }
+
+  onToggleEnd() {
+    if (!this.isVisible) {
+      this.options.onAfterHide();
+      this.options.onToggleEnd();
+      this.listenForRender();
+    } else {
+      this.options.onAfterShow();
     }
-  }, {
-    key: 'shouldShow',
-    value: function shouldShow() {
-      var _this = this;
+  }
+}
 
-      if (this.isVisible || this.isForceClosing) {
-        return;
-      }
+/* harmony default export */ __webpack_exports__["a"] = (Renderer);
 
-      this.clearDelayTimeouts();
-
-      if (this.options.showDelay > 0) {
-        this.showTimeout = setTimeout(function () {
-          _this.show();
-        }, this.options.showDelay);
-      } else {
-        this.show();
-      }
-    }
-  }, {
-    key: 'show',
-    value: function show() {
-      this.options.onBeforeShow();
-      this.toggleVisibility(true);
-    }
-  }, {
-    key: 'shouldHide',
-    value: function shouldHide() {
-      var _this2 = this;
-
-      if (!this.isVisible) {
-        return;
-      }
-
-      this.clearDelayTimeouts();
-
-      if (this.options.hideDelay > 0) {
-        this.hideTimeout = setTimeout(function () {
-          _this2.hide();
-        }, this.options.hideDelay);
-      } else {
-        this.hide();
-      }
-    }
-  }, {
-    key: 'hide',
-    value: function hide() {
-      this.options.onBeforeHide();
-      this.toggleVisibility(false);
-    }
-  }, {
-    key: 'toggleVisibility',
-    value: function toggleVisibility() {
-      var isVisible = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
-      if (this.isVisible === isVisible) {
-        return;
-      }
-
-      this.isVisible = isVisible;
-
-      this.listenForToggleEnd();
-
-      if (isVisible) {
-        (0, _utils.addClass)(this.popoverElement, 'is-visible');
-      } else {
-        (0, _utils.removeClass)(this.popoverElement, 'is-visible');
-      }
-    }
-  }, {
-    key: 'onToggleEnd',
-    value: function onToggleEnd() {
-      if (!this.isVisible) {
-        this.options.onAfterHide();
-        this.options.onToggleEnd();
-        this.listenForRender();
-      } else {
-        this.options.onAfterShow();
-      }
-    }
-  }]);
-
-  return Renderer;
-}();
-
-exports.default = Renderer;
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(6)(undefined);
+exports = module.exports = __webpack_require__(5)(undefined);
 // imports
 
 
@@ -890,7 +476,7 @@ exports.push([module.i, "/**\n  * Local Variables\n  *\n  * $arrow_hypotenuse_to
 
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports) {
 
 /*
@@ -972,7 +558,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -1018,7 +604,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(8);
+var	fixUrls = __webpack_require__(7);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -1331,7 +917,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports) {
 
 
@@ -1426,466 +1012,772 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(0);
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _utils = __webpack_require__(0);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var defaults = {
+const defaults = {
   attachmentElement: null,
   constraintElement: null,
   constraints: [{
     popover: 'top center',
-    trigger: 'bottom center'
+    trigger: 'bottom center',
   }, {
     popover: 'left center',
-    trigger: 'right center'
-  }]
+    trigger: 'right center',
+  }],
 };
 
-var Positioner = function () {
-  function Positioner(options) {
-    _classCallCheck(this, Positioner);
-
+class Positioner {
+  constructor(options) {
     this.options = Object.assign({}, defaults, options);
 
     this.initialize();
   }
 
-  _createClass(Positioner, [{
-    key: 'initialize',
-    value: function initialize() {
-      this.setUpGlobals();
-      this.setUpElements();
-      this.parseConstraints();
-      this.applyDefaultConstraint();
+  initialize() {
+    this.setUpGlobals();
+    this.setUpElements();
+    this.resetClasses();
+    this.parseConstraints();
+    this.applyDefaultConstraint();
+  }
+
+  setUpGlobals() {
+    this.origins = {};
+    this.cssCache = {};
+  }
+
+  setUpElements() {
+    this.attachmentElement = this.options.attachmentElement;
+    this.popoverElement = this.options.popoverElement;
+    this.triggerElement = this.options.triggerElement;
+    this.popoverContent = this.popoverElement.querySelector('.popoverjs-content');
+    this.popoverArrow = this.popoverElement.querySelector('.popoverjs-arrow');
+    this.constraintElement = this.getConstraintParent();
+
+    this.cacheCssOffsets();
+  }
+
+  setUpContainer() {
+    if (!this.options.bodyAttached) { return; }
+
+    this.createDetachedContainer();
+  }
+
+  destroyContainer() {
+    if (!this.options.bodyAttached || !this.hasAttachedContainer) { return; }
+
+    this.hasAttachedContainer = false;
+    this.originalContainer.appendChild(this.popoverElement);
+    document.body.removeChild(this.containerElement);
+  }
+
+  createDetachedContainer() {
+    if (this.hasAttachedContainer) { return; }
+
+    this.hasAttachedContainer = true;
+    this.originalContainer = this.popoverElement.parentElement;
+    this.containerElement = document.createElement('div');
+    this.containerElement.classList.add('popoverjs--detatched-container');
+    this.containerElement.appendChild(this.popoverElement);
+    document.body.appendChild(this.containerElement);
+  }
+
+  maintainDetachedContainerPosition() {
+    if (!this.options.bodyAttached) { return; }
+
+    const attachmentOrigin = this.origins.attachment;
+
+    const origin = {
+      height: `${attachmentOrigin.height}px`,
+      width: `${attachmentOrigin.width}px`,
+      left: `${attachmentOrigin.left}px`,
+      top: `${attachmentOrigin.top}px`,
+    };
+
+    Object.assign(this.containerElement.style, origin);
+  }
+
+  cacheCssOffsets() {
+    const sizerClasses = [
+      'popoverjs--popover-primary-top',
+      'popoverjs--popover-secondary-left',
+      'popoverjs--trigger-primary-left',
+      'popoverjs--trigger-secondary-top',
+    ];
+
+    this.togglePopoverClasses(sizerClasses, true);
+
+    this.cssCache = {
+      arrowSize: this.getArrowSize(),
+      attachmentOffset: Math.abs(this.popoverElement.offsetTop),
+      triggerOffset: Math.abs(this.popoverElement.offsetLeft),
+      contentOffset: Math.abs(this.popoverContent.offsetLeft),
+    };
+
+    this.togglePopoverClasses(sizerClasses, false);
+  }
+
+  getArrowSize() {
+    if (!this.popoverArrow) { return 0; }
+    return Math.abs(this.popoverArrow.clientHeight);
+  }
+
+  getConstraintParent() {
+    const constraintElement = this.options.constraintElement;
+
+    if (!constraintElement) {
+      return window;
     }
-  }, {
-    key: 'setUpGlobals',
-    value: function setUpGlobals() {
-      this.origins = {};
-      this.cssCache = {};
-    }
-  }, {
-    key: 'setUpElements',
-    value: function setUpElements() {
-      this.attachmentElement = this.options.attachmentElement;
-      this.popoverElement = this.options.popoverElement;
-      this.triggerElement = this.options.triggerElement;
-      this.popoverContent = this.popoverElement.querySelector('.popoverjs-content');
-      this.popoverArrow = this.popoverElement.querySelector('.popoverjs-arrow');
-      this.constraintElement = this.getConstraintParent();
 
-      this.cacheCssOffsets();
-    }
-  }, {
-    key: 'setUpContainer',
-    value: function setUpContainer() {
-      if (!this.options.bodyAttached) {
-        return;
-      }
+    return constraintElement;
+  }
 
-      this.createDetachedContainer();
-    }
-  }, {
-    key: 'destroyContainer',
-    value: function destroyContainer() {
-      if (!this.options.bodyAttached || !this.hasAttachedContainer) {
-        return;
-      }
+  parseConstraints() {
+    let id = 0;
+    this.constraints = this.options.constraints.map((constraint) => {
+      const triggerConstraint = constraint.trigger.split(' ');
+      const popoverConstraint = constraint.popover.split(' ');
 
-      this.hasAttachedContainer = false;
-      this.originalContainer.appendChild(this.popoverElement);
-      document.body.removeChild(this.containerElement);
-    }
-  }, {
-    key: 'createDetachedContainer',
-    value: function createDetachedContainer() {
-      if (this.hasAttachedContainer) {
-        return;
-      }
+      id += 1;
 
-      this.hasAttachedContainer = true;
-      this.originalContainer = this.popoverElement.parentElement;
-      this.containerElement = document.createElement('div');
-      this.containerElement.classList.add('popoverjs--detatched-container');
-      this.containerElement.appendChild(this.popoverElement);
-      document.body.appendChild(this.containerElement);
-    }
-  }, {
-    key: 'maintainDetachedContainerPosition',
-    value: function maintainDetachedContainerPosition() {
-      if (!this.options.bodyAttached) {
-        return;
-      }
-
-      var attachmentOrigin = this.origins.attachment;
-
-      var origin = {
-        height: attachmentOrigin.height + 'px',
-        width: attachmentOrigin.width + 'px',
-        left: attachmentOrigin.left + 'px',
-        top: attachmentOrigin.top + 'px'
-      };
-
-      Object.assign(this.containerElement.style, origin);
-    }
-  }, {
-    key: 'cacheCssOffsets',
-    value: function cacheCssOffsets() {
-      var sizerClasses = ['popoverjs--popover-primary-top', 'popoverjs--popover-secondary-left', 'popoverjs--trigger-primary-left', 'popoverjs--trigger-secondary-top'];
-
-      this.togglePopoverClasses(sizerClasses, true);
-
-      this.cssCache = {
-        arrowSize: this.getArrowSize(),
-        attachmentOffset: Math.abs(this.popoverElement.offsetTop),
-        triggerOffset: Math.abs(this.popoverElement.offsetLeft),
-        contentOffset: Math.abs(this.popoverContent.offsetLeft)
-      };
-
-      this.togglePopoverClasses(sizerClasses, false);
-    }
-  }, {
-    key: 'getArrowSize',
-    value: function getArrowSize() {
-      if (!this.popoverArrow) {
-        return 0;
-      }
-      return Math.abs(this.popoverArrow.clientHeight);
-    }
-  }, {
-    key: 'getConstraintParent',
-    value: function getConstraintParent() {
-      var constraintElement = this.options.constraintElement;
-
-      if (!constraintElement) {
-        return window;
-      }
-
-      return constraintElement;
-    }
-  }, {
-    key: 'parseConstraints',
-    value: function parseConstraints() {
-      var id = 0;
-      this.constraints = this.options.constraints.map(function (constraint) {
-        var triggerConstraint = constraint.trigger.split(' ');
-        var popoverConstraint = constraint.popover.split(' ');
-
-        id += 1;
-
-        return Object.assign({}, constraint, {
-          id: id,
-          trigger: {
-            primary: triggerConstraint[0],
-            secondary: triggerConstraint[1],
-            string: constraint.trigger
-          },
-          popover: {
-            primary: popoverConstraint[0],
-            secondary: popoverConstraint[1],
-            string: constraint.popover
-          }
-        });
+      return Object.assign({}, constraint, {
+        id,
+        trigger: {
+          primary: triggerConstraint[0],
+          secondary: triggerConstraint[1],
+          string: constraint.trigger,
+        },
+        popover: {
+          primary: popoverConstraint[0],
+          secondary: popoverConstraint[1],
+          string: constraint.popover,
+        },
       });
+    });
+  }
+
+  enable() {
+    this.listenForResize();
+    this.refreshAllElementData();
+    this.setUpContainer();
+    this.position();
+  }
+
+  resetClasses() {
+    this.popoverElement.className = 'popoverjs';
+  }
+
+  listenForResize() {
+    if (!this.options.resizePositioning) { return; }
+    window.addEventListener('resize', this.onResize.bind(this));
+  }
+
+  destroyListeners() {
+    window.removeEventListener('resize', this.onResize.bind(this));
+  }
+
+  destroy() {
+    this.destroyListeners();
+    this.destroyContainer();
+  }
+
+  onResize() {
+    this.position();
+  }
+
+  disable() {
+    this.destroy();
+  }
+
+  position() {
+    this.refreshAllElementData();
+    this.maintainDetachedContainerPosition();
+    this.checkConstraints();
+  }
+
+  checkConstraints() {
+    this.applyConstraint(this.getActiveConstraint());
+  }
+
+  getActiveConstraint() {
+    if (!this.options.unnecessaryRepositioning && this.canFitInto(this.activeConstraint)) {
+      return this.activeConstraint;
     }
-  }, {
-    key: 'enable',
-    value: function enable() {
-      this.listenForResize();
-      this.refreshAllElementData();
-      this.setUpContainer();
-      this.position();
+
+    const activeConstraint = this.constraints.find((constraint) => {
+      if (this.canFitInto(constraint)) { return constraint; }
+      return false;
+    });
+
+    if (!activeConstraint) { return this.activeConstraint; }
+
+    return activeConstraint;
+  }
+
+  refreshAllElementData() {
+    this.refreshParentOrigin();
+    this.refreshElementOrigins();
+  }
+
+  refreshParentOrigin() {
+    if (this.constraintElement === window) {
+      this.origins.parent = Object(__WEBPACK_IMPORTED_MODULE_0__utils__["d" /* getWindowOrigin */])();
+      return;
     }
-  }, {
-    key: 'listenForResize',
-    value: function listenForResize() {
-      if (!this.options.resizePositioning) {
-        return;
+
+    this.origins.parent = Object(__WEBPACK_IMPORTED_MODULE_0__utils__["c" /* getElementOrigin */])(this.constraintElement);
+  }
+
+  refreshElementOrigins() {
+    this.origins.popover = Object(__WEBPACK_IMPORTED_MODULE_0__utils__["c" /* getElementOrigin */])(this.popoverContent);
+    this.origins.attachment = Object(__WEBPACK_IMPORTED_MODULE_0__utils__["c" /* getElementOrigin */])(this.attachmentElement);
+  }
+
+  canFitInto(constraint) {
+    if (!constraint) { return false; }
+
+    let isOutsideConstraint = this.isConstrainedByPrimary(constraint.trigger.primary);
+
+    if (!isOutsideConstraint) {
+      switch (constraint.trigger.primary) {
+      case 'top':
+      case 'bottom':
+        isOutsideConstraint = this.isConstrainedBySecondary(constraint, 'left') ||
+          this.isConstrainedBySecondary(constraint, 'right');
+        break;
+      default:
+        isOutsideConstraint = this.isConstrainedBySecondary(constraint, 'bottom') ||
+          this.isConstrainedBySecondary(constraint, 'top');
       }
-      window.addEventListener('resize', this.onResize.bind(this));
     }
-  }, {
-    key: 'destroyListeners',
-    value: function destroyListeners() {
-      window.removeEventListener('resize', this.onResize.bind(this));
-    }
-  }, {
-    key: 'destroy',
-    value: function destroy() {
-      this.destroyListeners();
-      this.destroyContainer();
-    }
-  }, {
-    key: 'onResize',
-    value: function onResize() {
-      this.position();
-    }
-  }, {
-    key: 'disable',
-    value: function disable() {
-      this.destroy();
-    }
-  }, {
-    key: 'position',
-    value: function position() {
-      this.refreshAllElementData();
-      this.maintainDetachedContainerPosition();
-      this.checkConstraints();
-    }
-  }, {
-    key: 'checkConstraints',
-    value: function checkConstraints() {
-      this.applyConstraint(this.getActiveConstraint());
-    }
-  }, {
-    key: 'getActiveConstraint',
-    value: function getActiveConstraint() {
-      var _this = this;
 
-      if (!this.options.unnecessaryRepositioning && this.canFitInto(this.activeConstraint)) {
-        return this.activeConstraint;
-      }
+    return !isOutsideConstraint;
+  }
 
-      var activeConstraint = this.constraints.find(function (constraint) {
-        if (_this.canFitInto(constraint)) {
-          return constraint;
-        }
-        return false;
-      });
+  isConstrainedByPrimary(side) {
+    const originCoordinate = this.origins.attachment[side];
+    const popoverSize = this.getPopoverSizeFromSideCheck(side);
 
-      if (!activeConstraint) {
-        return this.activeConstraint;
-      }
-
-      return activeConstraint;
+    if (side === 'left' || side === 'top') {
+      return originCoordinate - popoverSize <= this.origins.parent[side];
     }
-  }, {
-    key: 'refreshAllElementData',
-    value: function refreshAllElementData() {
-      this.refreshParentOrigin();
-      this.refreshElementOrigins();
+
+    return originCoordinate + popoverSize >= this.origins.parent[side];
+  }
+
+  isConstrainedBySecondary(constraint, sideToCheck) {
+    const parentCoord = this.origins.parent[sideToCheck];
+    const originCoordinate = this.getOriginPointForConstraint(constraint);
+    const popoverSize = this.getPopoverSizeOnConstraintSide(constraint, sideToCheck);
+
+    switch (sideToCheck) {
+    case 'top':
+    case 'left':
+      return originCoordinate - popoverSize <= parentCoord;
+    default:
+      return originCoordinate + popoverSize >= parentCoord;
     }
-  }, {
-    key: 'refreshParentOrigin',
-    value: function refreshParentOrigin() {
-      if (this.constraintElement === window) {
-        this.origins.parent = (0, _utils.getWindowOrigin)();
-        return;
-      }
+  }
 
-      this.origins.parent = (0, _utils.getElementOrigin)(this.constraintElement);
+  getAttachementOffsetForConstraint(constraint) {
+    switch (constraint.popover.secondary) {
+    case 'center':
+      return 0;
+    default:
+      return this.cssCache.attachmentOffset;
     }
-  }, {
-    key: 'refreshElementOrigins',
-    value: function refreshElementOrigins() {
-      this.origins.popover = (0, _utils.getElementOrigin)(this.popoverContent);
-      this.origins.attachment = (0, _utils.getElementOrigin)(this.attachmentElement);
-    }
-  }, {
-    key: 'canFitInto',
-    value: function canFitInto(constraint) {
-      if (!constraint) {
-        return false;
-      }
+  }
 
-      var isOutsideConstraint = this.isConstrainedByPrimary(constraint.trigger.primary);
-
-      if (!isOutsideConstraint) {
-        switch (constraint.trigger.primary) {
-          case 'top':
-          case 'bottom':
-            isOutsideConstraint = this.isConstrainedBySecondary(constraint, 'left') || this.isConstrainedBySecondary(constraint, 'right');
-            break;
-          default:
-            isOutsideConstraint = this.isConstrainedBySecondary(constraint, 'bottom') || this.isConstrainedBySecondary(constraint, 'top');
-        }
-      }
-
-      return !isOutsideConstraint;
-    }
-  }, {
-    key: 'isConstrainedByPrimary',
-    value: function isConstrainedByPrimary(side) {
-      var originCoordinate = this.origins.attachment[side];
-      var popoverSize = this.getPopoverSizeFromSideCheck(side);
-
-      if (side === 'left' || side === 'top') {
-        return originCoordinate - popoverSize <= this.origins.parent[side];
-      }
-
-      return originCoordinate + popoverSize >= this.origins.parent[side];
-    }
-  }, {
-    key: 'isConstrainedBySecondary',
-    value: function isConstrainedBySecondary(constraint, sideToCheck) {
-      var parentCoord = this.origins.parent[sideToCheck];
-      var originCoordinate = this.getOriginPointForConstraint(constraint);
-      var popoverSize = this.getPopoverSizeOnConstraintSide(constraint, sideToCheck);
-
+  getPopoverSizeOnConstraintSide(constraint, sideToCheck) {
+    if (constraint.popover.secondary === 'center') {
       switch (sideToCheck) {
-        case 'top':
-        case 'left':
-          return originCoordinate - popoverSize <= parentCoord;
-        default:
-          return originCoordinate + popoverSize >= parentCoord;
+      case 'right':
+      case 'left':
+        return this.origins.popover.halfWidth;
+      default:
+        return this.origins.popover.halfHeight;
       }
     }
-  }, {
-    key: 'getAttachementOffsetForConstraint',
-    value: function getAttachementOffsetForConstraint(constraint) {
-      switch (constraint.popover.secondary) {
-        case 'center':
-          return 0;
-        default:
-          return this.cssCache.attachmentOffset;
+
+    switch (constraint.popover.secondary) {
+    case 'right':
+    case 'left':
+      if (sideToCheck === constraint.popover.secondary) {
+        return this.cssCache.contentOffset;
+      }
+      return this.origins.popover.width - this.cssCache.contentOffset;
+    default:
+      if (sideToCheck === constraint.popover.secondary) {
+        return this.cssCache.contentOffset;
+      }
+      return this.origins.popover.height - this.cssCache.contentOffset;
+    }
+  }
+
+  getOriginPointForConstraint(constraint) {
+    if (constraint.trigger.secondary === 'center') {
+      switch (constraint.trigger.primary) {
+      case 'top':
+      case 'bottom':
+        return this.origins.attachment.left + this.origins.attachment.halfWidth;
+      default:
+        return this.origins.attachment.top + this.origins.attachment.halfHeight;
       }
     }
-  }, {
-    key: 'getPopoverSizeOnConstraintSide',
-    value: function getPopoverSizeOnConstraintSide(constraint, sideToCheck) {
-      if (constraint.popover.secondary === 'center') {
-        switch (sideToCheck) {
-          case 'right':
-          case 'left':
-            return this.origins.popover.halfWidth;
-          default:
-            return this.origins.popover.halfHeight;
+
+    const attachmentOffset = this.getAttachementOffsetForConstraint(constraint);
+
+    switch (constraint.trigger.secondary) {
+    default:
+    case 'left':
+      return this.origins.attachment.left + this.cssCache.triggerOffset + attachmentOffset;
+    case 'right':
+      return this.origins.attachment.right - this.cssCache.triggerOffset - attachmentOffset;
+    case 'top':
+      return this.origins.attachment.top + this.cssCache.triggerOffset + attachmentOffset;
+    case 'bottom':
+      return this.origins.attachment.bottom - this.cssCache.triggerOffset - attachmentOffset;
+    }
+  }
+
+  getPopoverSizeFromSideCheck(side) {
+    const size = this.cssCache.arrowSize;
+
+    if (side === 'top' || side === 'bottom') {
+      return this.origins.popover.height + size;
+    }
+
+    return this.origins.popover.width + size;
+  }
+
+  applyDefaultConstraint() {
+    const defaultConstraint = this.constraints[0];
+    this.applyConstraint(defaultConstraint);
+  }
+
+  applyConstraint(constraintObject) {
+    if (this.activeConstraintIs(constraintObject)) { return; }
+
+    this.clearActiveConstraint();
+    this.activeConstraint = constraintObject;
+    this.toggleActiveConstraints(true);
+  }
+
+  toggleActiveConstraints(isToggled) {
+    this.togglePopoverClasses(this.getActiveConstraintClasses(), isToggled);
+  }
+
+  activeConstraintIs(constraintObject) {
+    if (!this.activeConstraint) { return false; }
+    return this.activeConstraint.id === constraintObject.id;
+  }
+
+  clearActiveConstraint() {
+    if (!this.activeConstraint) { return; }
+
+    this.toggleActiveConstraints(false);
+    this.activeConstraint = null;
+  }
+
+  togglePopoverClasses(classes, isToggled) {
+    const popover = this.popoverElement;
+    const method = isToggled ? __WEBPACK_IMPORTED_MODULE_0__utils__["a" /* addClass */] : __WEBPACK_IMPORTED_MODULE_0__utils__["f" /* removeClass */];
+
+    classes.forEach((className) => {
+      method(popover, className);
+    });
+  }
+
+  getActiveConstraintClasses() {
+    if (!this.activeConstraint) { return []; }
+
+    const popoverAnchors = this.activeConstraint.popover;
+    const triggerAnchors = this.activeConstraint.trigger;
+
+    return [
+      `popoverjs--popover-primary-${popoverAnchors.primary}`,
+      `popoverjs--popover-secondary-${popoverAnchors.secondary}`,
+      `popoverjs--trigger-primary-${triggerAnchors.primary}`,
+      `popoverjs--trigger-secondary-${triggerAnchors.secondary}`,
+    ];
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Positioner);
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports) {
+
+if (typeof Object.assign != 'function') {
+  Object.assign = function(target, varArgs) { // .length of function is 2
+    'use strict';
+    if (target == null) { // TypeError if undefined or null
+      throw new TypeError('Cannot convert undefined or null to object');
+    }
+
+    var to = Object(target);
+
+    for (var index = 1; index < arguments.length; index++) {
+      var nextSource = arguments[index];
+
+      if (nextSource != null) { // Skip over if undefined or null
+        for (var nextKey in nextSource) {
+          // Avoid bugs when hasOwnProperty is shadowed
+          if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+            to[nextKey] = nextSource[nextKey];
+          }
         }
       }
-
-      switch (constraint.popover.secondary) {
-        case 'right':
-        case 'left':
-          if (sideToCheck === constraint.popover.secondary) {
-            return this.cssCache.contentOffset;
-          }
-          return this.origins.popover.width - this.cssCache.contentOffset;
-        default:
-          if (sideToCheck === constraint.popover.secondary) {
-            return this.cssCache.contentOffset;
-          }
-          return this.origins.popover.height - this.cssCache.contentOffset;
-      }
     }
-  }, {
-    key: 'getOriginPointForConstraint',
-    value: function getOriginPointForConstraint(constraint) {
-      if (constraint.trigger.secondary === 'center') {
-        switch (constraint.trigger.primary) {
-          case 'top':
-          case 'bottom':
-            return this.origins.attachment.left + this.origins.attachment.halfWidth;
-          default:
-            return this.origins.attachment.top + this.origins.attachment.halfHeight;
+    return to;
+  };
+}
+
+// https://tc39.github.io/ecma262/#sec-array.prototype.find
+if (!Array.prototype.find) {
+  Object.defineProperty(Array.prototype, 'find', {
+    value: function(predicate) {
+     // 1. Let O be ? ToObject(this value).
+      if (this == null) {
+        throw new TypeError('"this" is null or not defined');
+      }
+
+      var o = Object(this);
+
+      // 2. Let len be ? ToLength(? Get(O, "length")).
+      var len = o.length >>> 0;
+
+      // 3. If IsCallable(predicate) is false, throw a TypeError exception.
+      if (typeof predicate !== 'function') {
+        throw new TypeError('predicate must be a function');
+      }
+
+      // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
+      var thisArg = arguments[1];
+
+      // 5. Let k be 0.
+      var k = 0;
+
+      // 6. Repeat, while k < len
+      while (k < len) {
+        // a. Let Pk be ! ToString(k).
+        // b. Let kValue be ? Get(O, Pk).
+        // c. Let testResult be ToBoolean(? Call(predicate, T, « kValue, k, O »)).
+        // d. If testResult is true, return kValue.
+        var kValue = o[k];
+        if (predicate.call(thisArg, kValue, k, o)) {
+          return kValue;
         }
+        // e. Increase k by 1.
+        k++;
       }
 
-      var attachmentOffset = this.getAttachementOffsetForConstraint(constraint);
-
-      switch (constraint.trigger.secondary) {
-        default:
-        case 'left':
-          return this.origins.attachment.left + this.cssCache.triggerOffset + attachmentOffset;
-        case 'right':
-          return this.origins.attachment.right - this.cssCache.triggerOffset - attachmentOffset;
-        case 'top':
-          return this.origins.attachment.top + this.cssCache.triggerOffset + attachmentOffset;
-        case 'bottom':
-          return this.origins.attachment.bottom - this.cssCache.triggerOffset - attachmentOffset;
-      }
+      // 7. Return undefined.
+      return undefined;
     }
-  }, {
-    key: 'getPopoverSizeFromSideCheck',
-    value: function getPopoverSizeFromSideCheck(side) {
-      var size = this.cssCache.arrowSize;
+  });
+}
 
-      if (side === 'top' || side === 'bottom') {
-        return this.origins.popover.height + size;
+// https://tc39.github.io/ecma262/#sec-array.prototype.includes
+if (!Array.prototype.includes) {
+  Object.defineProperty(Array.prototype, 'includes', {
+    value: function(searchElement, fromIndex) {
+
+      // 1. Let O be ? ToObject(this value).
+      if (this == null) {
+        throw new TypeError('"this" is null or not defined');
       }
 
-      return this.origins.popover.width + size;
-    }
-  }, {
-    key: 'applyDefaultConstraint',
-    value: function applyDefaultConstraint() {
-      var defaultConstraint = this.constraints[0];
-      this.applyConstraint(defaultConstraint);
-    }
-  }, {
-    key: 'applyConstraint',
-    value: function applyConstraint(constraintObject) {
-      if (this.activeConstraintIs(constraintObject)) {
-        return;
-      }
+      var o = Object(this);
 
-      this.clearActiveConstraint();
-      this.activeConstraint = constraintObject;
-      this.toggleActiveConstraints(true);
-    }
-  }, {
-    key: 'toggleActiveConstraints',
-    value: function toggleActiveConstraints(isToggled) {
-      this.togglePopoverClasses(this.getActiveConstraintClasses(), isToggled);
-    }
-  }, {
-    key: 'activeConstraintIs',
-    value: function activeConstraintIs(constraintObject) {
-      if (!this.activeConstraint) {
+      // 2. Let len be ? ToLength(? Get(O, "length")).
+      var len = o.length >>> 0;
+
+      // 3. If len is 0, return false.
+      if (len === 0) {
         return false;
       }
-      return this.activeConstraint.id === constraintObject.id;
-    }
-  }, {
-    key: 'clearActiveConstraint',
-    value: function clearActiveConstraint() {
-      if (!this.activeConstraint) {
-        return;
+
+      // 4. Let n be ? ToInteger(fromIndex).
+      //    (If fromIndex is undefined, this step produces the value 0.)
+      var n = fromIndex | 0;
+
+      // 5. If n ≥ 0, then
+      //  a. Let k be n.
+      // 6. Else n < 0,
+      //  a. Let k be len + n.
+      //  b. If k < 0, let k be 0.
+      var k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+
+      function sameValueZero(x, y) {
+        return x === y || (typeof x === 'number' && typeof y === 'number' && isNaN(x) && isNaN(y));
       }
 
-      this.toggleActiveConstraints(false);
-      this.activeConstraint = null;
-    }
-  }, {
-    key: 'togglePopoverClasses',
-    value: function togglePopoverClasses(classes, isToggled) {
-      var popover = this.popoverElement;
-      var method = isToggled ? _utils.addClass : _utils.removeClass;
-
-      classes.forEach(function (className) {
-        method(popover, className);
-      });
-    }
-  }, {
-    key: 'getActiveConstraintClasses',
-    value: function getActiveConstraintClasses() {
-      if (!this.activeConstraint) {
-        return [];
+      // 7. Repeat, while k < len
+      while (k < len) {
+        // a. Let elementK be the result of ? Get(O, ! ToString(k)).
+        // b. If SameValueZero(searchElement, elementK) is true, return true.
+        // c. Increase k by 1.
+        if (sameValueZero(o[k], searchElement)) {
+          return true;
+        }
+        k++;
       }
 
-      var popoverAnchors = this.activeConstraint.popover;
-      var triggerAnchors = this.activeConstraint.trigger;
-
-      return ['popoverjs--popover-primary-' + popoverAnchors.primary, 'popoverjs--popover-secondary-' + popoverAnchors.secondary, 'popoverjs--trigger-primary-' + triggerAnchors.primary, 'popoverjs--trigger-secondary-' + triggerAnchors.secondary];
+      // 8. Return false
+      return false;
     }
-  }]);
+  });
+}
 
-  return Positioner;
-}();
+/*
+ * classList.js: Cross-browser full element.classList implementation.
+ * 1.1.20170427
+ *
+ * By Eli Grey, http://eligrey.com
+ * License: Dedicated to the public domain.
+ *   See https://github.com/eligrey/classList.js/blob/master/LICENSE.md
+ */
 
-exports.default = Positioner;
+/*global self, document, DOMException */
+
+/*! @source http://purl.eligrey.com/github/classList.js/blob/master/classList.js */
+
+if ("document" in self) {
+
+// Full polyfill for browsers with no classList support
+// Including IE < Edge missing SVGElement.classList
+if (!("classList" in document.createElement("_"))
+	|| document.createElementNS && !("classList" in document.createElementNS("http://www.w3.org/2000/svg","g"))) {
+
+(function (view) {
+
+"use strict";
+
+if (!('Element' in view)) return;
+
+var
+	  classListProp = "classList"
+	, protoProp = "prototype"
+	, elemCtrProto = view.Element[protoProp]
+	, objCtr = Object
+	, strTrim = String[protoProp].trim || function () {
+		return this.replace(/^\s+|\s+$/g, "");
+	}
+	, arrIndexOf = Array[protoProp].indexOf || function (item) {
+		var
+			  i = 0
+			, len = this.length
+		;
+		for (; i < len; i++) {
+			if (i in this && this[i] === item) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	// Vendors: please allow content code to instantiate DOMExceptions
+	, DOMEx = function (type, message) {
+		this.name = type;
+		this.code = DOMException[type];
+		this.message = message;
+	}
+	, checkTokenAndGetIndex = function (classList, token) {
+		if (token === "") {
+			throw new DOMEx(
+				  "SYNTAX_ERR"
+				, "An invalid or illegal string was specified"
+			);
+		}
+		if (/\s/.test(token)) {
+			throw new DOMEx(
+				  "INVALID_CHARACTER_ERR"
+				, "String contains an invalid character"
+			);
+		}
+		return arrIndexOf.call(classList, token);
+	}
+	, ClassList = function (elem) {
+		var
+			  trimmedClasses = strTrim.call(elem.getAttribute("class") || "")
+			, classes = trimmedClasses ? trimmedClasses.split(/\s+/) : []
+			, i = 0
+			, len = classes.length
+		;
+		for (; i < len; i++) {
+			this.push(classes[i]);
+		}
+		this._updateClassName = function () {
+			elem.setAttribute("class", this.toString());
+		};
+	}
+	, classListProto = ClassList[protoProp] = []
+	, classListGetter = function () {
+		return new ClassList(this);
+	}
+;
+// Most DOMException implementations don't allow calling DOMException's toString()
+// on non-DOMExceptions. Error's toString() is sufficient here.
+DOMEx[protoProp] = Error[protoProp];
+classListProto.item = function (i) {
+	return this[i] || null;
+};
+classListProto.contains = function (token) {
+	token += "";
+	return checkTokenAndGetIndex(this, token) !== -1;
+};
+classListProto.add = function () {
+	var
+		  tokens = arguments
+		, i = 0
+		, l = tokens.length
+		, token
+		, updated = false
+	;
+	do {
+		token = tokens[i] + "";
+		if (checkTokenAndGetIndex(this, token) === -1) {
+			this.push(token);
+			updated = true;
+		}
+	}
+	while (++i < l);
+
+	if (updated) {
+		this._updateClassName();
+	}
+};
+classListProto.remove = function () {
+	var
+		  tokens = arguments
+		, i = 0
+		, l = tokens.length
+		, token
+		, updated = false
+		, index
+	;
+	do {
+		token = tokens[i] + "";
+		index = checkTokenAndGetIndex(this, token);
+		while (index !== -1) {
+			this.splice(index, 1);
+			updated = true;
+			index = checkTokenAndGetIndex(this, token);
+		}
+	}
+	while (++i < l);
+
+	if (updated) {
+		this._updateClassName();
+	}
+};
+classListProto.toggle = function (token, force) {
+	token += "";
+
+	var
+		  result = this.contains(token)
+		, method = result ?
+			force !== true && "remove"
+		:
+			force !== false && "add"
+	;
+
+	if (method) {
+		this[method](token);
+	}
+
+	if (force === true || force === false) {
+		return force;
+	} else {
+		return !result;
+	}
+};
+classListProto.toString = function () {
+	return this.join(" ");
+};
+
+if (objCtr.defineProperty) {
+	var classListPropDesc = {
+		  get: classListGetter
+		, enumerable: true
+		, configurable: true
+	};
+	try {
+		objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
+	} catch (ex) { // IE 8 doesn't support enumerable:true
+		// adding undefined to fight this issue https://github.com/eligrey/classList.js/issues/36
+		// modernie IE8-MSW7 machine has IE8 8.0.6001.18702 and is affected
+		if (ex.number === undefined || ex.number === -0x7FF5EC54) {
+			classListPropDesc.enumerable = false;
+			objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
+		}
+	}
+} else if (objCtr[protoProp].__defineGetter__) {
+	elemCtrProto.__defineGetter__(classListProp, classListGetter);
+}
+
+}(self));
+
+}
+
+// There is full or partial native classList support, so just check if we need
+// to normalize the add/remove and toggle APIs.
+
+(function () {
+	"use strict";
+
+	var testElement = document.createElement("_");
+
+	testElement.classList.add("c1", "c2");
+
+	// Polyfill for IE 10/11 and Firefox <26, where classList.add and
+	// classList.remove exist but support only one argument at a time.
+	if (!testElement.classList.contains("c2")) {
+		var createMethod = function(method) {
+			var original = DOMTokenList.prototype[method];
+
+			DOMTokenList.prototype[method] = function(token) {
+				var i, len = arguments.length;
+
+				for (i = 0; i < len; i++) {
+					token = arguments[i];
+					original.call(this, token);
+				}
+			};
+		};
+		createMethod('add');
+		createMethod('remove');
+	}
+
+	testElement.classList.toggle("c3", false);
+
+	// Polyfill for IE 10 and Firefox <24, where classList.toggle does not
+	// support the second argument.
+	if (testElement.classList.contains("c3")) {
+		var _toggle = DOMTokenList.prototype.toggle;
+
+		DOMTokenList.prototype.toggle = function(token, force) {
+			if (1 in arguments && !this.contains(token) === !force) {
+				return force;
+			} else {
+				return _toggle.call(this, token);
+			}
+		};
+
+	}
+
+	testElement = null;
+}());
+
+}
+
 
 /***/ })
 /******/ ]);
