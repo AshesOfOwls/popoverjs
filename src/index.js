@@ -74,6 +74,7 @@ class Popoverjs {
   }
 
   setUpRenderer() {
+    console.log();
     this.renderer = new Renderer(this.rendererOptions);
   }
 

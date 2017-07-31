@@ -9,12 +9,6 @@ module.exports = {
     libraryTarget: 'umd',
   },
   module: {
-    loaders: [
-      {
-        test: /\.js$/,
-        loader: 'babel-loader?presets[]=es2015',
-      },
-    ],
     rules: [{
       test: /\.scss$/,
       use: [{
@@ -24,6 +18,11 @@ module.exports = {
       }, {
         loader: 'sass-loader', // compiles Sass to CSS
       }],
+    }, {
+      test: [/\.js$/],
+      exclude: [/node_modules/],
+      loader: 'babel-loader',
+      options: { presets: ['es2015'] },
     }],
   },
 };
