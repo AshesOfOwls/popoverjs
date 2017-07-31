@@ -146,7 +146,11 @@ class Renderer {
 
     this.isVisible = isVisible;
 
-    this.listenForToggleEnd();
+    if (this.options.hideDelay > 0) {
+      this.listenForToggleEnd();
+    } else {
+      this.onToggleEnd();
+    }
 
     if (isVisible) {
       addClass(this.popoverElement, 'is-visible');
