@@ -3,6 +3,7 @@ import { addClass, removeClass, getElementOrigin, getWindowOrigin } from './util
 const defaults = {
   attachmentElement: null,
   constraintElement: null,
+  unnecessaryRepositioning: true,
   constraints: [{
     popover: 'top center',
     trigger: 'bottom center',

@@ -117,8 +117,8 @@
       new Popoverjs({
         bodyAttached: true,
         unnecessaryRepositioning: true,
-        triggerElement: document.getElementsByClassName('trigger-0')[0],
-        attachmentElement: document.getElementsByClassName('attachment')[0],
+        attachmentElement: document.getElementsByClassName('trigger-0')[0],
+        // attachmentElement: document.getElementsByClassName('attachment')[0],
         popoverElement: document.getElementsByClassName('popover-0')[0],
         constraintElement: document.getElementsByClassName('container')[0],
         constraints: [{
@@ -128,10 +128,12 @@
           popover: 'left center',
           trigger: 'left center',
         }],
-        onBeforeHide: function() { console.log('onBeforeHide') },
-        onBeforeShow: function() { console.log('onBeforeShow') },
-        onAfterHide: function() { console.log('onAfterHide') },
-        onAfterShow: function() { console.log('onAfterShow') },
+        showOn: 'mouseenter',
+        hideOn: 'mouseleave',
+        onBeforeHide: function() { },
+        onBeforeShow: function() { },
+        onAfterHide: function() { },
+        onAfterShow: function() { },
       });
 
       new Popoverjs({
@@ -140,10 +142,10 @@
         attachmentElement: document.getElementsByClassName('attachment')[0],
         popoverElement: document.getElementsByClassName('popover-1')[0],
         constraintElement: document.getElementsByClassName('container')[0],
-        onBeforeHide: function() { console.log('onBeforeHide') },
-        onBeforeShow: function() { console.log('onBeforeShow') },
-        onAfterHide: function() { console.log('onAfterHide') },
-        onAfterShow: function() { console.log('onAfterShow') },
+        onBeforeHide: function() { },
+        onBeforeShow: function() { },
+        onAfterHide: function() { },
+        onAfterShow: function() { },
       });
 
 

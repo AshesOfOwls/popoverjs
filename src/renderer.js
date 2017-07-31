@@ -13,6 +13,9 @@ class Renderer {
 
     this.render = this.render.bind(this);
     this.onDocumentClick = this.onDocumentClick.bind(this);
+    this.onPopoverEnter = this.onPopoverEnter.bind(this);
+    this.onPopoverLeave = this.onPopoverLeave.bind(this);
+    this.onToggleEnd = this.onToggleEnd.bind(this);
 
     this.initialize();
   }
@@ -20,12 +23,20 @@ class Renderer {
   initialize() {
     this.setUpGlobals();
     this.listenForRender();
+    this.listenForPopoverHover();
   }
 
   setUpGlobals() {
     this.isVisible = false;
     this.triggerElement = this.options.triggerElement;
     this.popoverElement = this.options.popoverElement;
+  }
+
+  listenForPopoverHover() {
+    if (!this.options.hideOn === 'mouseleave') { return; }
+
+    this.popoverElement.addEventListener('mouseenter', this.onPopoverEnter);
+    this.popoverElement.addEventListener('mouseleave', this.onPopoverLeave);
   }
 
   listenForRender() {
@@ -42,9 +53,10 @@ class Renderer {
 
   destroyListeners() {
     this.triggerElement.removeEventListener(this.options.showOn, this.render);
+    this.popoverElement.removeEventListener('mouseenter', this.onPopoverEnter);
 
     if (this.options.hideOn === 'documentClick') {
-      document.body.removeEventListener('click', this.onDocumentClick);
+      document.body.removeEventListener('click', this.onPopoverEnter);
     }
   }
 
@@ -61,15 +73,21 @@ class Renderer {
   onDocumentClick(e) {
     if (this.popoverElement.contains(e.target)) { return; }
     document.body.removeEventListener('click', this.onDocumentClick);
-    this.hide();
+    this.shouldHide();
   }
 
   listenForToggleEnd() {
-    oneEvent(this.popoverElement,
+    this.clearToggleEvent();
+    this.toggleEventData = oneEvent(this.popoverElement,
       whichTransitionEvent(this.popoverElement),
-      this.onToggleEnd.bind(this),
+      this.onToggleEnd,
       transitionEvent => (transitionEvent.propertyName === 'opacity'),
     );
+  }
+
+  clearToggleEvent() {
+    if (!this.toggleEventData) { return; }
+    this.popoverElement.removeEventListener(this.toggleEventData[0], this.toggleEventData[1]);
   }
 
   clearDelayTimeouts() {
@@ -94,6 +112,14 @@ class Renderer {
   show() {
     this.options.onBeforeShow();
     this.toggleVisibility(true);
+  }
+
+  onPopoverEnter() {
+    this.clearDelayTimeouts();
+  }
+
+  onPopoverLeave() {
+    this.shouldHide();
   }
 
   shouldHide() {

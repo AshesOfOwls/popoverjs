@@ -5,6 +5,8 @@ const oneEvent = (target, eventType, callback) => {
   };
 
   target.addEventListener(eventType, wrappedCallback);
+
+  return [eventType, wrappedCallback];
 };
 
 const addClass = (element, className) => {

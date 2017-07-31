@@ -76,7 +76,6 @@ class Popoverjs {
   }
 
   setUpRenderer() {
-    console.log();
     this.renderer = new Renderer(this.rendererOptions);
   }
 
@@ -90,7 +89,6 @@ class Popoverjs {
   }
 }
 
-console.log("RAN RAN RAN???");
 window.Popoverjs = Popoverjs;
 
 export default Popoverjs;
