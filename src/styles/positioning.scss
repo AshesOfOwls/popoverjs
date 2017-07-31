@@ -1,37 +1,37 @@
 .popoverjs {
-  // Trigger Positioning
-  &--trigger-primary-bottom {
+  // Attachment Positioning
+  &--attachment-primary-bottom {
     bottom: -1px;
   }
-  &--trigger-primary-top {
+  &--attachment-primary-top {
     top: -1px;
   }
-  &--trigger-primary-right {
+  &--attachment-primary-right {
     right: -1px;
   }
-  &--trigger-primary-left {
+  &--attachment-primary-left {
     left: -1px;
   }
 
-  &--trigger-secondary-bottom {
+  &--attachment-secondary-bottom {
     bottom: $arrow_attachment_offset;
   }
-  &--trigger-secondary-top {
+  &--attachment-secondary-top {
     top: $arrow_attachment_offset;
   }
-  &--trigger-secondary-right {
+  &--attachment-secondary-right {
     right: $arrow_attachment_offset;
   }
-  &--trigger-secondary-left {
+  &--attachment-secondary-left {
     left: $arrow_attachment_offset;
   }
 
-  &--trigger-primary-top.popoverjs--trigger-secondary-center,
-  &--trigger-primary-bottom.popoverjs--trigger-secondary-center {
+  &--attachment-primary-top.popoverjs--attachment-secondary-center,
+  &--attachment-primary-bottom.popoverjs--attachment-secondary-center {
     left: 50%;
   }
-  &--trigger-primary-left.popoverjs--trigger-secondary-center,
-  &--trigger-primary-right.popoverjs--trigger-secondary-center {
+  &--attachment-primary-left.popoverjs--attachment-secondary-center,
+  &--attachment-primary-right.popoverjs--attachment-secondary-center {
     top: 50%;
   }
 

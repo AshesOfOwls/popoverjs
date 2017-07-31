@@ -112,8 +112,6 @@
 
     <script src="../dist/popoverjs.js"></script>
     <script>
-      console.log("Yars")
-
       new Popoverjs({
         bodyAttached: true,
         unnecessaryRepositioning: true,
@@ -123,13 +121,13 @@
         constraintElement: document.getElementsByClassName('container')[0],
         constraints: [{
           popover: 'top left',
-          trigger: 'bottom left',
+          attachment: 'bottom left',
         }, {
           popover: 'left center',
-          trigger: 'left center',
+          attachment: 'left center',
         }],
         showOn: 'mouseenter',
-        hideOn: 'mouseleave',
+        hideOn: 'click',
         onBeforeHide: function() { },
         onBeforeShow: function() { },
         onAfterHide: function() { },

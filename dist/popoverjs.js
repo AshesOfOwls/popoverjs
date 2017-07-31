@@ -922,7 +922,7 @@ exports = module.exports = __webpack_require__(6)(undefined);
 
 
 // module
-exports.push([module.i, "/**\n  * Local Variables\n  *\n  * $arrow_hypotenuse_to_side_ratio:\n  * The $arrow_hypotenuse_to_side_ratio is important and should not be changed.\n  * In order to get an arrow, we are currently hacking it to be a square rotated\n  * at a 45 degree angle, and cut off via parent container overflow. Because we\n  * can only control the height/width of a box, setting the size of the arrow\n  * becomes difficult when it is rotated (Because the diagnol hypotenuse within\n  * a box is longer than its sides). To fix this, we can instead take the size\n  * which would be the hypotenuse and convert that to be the correct side\n  * length for the box. Since we are dealing with equal length sides, the .707\n  * will be consistent enough for that conversion.\n  */\n.popoverjs-arrow {\n  overflow: hidden;\n  position: absolute;\n  z-index: 5; }\n  .popoverjs-arrow:after {\n    content: \"\";\n    position: absolute;\n    width: 11.312px;\n    height: 11.312px;\n    background: white;\n    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.15);\n    transform: translateX(-50%) translateY(-50%) rotate(45deg);\n    top: 50%;\n    left: 50%; }\n\n.popoverjs--popover-primary-bottom > .popoverjs-arrow,\n.popoverjs--popover-primary-top > .popoverjs-arrow {\n  left: -8px;\n  height: 8px;\n  width: 16px; }\n\n.popoverjs--popover-primary-bottom > .popoverjs-arrow {\n  top: -8px; }\n  .popoverjs--popover-primary-bottom > .popoverjs-arrow:after {\n    margin-top: -4px; }\n\n.popoverjs--popover-primary-top > .popoverjs-arrow {\n  bottom: -8px; }\n  .popoverjs--popover-primary-top > .popoverjs-arrow:after {\n    margin-top: 4px; }\n\n.popoverjs--popover-primary-left > .popoverjs-arrow,\n.popoverjs--popover-primary-right > .popoverjs-arrow {\n  bottom: -8px;\n  height: 16px;\n  width: 8px; }\n\n.popoverjs--popover-primary-right > .popoverjs-arrow {\n  left: -8px; }\n  .popoverjs--popover-primary-right > .popoverjs-arrow:after {\n    margin-left: -4px; }\n\n.popoverjs--popover-primary-left > .popoverjs-arrow {\n  right: -8px; }\n  .popoverjs--popover-primary-left > .popoverjs-arrow:after {\n    margin-left: 4px; }\n\n.popoverjs--trigger-primary-bottom {\n  bottom: -1px; }\n\n.popoverjs--trigger-primary-top {\n  top: -1px; }\n\n.popoverjs--trigger-primary-right {\n  right: -1px; }\n\n.popoverjs--trigger-primary-left {\n  left: -1px; }\n\n.popoverjs--trigger-secondary-bottom {\n  bottom: 30px; }\n\n.popoverjs--trigger-secondary-top {\n  top: 30px; }\n\n.popoverjs--trigger-secondary-right {\n  right: 30px; }\n\n.popoverjs--trigger-secondary-left {\n  left: 30px; }\n\n.popoverjs--trigger-primary-top.popoverjs--trigger-secondary-center, .popoverjs--trigger-primary-bottom.popoverjs--trigger-secondary-center {\n  left: 50%; }\n\n.popoverjs--trigger-primary-left.popoverjs--trigger-secondary-center, .popoverjs--trigger-primary-right.popoverjs--trigger-secondary-center {\n  top: 50%; }\n\n.popoverjs--popover-primary-bottom > .popoverjs-content {\n  bottom: 9px; }\n\n.popoverjs--popover-primary-top > .popoverjs-content {\n  top: 9px; }\n\n.popoverjs--popover-primary-right > .popoverjs-content {\n  right: 9px; }\n\n.popoverjs--popover-primary-left > .popoverjs-content {\n  left: 9px; }\n\n.popoverjs--popover-secondary-bottom > .popoverjs-content {\n  margin-top: 25px;\n  transform: translateY(-100%); }\n\n.popoverjs--popover-secondary-top > .popoverjs-content {\n  margin-top: -25px;\n  transform: translateY(0%); }\n\n.popoverjs--popover-secondary-right > .popoverjs-content {\n  right: -25px; }\n\n.popoverjs--popover-secondary-left > .popoverjs-content {\n  left: -25px; }\n\n.popoverjs--popover-primary-bottom.popoverjs--popover-secondary-center > .popoverjs-content,\n.popoverjs--popover-primary-top.popoverjs--popover-secondary-center > .popoverjs-content {\n  left: 0;\n  transform: translateX(-50%); }\n\n.popoverjs--popover-primary-left.popoverjs--popover-secondary-center > .popoverjs-content,\n.popoverjs--popover-primary-right.popoverjs--popover-secondary-center > .popoverjs-content {\n  top: 0;\n  transform: translateY(-50%); }\n\n.popoverjs {\n  height: 1px;\n  opacity: 0;\n  pointer-events: all;\n  position: absolute;\n  transition: visibility 0.275s, opacity 0.275s linear;\n  visibility: hidden;\n  width: 1px;\n  z-index: 15; }\n  .popoverjs.is-visible {\n    opacity: 1;\n    visibility: visible; }\n  .popoverjs.is-transitionable {\n    transition: visibility 0.275s, height 0.2s, width 0.2s, opacity 0.275s; }\n  .popoverjs-content {\n    background: white;\n    border-radius: 3px;\n    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.15);\n    box-sizing: border-box;\n    position: absolute; }\n  .popoverjs--detatched-container {\n    position: absolute;\n    pointer-events: none; }\n", ""]);
+exports.push([module.i, "/**\n  * Local Variables\n  *\n  * $arrow_hypotenuse_to_side_ratio:\n  * The $arrow_hypotenuse_to_side_ratio is important and should not be changed.\n  * In order to get an arrow, we are currently hacking it to be a square rotated\n  * at a 45 degree angle, and cut off via parent container overflow. Because we\n  * can only control the height/width of a box, setting the size of the arrow\n  * becomes difficult when it is rotated (Because the diagnol hypotenuse within\n  * a box is longer than its sides). To fix this, we can instead take the size\n  * which would be the hypotenuse and convert that to be the correct side\n  * length for the box. Since we are dealing with equal length sides, the .707\n  * will be consistent enough for that conversion.\n  */\n.popoverjs-arrow {\n  overflow: hidden;\n  position: absolute;\n  z-index: 5; }\n  .popoverjs-arrow:after {\n    content: \"\";\n    position: absolute;\n    width: 11.312px;\n    height: 11.312px;\n    background: white;\n    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.15);\n    transform: translateX(-50%) translateY(-50%) rotate(45deg);\n    top: 50%;\n    left: 50%; }\n\n.popoverjs--popover-primary-bottom > .popoverjs-arrow,\n.popoverjs--popover-primary-top > .popoverjs-arrow {\n  left: -8px;\n  height: 8px;\n  width: 16px; }\n\n.popoverjs--popover-primary-bottom > .popoverjs-arrow {\n  top: -8px; }\n  .popoverjs--popover-primary-bottom > .popoverjs-arrow:after {\n    margin-top: -4px; }\n\n.popoverjs--popover-primary-top > .popoverjs-arrow {\n  bottom: -8px; }\n  .popoverjs--popover-primary-top > .popoverjs-arrow:after {\n    margin-top: 4px; }\n\n.popoverjs--popover-primary-left > .popoverjs-arrow,\n.popoverjs--popover-primary-right > .popoverjs-arrow {\n  bottom: -8px;\n  height: 16px;\n  width: 8px; }\n\n.popoverjs--popover-primary-right > .popoverjs-arrow {\n  left: -8px; }\n  .popoverjs--popover-primary-right > .popoverjs-arrow:after {\n    margin-left: -4px; }\n\n.popoverjs--popover-primary-left > .popoverjs-arrow {\n  right: -8px; }\n  .popoverjs--popover-primary-left > .popoverjs-arrow:after {\n    margin-left: 4px; }\n\n.popoverjs--attachment-primary-bottom {\n  bottom: -1px; }\n\n.popoverjs--attachment-primary-top {\n  top: -1px; }\n\n.popoverjs--attachment-primary-right {\n  right: -1px; }\n\n.popoverjs--attachment-primary-left {\n  left: -1px; }\n\n.popoverjs--attachment-secondary-bottom {\n  bottom: 30px; }\n\n.popoverjs--attachment-secondary-top {\n  top: 30px; }\n\n.popoverjs--attachment-secondary-right {\n  right: 30px; }\n\n.popoverjs--attachment-secondary-left {\n  left: 30px; }\n\n.popoverjs--attachment-primary-top.popoverjs--attachment-secondary-center, .popoverjs--attachment-primary-bottom.popoverjs--attachment-secondary-center {\n  left: 50%; }\n\n.popoverjs--attachment-primary-left.popoverjs--attachment-secondary-center, .popoverjs--attachment-primary-right.popoverjs--attachment-secondary-center {\n  top: 50%; }\n\n.popoverjs--popover-primary-bottom > .popoverjs-content {\n  bottom: 9px; }\n\n.popoverjs--popover-primary-top > .popoverjs-content {\n  top: 9px; }\n\n.popoverjs--popover-primary-right > .popoverjs-content {\n  right: 9px; }\n\n.popoverjs--popover-primary-left > .popoverjs-content {\n  left: 9px; }\n\n.popoverjs--popover-secondary-bottom > .popoverjs-content {\n  margin-top: 25px;\n  transform: translateY(-100%); }\n\n.popoverjs--popover-secondary-top > .popoverjs-content {\n  margin-top: -25px;\n  transform: translateY(0%); }\n\n.popoverjs--popover-secondary-right > .popoverjs-content {\n  right: -25px; }\n\n.popoverjs--popover-secondary-left > .popoverjs-content {\n  left: -25px; }\n\n.popoverjs--popover-primary-bottom.popoverjs--popover-secondary-center > .popoverjs-content,\n.popoverjs--popover-primary-top.popoverjs--popover-secondary-center > .popoverjs-content {\n  left: 0;\n  transform: translateX(-50%); }\n\n.popoverjs--popover-primary-left.popoverjs--popover-secondary-center > .popoverjs-content,\n.popoverjs--popover-primary-right.popoverjs--popover-secondary-center > .popoverjs-content {\n  top: 0;\n  transform: translateY(-50%); }\n\n.popoverjs {\n  height: 1px;\n  opacity: 0;\n  pointer-events: all;\n  position: absolute;\n  transition: visibility 0.275s, opacity 0.275s linear;\n  visibility: hidden;\n  width: 1px;\n  z-index: 15; }\n  .popoverjs.is-visible {\n    opacity: 1;\n    visibility: visible; }\n  .popoverjs.is-transitionable {\n    transition: visibility 0.275s, height 0.2s, width 0.2s, opacity 0.275s; }\n  .popoverjs-content {\n    background: white;\n    border-radius: 3px;\n    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.15);\n    box-sizing: border-box;\n    position: absolute; }\n  .popoverjs--detatched-container {\n    position: absolute;\n    pointer-events: none; }\n", ""]);
 
 // exports
 
@@ -1486,10 +1486,10 @@ var defaults = {
   unnecessaryRepositioning: true,
   constraints: [{
     popover: 'top center',
-    trigger: 'bottom center'
+    attachment: 'bottom center'
   }, {
     popover: 'left center',
-    trigger: 'right center'
+    attachment: 'right center'
   }]
 };
 
@@ -1584,7 +1584,7 @@ var Positioner = function () {
   }, {
     key: 'cacheCssOffsets',
     value: function cacheCssOffsets() {
-      var sizerClasses = ['popoverjs--popover-primary-top', 'popoverjs--popover-secondary-left', 'popoverjs--trigger-primary-left', 'popoverjs--trigger-secondary-top'];
+      var sizerClasses = ['popoverjs--popover-primary-top', 'popoverjs--popover-secondary-left', 'popoverjs--attachment-primary-left', 'popoverjs--attachment-secondary-top'];
 
       this.togglePopoverClasses(sizerClasses, true);
 
@@ -1621,17 +1621,17 @@ var Positioner = function () {
     value: function parseConstraints() {
       var id = 0;
       this.constraints = this.options.constraints.map(function (constraint) {
-        var triggerConstraint = constraint.trigger.split(' ');
+        var attachmentConstraint = constraint.attachment.split(' ');
         var popoverConstraint = constraint.popover.split(' ');
 
         id += 1;
 
         return Object.assign({}, constraint, {
           id: id,
-          trigger: {
-            primary: triggerConstraint[0],
-            secondary: triggerConstraint[1],
-            string: constraint.trigger
+          attachment: {
+            primary: attachmentConstraint[0],
+            secondary: attachmentConstraint[1],
+            string: constraint.attachment
           },
           popover: {
             primary: popoverConstraint[0],
@@ -1746,10 +1746,10 @@ var Positioner = function () {
         return false;
       }
 
-      var isOutsideConstraint = this.isConstrainedByPrimary(constraint.trigger.primary);
+      var isOutsideConstraint = this.isConstrainedByPrimary(constraint.attachment.primary);
 
       if (!isOutsideConstraint) {
-        switch (constraint.trigger.primary) {
+        switch (constraint.attachment.primary) {
           case 'top':
           case 'bottom':
             isOutsideConstraint = this.isConstrainedBySecondary(constraint, 'left') || this.isConstrainedBySecondary(constraint, 'right');
@@ -1828,8 +1828,8 @@ var Positioner = function () {
   }, {
     key: 'getOriginPointForConstraint',
     value: function getOriginPointForConstraint(constraint) {
-      if (constraint.trigger.secondary === 'center') {
-        switch (constraint.trigger.primary) {
+      if (constraint.attachment.secondary === 'center') {
+        switch (constraint.attachment.primary) {
           case 'top':
           case 'bottom':
             return this.origins.attachment.left + this.origins.attachment.halfWidth;
@@ -1840,7 +1840,7 @@ var Positioner = function () {
 
       var attachmentOffset = this.getAttachementOffsetForConstraint(constraint);
 
-      switch (constraint.trigger.secondary) {
+      switch (constraint.attachment.secondary) {
         default:
         case 'left':
           return this.origins.attachment.left + this.cssCache.triggerOffset + attachmentOffset;
@@ -1921,9 +1921,9 @@ var Positioner = function () {
       }
 
       var popoverAnchors = this.activeConstraint.popover;
-      var triggerAnchors = this.activeConstraint.trigger;
+      var attachmentAnchors = this.activeConstraint.attachment;
 
-      return ['popoverjs--popover-primary-' + popoverAnchors.primary, 'popoverjs--popover-secondary-' + popoverAnchors.secondary, 'popoverjs--trigger-primary-' + triggerAnchors.primary, 'popoverjs--trigger-secondary-' + triggerAnchors.secondary];
+      return ['popoverjs--popover-primary-' + popoverAnchors.primary, 'popoverjs--popover-secondary-' + popoverAnchors.secondary, 'popoverjs--attachment-primary-' + attachmentAnchors.primary, 'popoverjs--attachment-secondary-' + attachmentAnchors.secondary];
     }
   }]);
 
