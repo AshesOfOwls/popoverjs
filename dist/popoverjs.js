@@ -175,7 +175,7 @@ const error = (message) => {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(4);
+var content = __webpack_require__(5);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -183,7 +183,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(6)(content, options);
+var update = __webpack_require__(7)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -205,11 +205,15 @@ if(false) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__renderer__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__positioner__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__styles_main_scss__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__styles_main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__styles_main_scss__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polyfills__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polyfills___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__polyfills__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__renderer__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__positioner__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__styles_main_scss__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__styles_main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__styles_main_scss__);
+
+
 
 
 
@@ -237,8 +241,7 @@ const requiredOptions = [
 
 class Popoverjs {
   constructor(options) {
-    this.options = Object.assign({}, defaults);
-    this.options = Object.assign(this.options, options);
+    this.options = Object.assign({}, defaults, options);
 
     this.checkForRequiredOptions();
     this.initialize();
@@ -249,14 +252,13 @@ class Popoverjs {
 
     requiredOptions.forEach((option) => {
       if (!optionKeys.includes(option)) {
-        Object(__WEBPACK_IMPORTED_MODULE_2__utils__["b" /* error */])(`Must supply ${option} option to Popoverjs`);
+        Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* error */])(`Must supply ${option} option to Popoverjs`);
       }
     });
   }
 
   initialize() {
     this.setUpGlobals();
-    this.setUpPositioner();
     this.setUpRenderer();
   }
 
@@ -273,6 +275,7 @@ class Popoverjs {
   get rendererOptions() {
     return Object.assign({}, this.options, {
       onToggleEnd: this.onToggleEnd.bind(this),
+      onRender: this.onRender.bind(this),
     });
   }
 
@@ -280,13 +283,20 @@ class Popoverjs {
     this.Positioner.disable();
   }
 
+  onRender() {
+    this.setUpPositioner();
+  }
+
   setUpRenderer() {
-    this.renderer = new __WEBPACK_IMPORTED_MODULE_0__renderer__["a" /* default */](this.rendererOptions);
+    this.renderer = new __WEBPACK_IMPORTED_MODULE_1__renderer__["a" /* default */](this.rendererOptions);
+  }
+
+  get positionerOptions() {
+    return Object.assign({}, this.options);
   }
 
   setUpPositioner() {
-    this.Positioner = new __WEBPACK_IMPORTED_MODULE_1__positioner__["a" /* default */](this.options);
-
+    this.Positioner = new __WEBPACK_IMPORTED_MODULE_2__positioner__["a" /* default */](this.positionerOptions);
     this.Positioner.enable();
   }
 }
@@ -298,6 +308,37 @@ window.Popoverjs = Popoverjs;
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports) {
+
+if (typeof Object.assign != 'function') {
+
+  Object.assign = function(target, varArgs) { // .length of function is 2
+    'use strict';
+    if (target == null) { // TypeError if undefined or null
+      throw new TypeError('Cannot convert undefined or null to object');
+    }
+
+    var to = Object(target);
+
+    for (var index = 1; index < arguments.length; index++) {
+      var nextSource = arguments[index];
+
+      if (nextSource != null) { // Skip over if undefined or null
+        for (var nextKey in nextSource) {
+          // Avoid bugs when hasOwnProperty is shadowed
+          if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+            to[nextKey] = nextSource[nextKey];
+          }
+        }
+      }
+    }
+    return to;
+  };
+}
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -315,7 +356,7 @@ const defaults = {
 
 class Renderer {
   constructor(options) {
-    this.options = Object.assign(defaults, options);
+    this.options = Object.assign({}, defaults, options);
 
     this.render = this.render.bind(this);
     this.onDocumentClick = this.onDocumentClick.bind(this);
@@ -341,6 +382,7 @@ class Renderer {
   render(e) {
     e.stopImmediatePropagation();
 
+    this.options.onRender();
     this.shouldShow();
     this.listenForHide();
   }
@@ -449,10 +491,10 @@ class Renderer {
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(5)(undefined);
+exports = module.exports = __webpack_require__(6)(undefined);
 // imports
 
 
@@ -463,7 +505,7 @@ exports.push([module.i, "/**\n  * Local Variables\n  *\n  * $arrow_hypotenuse_to
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 /*
@@ -545,7 +587,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -591,7 +633,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(7);
+var	fixUrls = __webpack_require__(8);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -904,7 +946,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports) {
 
 
@@ -999,7 +1041,7 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1010,18 +1052,17 @@ const defaults = {
   attachmentElement: null,
   constraintElement: null,
   constraints: [{
-    popover: 'top left',
-    trigger: 'bottom right',
+    popover: 'top center',
+    trigger: 'bottom center',
   }, {
-    popover: 'left top',
-    trigger: 'right top',
+    popover: 'left center',
+    trigger: 'right center',
   }],
 };
 
 class Positioner {
   constructor(options) {
-    this.options = Object.assign({}, defaults);
-    this.options = Object.assign(this.options, options);
+    this.options = Object.assign({}, defaults, options);
 
     this.initialize();
   }

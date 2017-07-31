@@ -9,7 +9,7 @@ const defaults = {
 
 class Renderer {
   constructor(options) {
-    this.options = Object.assign(defaults, options);
+    this.options = Object.assign({}, defaults, options);
 
     this.render = this.render.bind(this);
     this.onDocumentClick = this.onDocumentClick.bind(this);
@@ -35,6 +35,7 @@ class Renderer {
   render(e) {
     e.stopImmediatePropagation();
 
+    this.options.onRender();
     this.shouldShow();
     this.listenForHide();
   }

@@ -1,3 +1,5 @@
+import './polyfills';
+
 import Renderer from './renderer';
 import Positioner from './positioner';
 
@@ -25,8 +27,7 @@ const requiredOptions = [
 
 class Popoverjs {
   constructor(options) {
-    this.options = Object.assign({}, defaults);
-    this.options = Object.assign(this.options, options);
+    this.options = Object.assign({}, defaults, options);
 
     this.checkForRequiredOptions();
     this.initialize();
@@ -44,7 +45,6 @@ class Popoverjs {
 
   initialize() {
     this.setUpGlobals();
-    this.setUpPositioner();
     this.setUpRenderer();
   }
 
@@ -61,6 +61,7 @@ class Popoverjs {
   get rendererOptions() {
     return Object.assign({}, this.options, {
       onToggleEnd: this.onToggleEnd.bind(this),
+      onRender: this.onRender.bind(this),
     });
   }
 
@@ -68,13 +69,20 @@ class Popoverjs {
     this.Positioner.disable();
   }
 
+  onRender() {
+    this.setUpPositioner();
+  }
+
   setUpRenderer() {
     this.renderer = new Renderer(this.rendererOptions);
   }
 
-  setUpPositioner() {
-    this.Positioner = new Positioner(this.options);
+  get positionerOptions() {
+    return Object.assign({}, this.options);
+  }
 
+  setUpPositioner() {
+    this.Positioner = new Positioner(this.positionerOptions);
     this.Positioner.enable();
   }
 }

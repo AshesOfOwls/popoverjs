@@ -62,36 +62,36 @@
             <div class="content">
               <div class="trigger trigger-2">
                 Click me
-              </div>
 
-              <div class="popoverjs popover-2">
-                <div class="popoverjs-arrow"></div>
-                <div class="popoverjs-content">
-                  <div class="content">
-                    <div class="trigger trigger-3">
-                      Click me
-                    </div>
+                <div class="popoverjs popover-2">
+                  <div class="popoverjs-arrow"></div>
+                  <div class="popoverjs-content">
+                    <div class="content">
+                      <div class="trigger trigger-3">
+                        Click me
 
-                    <div class="popoverjs popover-3">
-                      <div class="popoverjs-arrow"></div>
-                      <div class="popoverjs-content">
-                        <div class="content">
-                          <div class="trigger trigger-4">
-                            Click me
-                          </div>
+                        <div class="popoverjs popover-3">
+                          <div class="popoverjs-arrow"></div>
+                          <div class="popoverjs-content">
+                            <div class="content">
+                              <div class="trigger trigger-4">
+                                Click me
 
-                          <div class="popoverjs popover-4">
-                            <div class="popoverjs-arrow"></div>
-                            <div class="popoverjs-content">
-                              <div class="content">
-                                <div class="trigger trigger-5">
-                                  Click me
-                                </div>
-
-                                <div class="popoverjs popover-5">
+                                <div class="popoverjs popover-4">
                                   <div class="popoverjs-arrow"></div>
                                   <div class="popoverjs-content">
                                     <div class="content">
+                                      <div class="trigger trigger-5">
+                                        Click me
+
+                                        <div class="popoverjs popover-5">
+                                          <div class="popoverjs-arrow"></div>
+                                          <div class="popoverjs-content">
+                                            <div class="content">
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -133,7 +133,6 @@
       });
 
       new Popoverjs({
-        bodyAttached: true,
         unnecessaryRepositioning: true,
         triggerElement: document.getElementsByClassName('trigger-1')[0],
         attachmentElement: document.getElementsByClassName('attachment')[0],
@@ -148,28 +147,24 @@
       console.log("Yars")
 
       new Popoverjs({
-        bodyAttached: true,
         unnecessaryRepositioning: true,
         attachmentElement: document.getElementsByClassName('trigger-2')[0],
         popoverElement: document.getElementsByClassName('popover-2')[0],
       });
 
       new Popoverjs({
-        bodyAttached: true,
         unnecessaryRepositioning: true,
         attachmentElement: document.getElementsByClassName('trigger-3')[0],
         popoverElement: document.getElementsByClassName('popover-3')[0],
       });
 
       new Popoverjs({
-        bodyAttached: true,
         unnecessaryRepositioning: true,
         attachmentElement: document.getElementsByClassName('trigger-4')[0],
         popoverElement: document.getElementsByClassName('popover-4')[0],
       });
 
       new Popoverjs({
-        bodyAttached: true,
         unnecessaryRepositioning: true,
         attachmentElement: document.getElementsByClassName('trigger-5')[0],
         popoverElement: document.getElementsByClassName('popover-5')[0],

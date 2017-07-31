@@ -4,18 +4,17 @@ const defaults = {
   attachmentElement: null,
   constraintElement: null,
   constraints: [{
-    popover: 'top left',
-    trigger: 'bottom right',
+    popover: 'top center',
+    trigger: 'bottom center',
   }, {
-    popover: 'left top',
-    trigger: 'right top',
+    popover: 'left center',
+    trigger: 'right center',
   }],
 };
 
 class Positioner {
   constructor(options) {
-    this.options = Object.assign({}, defaults);
-    this.options = Object.assign(this.options, options);
+    this.options = Object.assign({}, defaults, options);
 
     this.initialize();
   }
