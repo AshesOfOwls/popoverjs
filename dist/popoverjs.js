@@ -301,6 +301,7 @@ class Popoverjs {
   }
 }
 
+console.log("RAN RAN RAN???");
 window.Popoverjs = Popoverjs;
 
 /* harmony default export */ __webpack_exports__["default"] = (Popoverjs);

@@ -87,6 +87,7 @@ class Popoverjs {
   }
 }
 
+console.log("RAN RAN RAN???");
 window.Popoverjs = Popoverjs;
 
 export default Popoverjs;
