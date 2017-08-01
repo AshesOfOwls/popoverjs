@@ -1524,7 +1524,6 @@ var Positioner = function () {
     value: function initialize() {
       this.setUpGlobals();
       this.setUpElements();
-      this.resetClasses();
       this.parseConstraints();
       this.applyDefaultConstraint();
     }
@@ -1544,6 +1543,7 @@ var Positioner = function () {
       this.popoverArrow = this.popoverElement.querySelector('.popoverjs-arrow');
       this.constraintElement = this.getConstraintParent();
 
+      this.resetClasses();
       this.cacheCssOffsets();
       this.updateContentWidth();
     }

@@ -24,7 +24,6 @@ class Positioner {
   initialize() {
     this.setUpGlobals();
     this.setUpElements();
-    this.resetClasses();
     this.parseConstraints();
     this.applyDefaultConstraint();
   }
@@ -42,6 +41,7 @@ class Positioner {
     this.popoverArrow = this.popoverElement.querySelector('.popoverjs-arrow');
     this.constraintElement = this.getConstraintParent();
 
+    this.resetClasses();
     this.cacheCssOffsets();
     this.updateContentWidth();
   }
