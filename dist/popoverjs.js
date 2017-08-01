@@ -1668,7 +1668,13 @@ var Positioner = function () {
   }, {
     key: 'resetClasses',
     value: function resetClasses() {
-      this.popoverElement.className = 'popoverjs';
+      var className = 'popoverjs';
+
+      if (this.options.customClass) {
+        className += ' ' + this.options.customClass;
+      }
+
+      this.popoverElement.className = className;
     }
   }, {
     key: 'listenForResize',

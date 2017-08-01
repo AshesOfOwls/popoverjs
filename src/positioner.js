@@ -151,7 +151,13 @@ class Positioner {
   }
 
   resetClasses() {
-    this.popoverElement.className = 'popoverjs';
+    let className = 'popoverjs';
+
+    if (this.options.customClass) {
+      className += ` ${this.options.customClass}`;
+    }
+
+    this.popoverElement.className = className;
   }
 
   listenForResize() {
