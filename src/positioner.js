@@ -1,6 +1,7 @@
 import { addClass, removeClass, getElementOrigin, getWindowOrigin } from './utils';
 
 const defaults = {
+  dynamicWidth: false,
   attachmentElement: null,
   constraintElement: null,
   unnecessaryRepositioning: true,
@@ -42,6 +43,7 @@ class Positioner {
     this.constraintElement = this.getConstraintParent();
 
     this.cacheCssOffsets();
+    this.updateContentWidth();
   }
 
   setUpContainer() {
@@ -96,6 +98,7 @@ class Positioner {
 
     this.cssCache = {
       arrowSize: this.getArrowSize(),
+      contentSize: this.getContentSize(),
       attachmentOffset: Math.abs(this.popoverElement.offsetTop),
       triggerOffset: Math.abs(this.popoverElement.offsetLeft),
       contentOffset: Math.abs(this.popoverContent.offsetLeft),
@@ -107,6 +110,19 @@ class Positioner {
   getArrowSize() {
     if (!this.popoverArrow) { return 0; }
     return Math.abs(this.popoverArrow.clientHeight);
+  }
+
+  getContentSize() {
+    this.popoverElement.style.position = 'fixed';
+    const width = this.popoverContent.getBoundingClientRect().width;
+    this.popoverElement.style.position = 'absolute';
+    return width;
+  }
+
+  updateContentWidth() {
+    if (!this.options.dynamicWidth) { return; }
+
+    this.popoverContent.style.width = this.cssCache.contentSize;
   }
 
   getConstraintParent() {

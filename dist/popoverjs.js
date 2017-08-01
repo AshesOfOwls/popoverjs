@@ -1497,6 +1497,7 @@ var _utils = __webpack_require__(0);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var defaults = {
+  dynamicWidth: false,
   attachmentElement: null,
   constraintElement: null,
   unnecessaryRepositioning: true,
@@ -1544,6 +1545,7 @@ var Positioner = function () {
       this.constraintElement = this.getConstraintParent();
 
       this.cacheCssOffsets();
+      this.updateContentWidth();
     }
   }, {
     key: 'setUpContainer',
@@ -1606,6 +1608,7 @@ var Positioner = function () {
 
       this.cssCache = {
         arrowSize: this.getArrowSize(),
+        contentSize: this.getContentSize(),
         attachmentOffset: Math.abs(this.popoverElement.offsetTop),
         triggerOffset: Math.abs(this.popoverElement.offsetLeft),
         contentOffset: Math.abs(this.popoverContent.offsetLeft)
@@ -1620,6 +1623,23 @@ var Positioner = function () {
         return 0;
       }
       return Math.abs(this.popoverArrow.clientHeight);
+    }
+  }, {
+    key: 'getContentSize',
+    value: function getContentSize() {
+      this.popoverElement.style.position = 'fixed';
+      var width = this.popoverContent.getBoundingClientRect().width;
+      this.popoverElement.style.position = 'absolute';
+      return width;
+    }
+  }, {
+    key: 'updateContentWidth',
+    value: function updateContentWidth() {
+      if (!this.options.dynamicWidth) {
+        return;
+      }
+
+      this.popoverContent.style.width = this.cssCache.contentSize;
     }
   }, {
     key: 'getConstraintParent',
