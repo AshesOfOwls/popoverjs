@@ -169,7 +169,7 @@ class Renderer {
   }
 
   onToggleEnd() {
-    this.wasVisible = !this.isVisible;
+    this.wasVisible = this.isVisible;
 
     if (!this.isVisible) {
       this.options.onAfterHide();

@@ -912,7 +912,7 @@ var Renderer = function () {
   }, {
     key: 'onToggleEnd',
     value: function onToggleEnd() {
-      this.wasVisible = !this.isVisible;
+      this.wasVisible = this.isVisible;
 
       if (!this.isVisible) {
         this.options.onAfterHide();
