@@ -86,6 +86,7 @@ class Renderer {
   listenForToggleEnd() {
     if (this.isVisible !== this.wasVisible) {
       this.onToggleEnd();
+      return;
     }
 
     this.clearToggleEvent();

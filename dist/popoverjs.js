@@ -807,6 +807,7 @@ var Renderer = function () {
     value: function listenForToggleEnd() {
       if (this.isVisible !== this.wasVisible) {
         this.onToggleEnd();
+        return;
       }
 
       this.clearToggleEvent();
