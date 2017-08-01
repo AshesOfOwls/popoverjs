@@ -16,6 +16,7 @@ class Renderer {
     this.onPopoverEnter = this.onPopoverEnter.bind(this);
     this.onPopoverLeave = this.onPopoverLeave.bind(this);
     this.onToggleEnd = this.onToggleEnd.bind(this);
+    this.onTriggerLeave = this.onTriggerLeave.bind(this);
 
     this.initialize();
   }
@@ -27,6 +28,7 @@ class Renderer {
   }
 
   setUpGlobals() {
+    this.wasVisible = false;
     this.isVisible = false;
     this.triggerElement = this.options.triggerElement;
     this.popoverElement = this.options.popoverElement;
@@ -66,8 +68,13 @@ class Renderer {
       document.body.addEventListener('click', this.onDocumentClick);
       break;
     default:
-      this.triggerElement.addEventListener(this.options.hideOn, this.onDocumentClick);
+      this.triggerElement.addEventListener(this.options.hideOn, this.onTriggerLeave);
     }
+  }
+
+  onTriggerLeave() {
+    this.triggerElement.removeEventListener(this.options.hideOn, this.onTriggerLeave);
+    this.shouldHide();
   }
 
   onDocumentClick(e) {
@@ -77,7 +84,12 @@ class Renderer {
   }
 
   listenForToggleEnd() {
+    if (this.isVisible !== this.wasVisible) {
+      this.onToggleEnd();
+    }
+
     this.clearToggleEvent();
+
     this.toggleEventData = oneEvent(this.popoverElement,
       whichTransitionEvent(this.popoverElement),
       this.onToggleEnd,
@@ -146,11 +158,7 @@ class Renderer {
 
     this.isVisible = isVisible;
 
-    if (this.options.hideDelay > 0) {
-      this.listenForToggleEnd();
-    } else {
-      this.onToggleEnd();
-    }
+    this.listenForToggleEnd();
 
     if (isVisible) {
       addClass(this.popoverElement, 'is-visible');
@@ -160,6 +168,8 @@ class Renderer {
   }
 
   onToggleEnd() {
+    this.wasVisible = !this.isVisible;
+
     if (!this.isVisible) {
       this.options.onAfterHide();
       this.options.onToggleEnd();

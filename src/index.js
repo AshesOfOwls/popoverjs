@@ -8,10 +8,10 @@ import { error } from './utils';
 import './styles/main.scss';
 
 const defaults = {
-  showOn: 'click',
-  hideOn: 'documentClick',
+  showOn: 'mouseenter',
+  hideOn: 'mouseleave',
   showDelay: 0,
-  hideDelay: 200,
+  hideDelay: 0,
   unnecessaryRepositioning: false,
   resizePositioning: true,
   onBeforeHide: () => {},

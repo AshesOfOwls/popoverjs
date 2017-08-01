@@ -238,10 +238,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var defaults = {
-  showOn: 'click',
-  hideOn: 'documentClick',
+  showOn: 'mouseenter',
+  hideOn: 'mouseleave',
   showDelay: 0,
-  hideDelay: 200,
+  hideDelay: 0,
   unnecessaryRepositioning: false,
   resizePositioning: true,
   onBeforeHide: function onBeforeHide() {},
@@ -722,6 +722,7 @@ var Renderer = function () {
     this.onPopoverEnter = this.onPopoverEnter.bind(this);
     this.onPopoverLeave = this.onPopoverLeave.bind(this);
     this.onToggleEnd = this.onToggleEnd.bind(this);
+    this.onTriggerLeave = this.onTriggerLeave.bind(this);
 
     this.initialize();
   }
@@ -736,6 +737,7 @@ var Renderer = function () {
   }, {
     key: 'setUpGlobals',
     value: function setUpGlobals() {
+      this.wasVisible = false;
       this.isVisible = false;
       this.triggerElement = this.options.triggerElement;
       this.popoverElement = this.options.popoverElement;
@@ -782,8 +784,14 @@ var Renderer = function () {
           document.body.addEventListener('click', this.onDocumentClick);
           break;
         default:
-          this.triggerElement.addEventListener(this.options.hideOn, this.onDocumentClick);
+          this.triggerElement.addEventListener(this.options.hideOn, this.onTriggerLeave);
       }
+    }
+  }, {
+    key: 'onTriggerLeave',
+    value: function onTriggerLeave() {
+      this.triggerElement.removeEventListener(this.options.hideOn, this.onTriggerLeave);
+      this.shouldHide();
     }
   }, {
     key: 'onDocumentClick',
@@ -797,7 +805,12 @@ var Renderer = function () {
   }, {
     key: 'listenForToggleEnd',
     value: function listenForToggleEnd() {
+      if (this.isVisible !== this.wasVisible) {
+        this.onToggleEnd();
+      }
+
       this.clearToggleEvent();
+
       this.toggleEventData = (0, _utils.oneEvent)(this.popoverElement, (0, _utils.whichTransitionEvent)(this.popoverElement), this.onToggleEnd, function (transitionEvent) {
         return transitionEvent.propertyName === 'opacity';
       });
@@ -887,11 +900,7 @@ var Renderer = function () {
 
       this.isVisible = isVisible;
 
-      if (this.options.hideDelay > 0) {
-        this.listenForToggleEnd();
-      } else {
-        this.onToggleEnd();
-      }
+      this.listenForToggleEnd();
 
       if (isVisible) {
         (0, _utils.addClass)(this.popoverElement, 'is-visible');
@@ -902,6 +911,8 @@ var Renderer = function () {
   }, {
     key: 'onToggleEnd',
     value: function onToggleEnd() {
+      this.wasVisible = !this.isVisible;
+
       if (!this.isVisible) {
         this.options.onAfterHide();
         this.options.onToggleEnd();
