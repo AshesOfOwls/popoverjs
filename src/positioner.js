@@ -113,16 +113,16 @@ class Positioner {
   }
 
   getContentSize() {
-    this.popoverElement.style.position = 'fixed';
+    this.popoverContent.style.position = 'fixed';
     const width = this.popoverContent.getBoundingClientRect().width;
-    this.popoverElement.style.position = 'absolute';
+    this.popoverContent.style.position = 'absolute';
     return width;
   }
 
   updateContentWidth() {
     if (!this.options.dynamicWidth) { return; }
 
-    this.popoverContent.style.width = this.cssCache.contentSize;
+    this.popoverContent.style.width = `${this.cssCache.contentSize}px`;
   }
 
   getConstraintParent() {

@@ -1627,9 +1627,9 @@ var Positioner = function () {
   }, {
     key: 'getContentSize',
     value: function getContentSize() {
-      this.popoverElement.style.position = 'fixed';
+      this.popoverContent.style.position = 'fixed';
       var width = this.popoverContent.getBoundingClientRect().width;
-      this.popoverElement.style.position = 'absolute';
+      this.popoverContent.style.position = 'absolute';
       return width;
     }
   }, {
@@ -1639,7 +1639,7 @@ var Positioner = function () {
         return;
       }
 
-      this.popoverContent.style.width = this.cssCache.contentSize;
+      this.popoverContent.style.width = this.cssCache.contentSize + 'px';
     }
   }, {
     key: 'getConstraintParent',
