@@ -54,7 +54,7 @@ class Popoverjs {
     }
   }
 
-  position() {
+  update() {
     if (!this.Positioner) { return; }
 
     this.Positioner.position();
@@ -75,8 +75,21 @@ class Popoverjs {
     this.setUpPositioner();
   }
 
+  destroy() {
+    this.destroyRenderer()
+    this.destroyPositioner();
+  }
+
   setUpRenderer() {
-    this.renderer = new Renderer(this.rendererOptions);
+    this.Renderer = new Renderer(this.rendererOptions);
+  }
+
+  destroyRenderer() {
+    if (!this.Renderer) { return; }
+
+    this.Renderer.destroy();
+    this.Renderer = null;
+    delete this.Renderer;
   }
 
   get positionerOptions() {
@@ -86,6 +99,14 @@ class Popoverjs {
   setUpPositioner() {
     this.Positioner = new Positioner(this.positionerOptions);
     this.Positioner.enable();
+  }
+
+  destroyPositioner() {
+    if (!this.Positioner) { return; }
+
+    this.Positioner.destroy();
+    this.Positioner = null;
+    delete this.Positioner;
   }
 }
 

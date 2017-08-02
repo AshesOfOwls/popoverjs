@@ -27,6 +27,10 @@ class Renderer {
     this.listenForPopoverHover();
   }
 
+  destroy() {
+    this.destroyListeners();
+  }
+
   setUpGlobals() {
     this.wasVisible = false;
     this.isVisible = false;

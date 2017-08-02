@@ -287,8 +287,8 @@ var Popoverjs = function () {
       }
     }
   }, {
-    key: 'position',
-    value: function position() {
+    key: 'update',
+    value: function update() {
       if (!this.Positioner) {
         return;
       }
@@ -306,15 +306,43 @@ var Popoverjs = function () {
       this.setUpPositioner();
     }
   }, {
+    key: 'destroy',
+    value: function destroy() {
+      this.destroyRenderer();
+      this.destroyPositioner();
+    }
+  }, {
     key: 'setUpRenderer',
     value: function setUpRenderer() {
-      this.renderer = new _renderer2.default(this.rendererOptions);
+      this.Renderer = new _renderer2.default(this.rendererOptions);
+    }
+  }, {
+    key: 'destroyRenderer',
+    value: function destroyRenderer() {
+      if (!this.Renderer) {
+        return;
+      }
+
+      this.Renderer.destroy();
+      this.Renderer = null;
+      delete this.Renderer;
     }
   }, {
     key: 'setUpPositioner',
     value: function setUpPositioner() {
       this.Positioner = new _positioner2.default(this.positionerOptions);
       this.Positioner.enable();
+    }
+  }, {
+    key: 'destroyPositioner',
+    value: function destroyPositioner() {
+      if (!this.Positioner) {
+        return;
+      }
+
+      this.Positioner.destroy();
+      this.Positioner = null;
+      delete this.Positioner;
     }
   }, {
     key: 'rendererOptions',
@@ -733,6 +761,11 @@ var Renderer = function () {
       this.setUpGlobals();
       this.listenForRender();
       this.listenForPopoverHover();
+    }
+  }, {
+    key: 'destroy',
+    value: function destroy() {
+      this.destroyListeners();
     }
   }, {
     key: 'setUpGlobals',
