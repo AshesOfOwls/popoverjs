@@ -58,8 +58,11 @@ class Renderer {
   }
 
   destroyListeners() {
+    this.clearToggleEvent();
+
     this.triggerElement.removeEventListener(this.options.showOn, this.render);
     this.popoverElement.removeEventListener('mouseenter', this.onPopoverEnter);
+    this.triggerElement.removeEventListener(this.options.hideOn, this.onTriggerLeave);
 
     if (this.options.hideOn === 'documentClick') {
       document.body.removeEventListener('click', this.onPopoverEnter);
@@ -88,7 +91,7 @@ class Renderer {
   }
 
   listenForToggleEnd() {
-    if (this.isVisible !== this.wasVisible) {
+    if (this.isVisible === this.wasVisible) {
       this.onToggleEnd();
       return;
     }
