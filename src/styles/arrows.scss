@@ -15,8 +15,8 @@
 
 // Immutable Variables
 $arrow_hypotenuse_to_side_ratio: .707;
-$arrow_side: $arrow_size * $arrow_hypotenuse_to_side_ratio;
-$arrow_middle: $arrow_size / 2;
+$arrow_side: $arrow_width * $arrow_hypotenuse_to_side_ratio;
+$arrow_middle: $arrow_width / 2;
 $arrow_offset: $arrow_middle + $arrow_content_offset;
 $content_offset: $arrow_middle + 1;
 
@@ -40,9 +40,9 @@ $content_offset: $arrow_middle + 1;
 
   &--popover-primary-bottom > &-arrow,
   &--popover-primary-top > &-arrow {
-    left: -$arrow_size / 2;
+    left: -$arrow_width / 2;
     height: $arrow_middle;
-    width: $arrow_size;
+    width: $arrow_width;
   }
 
   &--popover-primary-bottom > &-arrow {
@@ -64,12 +64,12 @@ $content_offset: $arrow_middle + 1;
   &--popover-primary-left > &-arrow,
   &--popover-primary-right > &-arrow {
     bottom: -$arrow_middle;
-    height: $arrow_size;
+    height: $arrow_width;
     width: $arrow_middle;
   }
 
   &--popover-primary-right > &-arrow {
-    left: -$arrow_size / 2;
+    left: -$arrow_width / 2;
 
     &:after {
       margin-left: -$arrow_middle / 2;
@@ -77,7 +77,7 @@ $content_offset: $arrow_middle + 1;
   }
 
   &--popover-primary-left > &-arrow {
-    right: -$arrow_size / 2;
+    right: -$arrow_width / 2;
 
     &:after {
       margin-left: $arrow_middle / 2;
