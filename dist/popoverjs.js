@@ -1543,12 +1543,13 @@ var Positioner = function () {
       }
 
       var attachmentOrigin = this.origins.attachment;
+      var top = attachmentOrigin.top + this.origins.body.top;
 
       var origin = {
         height: attachmentOrigin.height + 'px',
         width: attachmentOrigin.width + 'px',
         left: attachmentOrigin.left + 'px',
-        top: attachmentOrigin.top + 'px'
+        top: top + 'px'
       };
 
       Object.assign(this.containerElement.style, origin);
@@ -1734,6 +1735,7 @@ var Positioner = function () {
     value: function refreshElementOrigins() {
       this.origins.popover = (0, _utils.getElementOrigin)(this.popoverContent);
       this.origins.attachment = (0, _utils.getElementOrigin)(this.attachmentElement);
+      this.origins.body = (0, _utils.getElementOrigin)(document.body);
     }
   }, {
     key: 'canFitInto',

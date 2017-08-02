@@ -75,12 +75,13 @@ class Positioner {
     if (!this.options.bodyAttached) { return; }
 
     const attachmentOrigin = this.origins.attachment;
+    const top = attachmentOrigin.top + this.origins.body.top;
 
     const origin = {
       height: `${attachmentOrigin.height}px`,
       width: `${attachmentOrigin.width}px`,
       left: `${attachmentOrigin.left}px`,
-      top: `${attachmentOrigin.top}px`,
+      top: `${top}px`,
     };
 
     Object.assign(this.containerElement.style, origin);
@@ -240,6 +241,7 @@ class Positioner {
   refreshElementOrigins() {
     this.origins.popover = getElementOrigin(this.popoverContent);
     this.origins.attachment = getElementOrigin(this.attachmentElement);
+    this.origins.body = getElementOrigin(document.body);
   }
 
   canFitInto(constraint) {
