@@ -6,8 +6,8 @@ const defaults = {
   constraintElement: null,
   unnecessaryRepositioning: true,
   constraints: [{
-    popover: 'top center',
-    attachment: 'bottom center',
+    popover: 'top left',
+    attachment: 'bottom right',
   }, {
     popover: 'left center',
     attachment: 'right center',

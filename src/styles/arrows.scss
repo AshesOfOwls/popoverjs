@@ -16,9 +16,6 @@
 // Immutable Variables
 $arrow_hypotenuse_to_side_ratio: .707;
 $arrow_side: $arrow_width * $arrow_hypotenuse_to_side_ratio;
-$arrow_middle: $arrow_width / 2;
-$arrow_offset: $arrow_middle + $arrow_content_offset;
-$content_offset: $arrow_middle + 1;
 
 .popoverjs {
   &-arrow {

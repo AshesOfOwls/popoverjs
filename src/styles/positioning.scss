@@ -1,29 +1,31 @@
+$content_arrow_offset: $arrow_middle + 1;
+
 .popoverjs {
   // Attachment Positioning
   &--attachment-primary-bottom {
-    bottom: -1px;
+    bottom: -1px - $attachment_margin;
   }
   &--attachment-primary-top {
-    top: -1px;
+    top: -1px - $attachment_margin;
   }
   &--attachment-primary-right {
-    right: -1px;
+    right: -1px - $attachment_margin;
   }
   &--attachment-primary-left {
-    left: -1px;
+    left: -1px - $attachment_margin;
   }
 
   &--attachment-secondary-bottom {
-    bottom: $arrow_attachment_offset;
+    bottom: $arrow_side_offset;
   }
   &--attachment-secondary-top {
-    top: $arrow_attachment_offset;
+    top: $arrow_side_offset;
   }
   &--attachment-secondary-right {
-    right: $arrow_attachment_offset;
+    right: $arrow_side_offset;
   }
   &--attachment-secondary-left {
-    left: $arrow_attachment_offset;
+    left: $arrow_side_offset;
   }
 
   &--attachment-primary-top.popoverjs--attachment-secondary-center,
@@ -37,31 +39,31 @@
 
   // Popover Anchor Positioning
   &--popover-primary-bottom > &-content {
-    bottom: $content_offset;
+    bottom: $content_arrow_offset;
   }
   &--popover-primary-top > &-content {
-    top: $content_offset;
+    top: $content_arrow_offset;
   }
   &--popover-primary-right > &-content {
-    right: $content_offset;
+    right: $content_arrow_offset;
   }
   &--popover-primary-left > &-content {
-    left: $content_offset;
+    left: $content_arrow_offset;
   }
 
   &--popover-secondary-bottom > &-content {
-    margin-top: $arrow_offset;
+    margin-top: $content_offset;
     transform: translateY(-100%);
   }
   &--popover-secondary-top > &-content {
-    margin-top: -$arrow_offset;
+    margin-top: -$content_offset;
     transform: translateY(0%);
   }
   &--popover-secondary-right > &-content {
-    right: -$arrow_offset;
+    right: -$content_offset;
   }
   &--popover-secondary-left > &-content {
-    left: -$arrow_offset;
+    left: -$content_offset;
   }
 
   &--popover-primary-bottom.popoverjs--popover-secondary-center > &-content,

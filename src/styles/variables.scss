@@ -1,9 +1,9 @@
 // Configuration
 $arrow_width: 25px;
-$arrow_content_offset: 17px;
-$arrow_attachment_offset: 30px;
+$content_offset: 0px;
+$arrow_side_offset: 0px;
+$attachment_margin: 10px;
 
 // Immutable Variables
 $arrow_middle: $arrow_width / 2;
-$arrow_offset: $arrow_middle + $arrow_content_offset;
-$content_offset: $arrow_middle + 1;
+$content_offset: $arrow_middle + $content_offset;
