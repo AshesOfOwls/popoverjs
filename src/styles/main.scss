@@ -22,9 +22,8 @@
   }
 
   &-content {
-    background: $bg_color;
+    background-color: white;
     border-radius: 3px;
-    box-shadow: $popover_shadow;
     box-sizing: border-box;
     position: absolute;
   }
