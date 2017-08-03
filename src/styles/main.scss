@@ -30,4 +30,9 @@
     position: absolute;
     pointer-events: none;
   }
+
+  &--wrapper {
+    display: inline-block;
+    position: relative;
+  }
 }
