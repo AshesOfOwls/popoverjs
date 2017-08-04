@@ -1,8 +1,8 @@
 {
-  "name": "popoverjs",
+  "name": "popover.js",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/popoverjs.js",
+  "main": "dist/popover.js",
   "scripts": {
     "build": "webpack",
     "build:watch": "webpack --watch",
