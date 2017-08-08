@@ -8,5 +8,3 @@
   @include popoverjs-arrows($arrow_width, $arrow_middle);
   @include popoverjs-positioning($attachment_margin, $arrow_side_offset, $content_offset, $arrow_middle);
 }
-
-@include popoverjs(16px, 10px, 16px, 5px);

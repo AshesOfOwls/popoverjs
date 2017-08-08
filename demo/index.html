@@ -1,43 +1,45 @@
 <html>
   <head>
     <title>PopoverJs</title>
+    <script src="../dist/popover.js"></script>
+    <style>
+      body {
+        background: #EFEFEF;
+        padding: 30px;
+      }
+
+      .trigger {
+        background: green;
+        height: 30px;
+        position: relative;
+        margin: 30px;
+        width: 100px;
+      }
+
+      .content {
+        background: grey;
+        height: 90px;
+        margin: 5px;
+        width: 90px;
+      }
+
+      .container {
+        border: 1px solid black;
+        height: 100%;
+        width: 100%;
+      }
+
+      .attachment {
+        border: 1px solid red;
+        height: 300px;
+        margin: 100px 200px;
+        position: relative;
+        width: 300px;
+      }
+    </style>
   </head>
-  <style>
-    body {
-      background: #EFEFEF;
-      padding: 30px;
-    }
-
-    .trigger {
-      background: green;
-      height: 30px;
-      position: relative;
-      margin: 30px;
-      width: 100px;
-    }
-
-    .content {
-      background: grey;
-      height: 90px;
-      margin: 5px;
-      width: 90px;
-    }
-
-    .container {
-      border: 1px solid black;
-      height: 100%;
-      width: 100%;
-    }
-
-    .attachment {
-      border: 1px solid red;
-      height: 300px;
-      margin: 100px 200px;
-      position: relative;
-      width: 300px;
-    }
-  </style>
   <body>
+
     <div class="container">
       <div class="attachment">
         <div class="trigger trigger-0">
@@ -109,8 +111,6 @@
         </div>
       </div>
     </div>
-
-    <script src="../dist/popover.js"></script>
     <script>
       window.test = new Popoverjs({
         customClass: 'Omicron persei 8',

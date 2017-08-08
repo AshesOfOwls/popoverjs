@@ -1,5 +1,7 @@
 @import 'mixin';
 
+@include popoverjs(16px, 10px, 16px, 5px);
+
 .popoverjs {
   height: 1px;
   opacity: 0;
