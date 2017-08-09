@@ -5,6 +5,7 @@ const defaults = {
   attachmentElement: null,
   constraintElement: null,
   unnecessaryRepositioning: true,
+  scrollPositioning: true,
   constraints: [{
     popover: 'top left',
     attachment: 'bottom right',
@@ -75,8 +76,7 @@ class Positioner {
     if (!this.options.bodyAttached) { return; }
 
     const attachmentOrigin = this.origins.attachment;
-    const top = attachmentOrigin.top + this.origins.body.top;
-
+    const top = attachmentOrigin.top - this.bodyTopOffset;
     const origin = {
       height: `${attachmentOrigin.height}px`,
       width: `${attachmentOrigin.width}px`,
@@ -85,6 +85,12 @@ class Positioner {
     };
 
     Object.assign(this.containerElement.style, origin);
+  }
+
+  get bodyTopOffset() {
+    const margin = parseInt(window.getComputedStyle(document.body).marginTop, 10);
+
+    return this.origins.body.top - margin;
   }
 
   cacheCssOffsets() {
@@ -162,6 +168,7 @@ class Positioner {
 
   enable() {
     this.listenForResize();
+    this.listenForScroll();
     this.refreshAllElementData();
     this.setUpContainer();
     this.position();
@@ -182,6 +189,11 @@ class Positioner {
     window.addEventListener('resize', this.onResize.bind(this));
   }
 
+  listenForScroll() {
+    if (!this.options.scrollPositioning) { return; }
+    window.addEventListener('scroll', this.onScroll.bind(this));
+  }
+
   destroyListeners() {
     window.removeEventListener('resize', this.onResize.bind(this));
   }
@@ -192,6 +204,10 @@ class Positioner {
   }
 
   onResize() {
+    this.position();
+  }
+
+  onScroll() {
     this.position();
   }
 

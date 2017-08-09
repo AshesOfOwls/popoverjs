@@ -76,7 +76,7 @@ class Popoverjs {
   }
 
   destroy() {
-    this.destroyRenderer()
+    this.destroyRenderer();
     this.destroyPositioner();
   }
 
