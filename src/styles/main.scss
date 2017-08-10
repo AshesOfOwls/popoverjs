@@ -10,7 +10,6 @@
   transition: visibility 0.275s, opacity 0.275s linear;
   visibility: hidden;
   width: 1px;
-  z-index: 15;
 
   &.is-visible {
     opacity: 1;
