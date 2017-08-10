@@ -67,7 +67,7 @@ class Positioner {
     this.hasAttachedContainer = true;
     this.originalContainer = this.popoverElement.parentElement;
     this.containerElement = document.createElement('div');
-    this.containerElement.classList.add('popoverjs--detatched-container');
+    this.containerElement.classList.add('popoverjs--detached-container');
     this.containerElement.appendChild(this.popoverElement);
     document.body.appendChild(this.containerElement);
   }
