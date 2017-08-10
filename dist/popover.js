@@ -778,7 +778,7 @@ var Renderer = function () {
   }, {
     key: 'listenForPopoverHover',
     value: function listenForPopoverHover() {
-      if (!this.options.hideOn === 'mouseleave') {
+      if (['mouseleave', 'documentClick'].includes(this.options.hideOn)) {
         return;
       }
 

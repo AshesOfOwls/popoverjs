@@ -39,7 +39,7 @@ class Renderer {
   }
 
   listenForPopoverHover() {
-    if (!this.options.hideOn === 'mouseleave') { return; }
+    if (['mouseleave', 'documentClick'].includes(this.options.hideOn)) { return; }
 
     this.popoverElement.addEventListener('mouseenter', this.onPopoverEnter);
     this.popoverElement.addEventListener('mouseleave', this.onPopoverLeave);
