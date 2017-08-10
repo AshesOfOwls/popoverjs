@@ -76,7 +76,8 @@ class Positioner {
     if (!this.options.bodyAttached) { return; }
 
     const attachmentOrigin = this.origins.attachment;
-    const top = attachmentOrigin.top - this.bodyTopOffset;
+    const bodyTopOffset = parseInt(window.getComputedStyle(document.body).marginTop, 10);
+    const top = attachmentOrigin.top - bodyTopOffset;
     const origin = {
       height: `${attachmentOrigin.height}px`,
       width: `${attachmentOrigin.width}px`,
@@ -85,12 +86,6 @@ class Positioner {
     };
 
     Object.assign(this.containerElement.style, origin);
-  }
-
-  get bodyTopOffset() {
-    const margin = parseInt(window.getComputedStyle(document.body).marginTop, 10);
-
-    return this.origins.body.top - margin;
   }
 
   cacheCssOffsets() {

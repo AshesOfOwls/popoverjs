@@ -1626,7 +1626,8 @@ var Positioner = function () {
       }
 
       var attachmentOrigin = this.origins.attachment;
-      var top = attachmentOrigin.top - this.bodyTopOffset;
+      var bodyTopOffset = parseInt(window.getComputedStyle(document.body).marginTop, 10);
+      var top = attachmentOrigin.top - bodyTopOffset;
       var origin = {
         height: attachmentOrigin.height + 'px',
         width: attachmentOrigin.width + 'px',
@@ -2018,13 +2019,6 @@ var Positioner = function () {
       var attachmentAnchors = this.activeConstraint.attachment;
 
       return ['popoverjs--popover-primary-' + popoverAnchors.primary, 'popoverjs--popover-secondary-' + popoverAnchors.secondary, 'popoverjs--attachment-primary-' + attachmentAnchors.primary, 'popoverjs--attachment-secondary-' + attachmentAnchors.secondary];
-    }
-  }, {
-    key: 'bodyTopOffset',
-    get: function get() {
-      var margin = parseInt(window.getComputedStyle(document.body).marginTop, 10);
-
-      return this.origins.body.top - margin;
     }
   }]);
 
