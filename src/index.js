@@ -12,6 +12,7 @@ const defaults = {
   hideOn: 'documentClick',
   showDelay: 0,
   hideDelay: 0,
+  themeClass: 'popoverjs--default',
   unnecessaryRepositioning: false,
   resizePositioning: true,
   onBeforeHide: () => {},

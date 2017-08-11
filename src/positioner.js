@@ -176,6 +176,10 @@ class Positioner {
       className += ` ${this.options.customClass}`;
     }
 
+    if (this.options.themeClass) {
+      className += ` ${this.options.themeClass}`;
+    }
+
     this.popoverElement.className = className;
   }
 
