@@ -69,7 +69,17 @@ class Popoverjs {
   }
 
   onToggleEnd() {
+    if (!this.Positioner) { return; }
+
     this.Positioner.disable();
+  }
+
+  show() {
+    this.Renderer.show();
+  }
+
+  hide() {
+    this.Renderer.hide();
   }
 
   onRender() {
