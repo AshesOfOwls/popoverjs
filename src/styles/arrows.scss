@@ -17,13 +17,13 @@
   $arrow_hypotenuse_to_side_ratio: .707;
   $arrow_side: $arrow_width * $arrow_hypotenuse_to_side_ratio;
 
-  .popoverjs-arrow {
+  & > .popoverjs-arrow {
     overflow: hidden;
     position: absolute;
     z-index: 5;
   }
 
-  .popoverjs-arrow:after {
+  & > .popoverjs-arrow:after {
     content: "";
     position: absolute;
     width: $arrow_side;
@@ -42,6 +42,7 @@
   }
 
   &.popoverjs--popover-primary-bottom > .popoverjs-arrow {
+    bottom: auto;
     top: -$arrow_middle;
 
     &:after {
@@ -51,6 +52,7 @@
 
   &.popoverjs--popover-primary-top > .popoverjs-arrow {
     bottom: -$arrow_middle;
+    top: auto;
 
     &:after {
       margin-top: $arrow_middle / 2;
@@ -66,6 +68,7 @@
 
   &.popoverjs--popover-primary-right > .popoverjs-arrow {
     left: -$arrow_width / 2;
+    right: auto;
 
     &:after {
       margin-left: -$arrow_middle / 2;
@@ -73,6 +76,7 @@
   }
 
   &.popoverjs--popover-primary-left > .popoverjs-arrow {
+    left: auto;
     right: -$arrow_width / 2;
 
     &:after {
