@@ -17,6 +17,14 @@ const removeClass = (element, className) => {
   element.classList.remove(className);
 };
 
+const toggleClassesOnElement = (element, classes, isToggled) => {
+  const method = isToggled ? addClass : removeClass;
+
+  classes.forEach((className) => {
+    method(element, className);
+  });
+};
+
 const setHalfPointsOnOrigin = (origin) => {
   const halfHeight = origin.height / 2;
   const halfWidth = origin.width / 2;
@@ -88,4 +96,5 @@ export {
   setHalfPointsOnOrigin,
   getWindowOrigin,
   whichTransitionEvent,
+  toggleClassesOnElement,
 };

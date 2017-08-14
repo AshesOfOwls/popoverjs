@@ -1,4 +1,4 @@
-import { addClass, removeClass, getElementOrigin, getWindowOrigin } from './utils';
+import { toggleClassesOnElement, getElementOrigin, getWindowOrigin } from './utils';
 
 const defaults = {
   dynamicWidth: false,
@@ -6,6 +6,7 @@ const defaults = {
   constraintElement: null,
   unnecessaryRepositioning: true,
   scrollPositioning: true,
+  applyClassesToAttachment: false,
   constraints: [{
     popover: 'top left',
     attachment: 'bottom right',
@@ -198,6 +199,7 @@ class Positioner {
   }
 
   destroy() {
+    this.clearActiveConstraint();
     this.destroyListeners();
     this.destroyContainer();
   }
@@ -390,7 +392,13 @@ class Positioner {
   }
 
   toggleActiveConstraints(isToggled) {
-    this.togglePopoverClasses(this.getActiveConstraintClasses(), isToggled);
+    const constraintClasses = this.getActiveConstraintClasses();
+
+    this.togglePopoverClasses(constraintClasses, isToggled);
+
+    if (this.options.applyClassesToAttachment) {
+      toggleClassesOnElement(this.attachmentElement, constraintClasses, isToggled);
+    }
   }
 
   activeConstraintIs(constraintObject) {
@@ -406,12 +414,7 @@ class Positioner {
   }
 
   togglePopoverClasses(classes, isToggled) {
-    const popover = this.popoverElement;
-    const method = isToggled ? addClass : removeClass;
-
-    classes.forEach((className) => {
-      method(popover, className);
-    });
+    toggleClassesOnElement(this.popoverElement, classes, isToggled);
   }
 
   getActiveConstraintClasses() {

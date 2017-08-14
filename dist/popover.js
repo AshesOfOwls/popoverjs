@@ -102,6 +102,14 @@ var removeClass = function removeClass(element, className) {
   element.classList.remove(className);
 };
 
+var toggleClassesOnElement = function toggleClassesOnElement(element, classes, isToggled) {
+  var method = isToggled ? addClass : removeClass;
+
+  classes.forEach(function (className) {
+    method(element, className);
+  });
+};
+
 var setHalfPointsOnOrigin = function setHalfPointsOnOrigin(origin) {
   var halfHeight = origin.height / 2;
   var halfWidth = origin.width / 2;
@@ -174,6 +182,7 @@ exports.getElementOrigin = getElementOrigin;
 exports.setHalfPointsOnOrigin = setHalfPointsOnOrigin;
 exports.getWindowOrigin = getWindowOrigin;
 exports.whichTransitionEvent = whichTransitionEvent;
+exports.toggleClassesOnElement = toggleClassesOnElement;
 
 /***/ }),
 /* 1 */
@@ -1591,6 +1600,7 @@ var defaults = {
   constraintElement: null,
   unnecessaryRepositioning: true,
   scrollPositioning: true,
+  applyClassesToAttachment: false,
   constraints: [{
     popover: 'top left',
     attachment: 'bottom right'
@@ -1816,6 +1826,7 @@ var Positioner = function () {
   }, {
     key: 'destroy',
     value: function destroy() {
+      this.clearActiveConstraint();
       this.destroyListeners();
       this.destroyContainer();
     }
@@ -2035,7 +2046,13 @@ var Positioner = function () {
   }, {
     key: 'toggleActiveConstraints',
     value: function toggleActiveConstraints(isToggled) {
-      this.togglePopoverClasses(this.getActiveConstraintClasses(), isToggled);
+      var constraintClasses = this.getActiveConstraintClasses();
+
+      this.togglePopoverClasses(constraintClasses, isToggled);
+
+      if (this.options.applyClassesToAttachment) {
+        (0, _utils.toggleClassesOnElement)(this.attachmentElement, constraintClasses, isToggled);
+      }
     }
   }, {
     key: 'activeConstraintIs',
@@ -2058,12 +2075,7 @@ var Positioner = function () {
   }, {
     key: 'togglePopoverClasses',
     value: function togglePopoverClasses(classes, isToggled) {
-      var popover = this.popoverElement;
-      var method = isToggled ? _utils.addClass : _utils.removeClass;
-
-      classes.forEach(function (className) {
-        method(popover, className);
-      });
+      (0, _utils.toggleClassesOnElement)(this.popoverElement, classes, isToggled);
     }
   }, {
     key: 'getActiveConstraintClasses',
