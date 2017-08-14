@@ -5,6 +5,9 @@ import './styles/main.scss';
 const defaults = {
   showOn: 'click',
   hideOn: 'documentClick',
+  manualShow: false,
+  manualHide: false,
+  onHideEvent: () => {},
 };
 
 class Renderer {
@@ -46,7 +49,7 @@ class Renderer {
   }
 
   listenForRender() {
-    if (this.options.manualRender) { return; }
+    if (this.options.manualShow) { return; }
 
     oneEvent(this.triggerElement, this.options.showOn, this.onTriggerClick);
   }
@@ -81,12 +84,20 @@ class Renderer {
 
   onTriggerLeave() {
     this.triggerElement.removeEventListener(this.options.hideOn, this.onTriggerLeave);
-    this.shouldHide();
+    this.onHideEvent('triggerLeave');
   }
 
   onDocumentClick(e) {
     if (this.popoverElement.contains(e.target)) { return; }
     document.body.removeEventListener('click', this.onDocumentClick);
+    this.onHideEvent('documentClick');
+  }
+
+  onHideEvent(hideEvent) {
+    this.options.onHideEvent(hideEvent);
+
+    if (this.options.manualHide) { return; }
+
     this.shouldHide();
   }
 

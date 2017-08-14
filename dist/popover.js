@@ -242,7 +242,8 @@ var defaults = {
   hideOn: 'documentClick',
   showDelay: 0,
   hideDelay: 0,
-  manualRender: true,
+  manualShow: false,
+  manualHide: false,
   themeClass: 'popoverjs--default',
   unnecessaryRepositioning: false,
   resizePositioning: true,
@@ -761,7 +762,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var defaults = {
   showOn: 'click',
-  hideOn: 'documentClick'
+  hideOn: 'documentClick',
+  manualShow: false,
+  manualHide: false,
+  onHideEvent: function onHideEvent() {}
 };
 
 var Renderer = function () {
@@ -813,7 +817,7 @@ var Renderer = function () {
   }, {
     key: 'listenForRender',
     value: function listenForRender() {
-      if (this.options.manualRender) {
+      if (this.options.manualShow) {
         return;
       }
 
@@ -854,7 +858,7 @@ var Renderer = function () {
     key: 'onTriggerLeave',
     value: function onTriggerLeave() {
       this.triggerElement.removeEventListener(this.options.hideOn, this.onTriggerLeave);
-      this.shouldHide();
+      this.onHideEvent('triggerLeave');
     }
   }, {
     key: 'onDocumentClick',
@@ -863,6 +867,17 @@ var Renderer = function () {
         return;
       }
       document.body.removeEventListener('click', this.onDocumentClick);
+      this.onHideEvent('documentClick');
+    }
+  }, {
+    key: 'onHideEvent',
+    value: function onHideEvent(hideEvent) {
+      this.options.onHideEvent(hideEvent);
+
+      if (this.options.manualHide) {
+        return;
+      }
+
       this.shouldHide();
     }
   }, {
