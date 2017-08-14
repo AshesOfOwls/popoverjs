@@ -90,10 +90,10 @@ class Positioner {
 
   cacheCssOffsets() {
     const sizerClasses = [
-      'popoverjs--popover-primary-top',
+      'popoverjs--popover-primary-bottom',
       'popoverjs--popover-secondary-left',
-      'popoverjs--attachment-primary-left',
-      'popoverjs--attachment-secondary-top',
+      'popoverjs--attachment-primary-top',
+      'popoverjs--attachment-secondary-left',
     ];
 
     this.togglePopoverClasses(sizerClasses, true);
@@ -101,7 +101,7 @@ class Positioner {
     this.cssCache = {
       arrowSize: this.getArrowSize(),
       contentSize: this.getContentSize(),
-      attachmentOffset: Math.abs(this.popoverElement.offsetTop),
+      attachmentOffset: Math.abs(this.popoverElement.offsetTop) - 1,
       triggerOffset: Math.abs(this.popoverElement.offsetLeft),
       contentOffset: Math.abs(this.popoverContent.offsetLeft),
     };
@@ -281,7 +281,7 @@ class Positioner {
   }
 
   isConstrainedByPrimary(side) {
-    const originCoordinate = this.origins.attachment[side];
+    const originCoordinate = this.origins.attachment[side] + this.cssCache.attachmentOffset;
     const popoverSize = this.getPopoverSizeFromSideCheck(side);
 
     if (side === 'left' || side === 'top') {

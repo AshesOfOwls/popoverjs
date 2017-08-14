@@ -1655,14 +1655,14 @@ var Positioner = function () {
   }, {
     key: 'cacheCssOffsets',
     value: function cacheCssOffsets() {
-      var sizerClasses = ['popoverjs--popover-primary-top', 'popoverjs--popover-secondary-left', 'popoverjs--attachment-primary-left', 'popoverjs--attachment-secondary-top'];
+      var sizerClasses = ['popoverjs--popover-primary-bottom', 'popoverjs--popover-secondary-left', 'popoverjs--attachment-primary-top', 'popoverjs--attachment-secondary-left'];
 
       this.togglePopoverClasses(sizerClasses, true);
 
       this.cssCache = {
         arrowSize: this.getArrowSize(),
         contentSize: this.getContentSize(),
-        attachmentOffset: Math.abs(this.popoverElement.offsetTop),
+        attachmentOffset: Math.abs(this.popoverElement.offsetTop) - 1,
         triggerOffset: Math.abs(this.popoverElement.offsetLeft),
         contentOffset: Math.abs(this.popoverContent.offsetLeft)
       };
@@ -1878,7 +1878,7 @@ var Positioner = function () {
   }, {
     key: 'isConstrainedByPrimary',
     value: function isConstrainedByPrimary(side) {
-      var originCoordinate = this.origins.attachment[side];
+      var originCoordinate = this.origins.attachment[side] + this.cssCache.attachmentOffset;
       var popoverSize = this.getPopoverSizeFromSideCheck(side);
 
       if (side === 'left' || side === 'top') {
