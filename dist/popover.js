@@ -242,6 +242,7 @@ var defaults = {
   hideOn: 'documentClick',
   showDelay: 0,
   hideDelay: 0,
+  manualRender: true,
   themeClass: 'popoverjs--default',
   unnecessaryRepositioning: false,
   resizePositioning: true,
@@ -288,6 +289,15 @@ var Popoverjs = function () {
       }
     }
   }, {
+    key: 'toggle',
+    value: function toggle(isToggled) {
+      if (isToggled) {
+        this.show();
+      } else {
+        this.hide();
+      }
+    }
+  }, {
     key: 'update',
     value: function update() {
       if (!this.Positioner) {
@@ -316,8 +326,8 @@ var Popoverjs = function () {
       this.Renderer.hide();
     }
   }, {
-    key: 'onRender',
-    value: function onRender() {
+    key: 'onBeforeShow',
+    value: function onBeforeShow() {
       this.setUpPositioner();
     }
   }, {
@@ -364,7 +374,7 @@ var Popoverjs = function () {
     get: function get() {
       return Object.assign({}, this.options, {
         onToggleEnd: this.onToggleEnd.bind(this),
-        onRender: this.onRender.bind(this)
+        onBeforeShow: this.onBeforeShow.bind(this)
       });
     }
   }, {
@@ -760,7 +770,7 @@ var Renderer = function () {
 
     this.options = Object.assign({}, defaults, options);
 
-    this.render = this.render.bind(this);
+    this.onTriggerClick = this.onTriggerClick.bind(this);
     this.onDocumentClick = this.onDocumentClick.bind(this);
     this.onPopoverEnter = this.onPopoverEnter.bind(this);
     this.onPopoverLeave = this.onPopoverLeave.bind(this);
@@ -803,16 +813,18 @@ var Renderer = function () {
   }, {
     key: 'listenForRender',
     value: function listenForRender() {
-      (0, _utils.oneEvent)(this.triggerElement, this.options.showOn, this.render);
+      if (this.options.manualRender) {
+        return;
+      }
+
+      (0, _utils.oneEvent)(this.triggerElement, this.options.showOn, this.onTriggerClick);
     }
   }, {
-    key: 'render',
-    value: function render(e) {
+    key: 'onTriggerClick',
+    value: function onTriggerClick(e) {
       e.stopImmediatePropagation();
 
-      this.options.onRender();
-      this.shouldShow();
-      this.listenForHide();
+      this.show();
     }
   }, {
     key: 'destroyListeners',
@@ -894,17 +906,18 @@ var Renderer = function () {
 
       if (this.options.showDelay > 0) {
         this.showTimeout = setTimeout(function () {
-          _this.show();
+          _this._show();
         }, this.options.showDelay);
       } else {
-        this.show();
+        this._show();
       }
     }
   }, {
-    key: 'show',
-    value: function show() {
+    key: '_show',
+    value: function _show() {
       this.options.onBeforeShow();
       this.toggleVisibility(true);
+      this.listenForHide();
     }
   }, {
     key: 'onPopoverEnter',
@@ -915,6 +928,16 @@ var Renderer = function () {
     key: 'onPopoverLeave',
     value: function onPopoverLeave() {
       this.shouldHide();
+    }
+  }, {
+    key: 'hide',
+    value: function hide() {
+      this.shouldHide();
+    }
+  }, {
+    key: 'show',
+    value: function show() {
+      this.shouldShow();
     }
   }, {
     key: 'shouldHide',
@@ -929,15 +952,15 @@ var Renderer = function () {
 
       if (this.options.hideDelay > 0) {
         this.hideTimeout = setTimeout(function () {
-          _this2.hide();
+          _this2._hide();
         }, this.options.hideDelay);
       } else {
-        this.hide();
+        this._hide();
       }
     }
   }, {
-    key: 'hide',
-    value: function hide() {
+    key: '_hide',
+    value: function _hide() {
       this.options.onBeforeHide();
       this.toggleVisibility(false);
     }

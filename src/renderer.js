@@ -11,7 +11,7 @@ class Renderer {
   constructor(options) {
     this.options = Object.assign({}, defaults, options);
 
-    this.render = this.render.bind(this);
+    this.onTriggerClick = this.onTriggerClick.bind(this);
     this.onDocumentClick = this.onDocumentClick.bind(this);
     this.onPopoverEnter = this.onPopoverEnter.bind(this);
     this.onPopoverLeave = this.onPopoverLeave.bind(this);
@@ -46,15 +46,15 @@ class Renderer {
   }
 
   listenForRender() {
-    oneEvent(this.triggerElement, this.options.showOn, this.render);
+    if (this.options.manualRender) { return; }
+
+    oneEvent(this.triggerElement, this.options.showOn, this.onTriggerClick);
   }
 
-  render(e) {
+  onTriggerClick(e) {
     e.stopImmediatePropagation();
 
-    this.options.onRender();
-    this.shouldShow();
-    this.listenForHide();
+    this.show();
   }
 
   destroyListeners() {
@@ -122,16 +122,17 @@ class Renderer {
 
     if (this.options.showDelay > 0) {
       this.showTimeout = setTimeout(() => {
-        this.show();
+        this._show();
       }, this.options.showDelay);
     } else {
-      this.show();
+      this._show();
     }
   }
 
-  show() {
+  _show() {
     this.options.onBeforeShow();
     this.toggleVisibility(true);
+    this.listenForHide();
   }
 
   onPopoverEnter() {
@@ -142,6 +143,14 @@ class Renderer {
     this.shouldHide();
   }
 
+  hide() {
+    this.shouldHide();
+  }
+
+  show() {
+    this.shouldShow();
+  }
+
   shouldHide() {
     if (!this.isVisible) { return; }
 
@@ -149,14 +158,14 @@ class Renderer {
 
     if (this.options.hideDelay > 0) {
       this.hideTimeout = setTimeout(() => {
-        this.hide();
+        this._hide();
       }, this.options.hideDelay);
     } else {
-      this.hide();
+      this._hide();
     }
   }
 
-  hide() {
+  _hide() {
     this.options.onBeforeHide();
     this.toggleVisibility(false);
   }

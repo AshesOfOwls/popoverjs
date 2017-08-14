@@ -12,6 +12,7 @@ const defaults = {
   hideOn: 'documentClick',
   showDelay: 0,
   hideDelay: 0,
+  manualRender: true,
   themeClass: 'popoverjs--default',
   unnecessaryRepositioning: false,
   resizePositioning: true,
@@ -55,6 +56,14 @@ class Popoverjs {
     }
   }
 
+  toggle(isToggled) {
+    if (isToggled) {
+      this.show();
+    } else {
+      this.hide();
+    }
+  }
+
   update() {
     if (!this.Positioner) { return; }
 
@@ -64,7 +73,7 @@ class Popoverjs {
   get rendererOptions() {
     return Object.assign({}, this.options, {
       onToggleEnd: this.onToggleEnd.bind(this),
-      onRender: this.onRender.bind(this),
+      onBeforeShow: this.onBeforeShow.bind(this),
     });
   }
 
@@ -82,7 +91,7 @@ class Popoverjs {
     this.Renderer.hide();
   }
 
-  onRender() {
+  onBeforeShow() {
     this.setUpPositioner();
   }
 
