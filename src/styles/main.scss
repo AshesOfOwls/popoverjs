@@ -18,6 +18,10 @@
     transition: visibility 0.275s, height 0.2s, width 0.2s, opacity 0.275s;
   }
 
+  &-arrow:after {
+    background-color: #ffffff;
+  }
+
   &-content {
     background-color: white;
     border-radius: 3px;
