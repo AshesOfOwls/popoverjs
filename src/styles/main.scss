@@ -2,20 +2,12 @@
 
 .popoverjs {
   height: 1px;
-  opacity: 0;
-  pointer-events: all;
   position: absolute;
-  transition: visibility 0.275s, opacity 0.275s linear;
   visibility: hidden;
   width: 1px;
 
   &.is-visible {
-    opacity: 1;
     visibility: visible;
-  }
-
-  &.is-transitionable {
-    transition: visibility 0.275s, height 0.2s, width 0.2s, opacity 0.275s;
   }
 
   &-arrow:after {
@@ -24,7 +16,6 @@
 
   &-content {
     background-color: white;
-    border-radius: 3px;
     box-sizing: border-box;
     position: absolute;
   }
