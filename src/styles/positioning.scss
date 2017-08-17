@@ -28,10 +28,14 @@
     left: $arrow_side_offset;
   }
 
+  &.popoverjs--attachment-primary-top.popoverjs--attachment-secondary-middle,
+  &.popoverjs--attachment-primary-bottom.popoverjs--attachment-secondary-middle,
   &.popoverjs--attachment-primary-top.popoverjs--attachment-secondary-center,
   &.popoverjs--attachment-primary-bottom.popoverjs--attachment-secondary-center {
     left: 50%;
   }
+  &.popoverjs--attachment-primary-left.popoverjs--attachment-secondary-middle,
+  &.popoverjs--attachment-primary-right.popoverjs--attachment-secondary-middle {
   &.popoverjs--attachment-primary-left.popoverjs--attachment-secondary-center,
   &.popoverjs--attachment-primary-right.popoverjs--attachment-secondary-center {
     top: 50%;
@@ -66,12 +70,16 @@
     left: -$content_offset;
   }
 
+  &.popoverjs--popover-primary-bottom.popoverjs--popover-secondary-middle > .popoverjs-content,
+  &.popoverjs--popover-primary-top.popoverjs--popover-secondary-middle > .popoverjs-content,
   &.popoverjs--popover-primary-bottom.popoverjs--popover-secondary-center > .popoverjs-content,
   &.popoverjs--popover-primary-top.popoverjs--popover-secondary-center > .popoverjs-content {
     left: 0;
     transform: translateX(-50%);
   }
 
+  &.popoverjs--popover-primary-left.popoverjs--popover-secondary-middle > .popoverjs-content,
+  &.popoverjs--popover-primary-right.popoverjs--popover-secondary-middle > .popoverjs-content,
   &.popoverjs--popover-primary-left.popoverjs--popover-secondary-center > .popoverjs-content,
   &.popoverjs--popover-primary-right.popoverjs--popover-secondary-center > .popoverjs-content {
     top: 0;

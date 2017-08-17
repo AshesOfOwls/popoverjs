@@ -309,6 +309,7 @@ class Positioner {
 
   getAttachementOffsetForConstraint(constraint) {
     switch (constraint.popover.secondary) {
+    case 'middle':
     case 'center':
       return 0;
     default:
@@ -317,7 +318,7 @@ class Positioner {
   }
 
   getPopoverSizeOnConstraintSide(constraint, sideToCheck) {
-    if (constraint.popover.secondary === 'center') {
+    if (['center', 'middle'].includes(constraint.popover.secondary)) {
       switch (sideToCheck) {
       case 'right':
       case 'left':
@@ -343,7 +344,7 @@ class Positioner {
   }
 
   getOriginPointForConstraint(constraint) {
-    if (constraint.attachment.secondary === 'center') {
+    if (['center', 'middle'].includes(constraint.attachment.secondary)) {
       switch (constraint.attachment.primary) {
       case 'top':
       case 'bottom':

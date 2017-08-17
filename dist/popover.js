@@ -1029,101 +1029,12 @@ exports.default = Renderer;
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(6)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "/**\n  * Local Variables\n  *\n  * $arrow_hypotenuse_to_side_ratio:\n  * The $arrow_hypotenuse_to_side_ratio is important and should not be changed.\n  * In order to get an arrow, we are currently hacking it to be a square rotated\n  * at a 45 degree angle, and cut off via parent container overflow. Because we\n  * can only control the height/width of a box, setting the size of the arrow\n  * becomes difficult when it is rotated (Because the diagnol hypotenuse within\n  * a box is longer than its sides). To fix this, we can instead take the size\n  * which would be the hypotenuse and convert that to be the correct side\n  * length for the box. Since we are dealing with equal length sides, the .707\n  * will be consistent enough for that conversion.\n  */\n.popoverjs {\n  height: 1px;\n  pointer-events: all;\n  position: absolute;\n  visibility: hidden;\n  width: 1px; }\n  .popoverjs.is-visible {\n    visibility: visible; }\n  .popoverjs-arrow:after {\n    background-color: #ffffff; }\n  .popoverjs-content {\n    background-color: white;\n    box-sizing: border-box;\n    position: absolute; }\n  .popoverjs--detached-container {\n    position: absolute;\n    pointer-events: none; }\n  .popoverjs--wrapper {\n    display: inline-block;\n    position: relative; }\n\n.popoverjs--default > .popoverjs-arrow {\n  overflow: hidden;\n  position: absolute;\n  z-index: 5; }\n\n.popoverjs--default > .popoverjs-arrow:after {\n  content: \"\";\n  position: absolute;\n  width: 11.312px;\n  height: 11.312px;\n  transform: translateX(-50%) translateY(-50%) rotate(45deg);\n  top: 50%;\n  left: 50%; }\n\n.popoverjs--default.popoverjs--popover-primary-bottom > .popoverjs-arrow,\n.popoverjs--default.popoverjs--popover-primary-top > .popoverjs-arrow {\n  left: -8px;\n  height: 8px;\n  width: 16px; }\n\n.popoverjs--default.popoverjs--popover-primary-bottom > .popoverjs-arrow {\n  bottom: auto;\n  top: -8px; }\n  .popoverjs--default.popoverjs--popover-primary-bottom > .popoverjs-arrow:after {\n    margin-top: -4px; }\n\n.popoverjs--default.popoverjs--popover-primary-top > .popoverjs-arrow {\n  bottom: -8px;\n  top: auto; }\n  .popoverjs--default.popoverjs--popover-primary-top > .popoverjs-arrow:after {\n    margin-top: 4px; }\n\n.popoverjs--default.popoverjs--popover-primary-left > .popoverjs-arrow,\n.popoverjs--default.popoverjs--popover-primary-right > .popoverjs-arrow {\n  bottom: -8px;\n  height: 16px;\n  width: 8px; }\n\n.popoverjs--default.popoverjs--popover-primary-right > .popoverjs-arrow {\n  left: -8px;\n  right: auto; }\n  .popoverjs--default.popoverjs--popover-primary-right > .popoverjs-arrow:after {\n    margin-left: -4px; }\n\n.popoverjs--default.popoverjs--popover-primary-left > .popoverjs-arrow {\n  left: auto;\n  right: -8px; }\n  .popoverjs--default.popoverjs--popover-primary-left > .popoverjs-arrow:after {\n    margin-left: 4px; }\n\n.popoverjs--default.popoverjs--attachment-primary-bottom {\n  bottom: -1px; }\n\n.popoverjs--default.popoverjs--attachment-primary-top {\n  top: -1px; }\n\n.popoverjs--default.popoverjs--attachment-primary-right {\n  right: -1px; }\n\n.popoverjs--default.popoverjs--attachment-primary-left {\n  left: -1px; }\n\n.popoverjs--default.popoverjs--attachment-secondary-bottom {\n  bottom: 16px; }\n\n.popoverjs--default.popoverjs--attachment-secondary-top {\n  top: 16px; }\n\n.popoverjs--default.popoverjs--attachment-secondary-right {\n  right: 16px; }\n\n.popoverjs--default.popoverjs--attachment-secondary-left {\n  left: 16px; }\n\n.popoverjs--default.popoverjs--attachment-primary-top.popoverjs--attachment-secondary-center, .popoverjs--default.popoverjs--attachment-primary-bottom.popoverjs--attachment-secondary-center {\n  left: 50%; }\n\n.popoverjs--default.popoverjs--attachment-primary-left.popoverjs--attachment-secondary-center, .popoverjs--default.popoverjs--attachment-primary-right.popoverjs--attachment-secondary-center {\n  top: 50%; }\n\n.popoverjs--default.popoverjs--popover-primary-bottom > .popoverjs-content {\n  bottom: 9px; }\n\n.popoverjs--default.popoverjs--popover-primary-top > .popoverjs-content {\n  top: 9px; }\n\n.popoverjs--default.popoverjs--popover-primary-right > .popoverjs-content {\n  right: 9px; }\n\n.popoverjs--default.popoverjs--popover-primary-left > .popoverjs-content {\n  left: 9px; }\n\n.popoverjs--default.popoverjs--popover-secondary-bottom > .popoverjs-content {\n  margin-top: 18px;\n  transform: translateY(-100%); }\n\n.popoverjs--default.popoverjs--popover-secondary-top > .popoverjs-content {\n  margin-top: -18px;\n  transform: translateY(0%); }\n\n.popoverjs--default.popoverjs--popover-secondary-right > .popoverjs-content {\n  right: -18px; }\n\n.popoverjs--default.popoverjs--popover-secondary-left > .popoverjs-content {\n  left: -18px; }\n\n.popoverjs--default.popoverjs--popover-primary-bottom.popoverjs--popover-secondary-center > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-top.popoverjs--popover-secondary-center > .popoverjs-content {\n  left: 0;\n  transform: translateX(-50%); }\n\n.popoverjs--default.popoverjs--popover-primary-left.popoverjs--popover-secondary-center > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-right.popoverjs--popover-secondary-center > .popoverjs-content {\n  top: 0;\n  transform: translateY(-50%); }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 6 */
 /***/ (function(module, exports) {
 
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
-
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
-
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
-
-	return [content].join('\n');
-}
-
-// Adapted from convert-source-map (MIT)
-function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-
-	return '/*# ' + data + ' */';
-}
-
+throw new Error("Module build failed: \n}\n^\n      Invalid CSS after \"}\": expected \"}\", was \"\"\n      in /Users/McPants/Sites/popoverjs/src/styles/positioning.scss (line 88, column 2)");
 
 /***/ }),
+/* 6 */,
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1955,6 +1866,7 @@ var Positioner = function () {
     key: 'getAttachementOffsetForConstraint',
     value: function getAttachementOffsetForConstraint(constraint) {
       switch (constraint.popover.secondary) {
+        case 'middle':
         case 'center':
           return 0;
         default:
@@ -1964,7 +1876,7 @@ var Positioner = function () {
   }, {
     key: 'getPopoverSizeOnConstraintSide',
     value: function getPopoverSizeOnConstraintSide(constraint, sideToCheck) {
-      if (constraint.popover.secondary === 'center') {
+      if (['center', 'middle'].includes(constraint.popover.secondary)) {
         switch (sideToCheck) {
           case 'right':
           case 'left':
@@ -1991,7 +1903,7 @@ var Positioner = function () {
   }, {
     key: 'getOriginPointForConstraint',
     value: function getOriginPointForConstraint(constraint) {
-      if (constraint.attachment.secondary === 'center') {
+      if (['center', 'middle'].includes(constraint.attachment.secondary)) {
         switch (constraint.attachment.primary) {
           case 'top':
           case 'bottom':
