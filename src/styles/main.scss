@@ -35,27 +35,3 @@
 .popoverjs--default {
   @include popoverjs(16px, 10px, 16px, 0px);
 }
-
-.popoverjs.one {
-  @include popoverjs(26px, 10px, 16px, 10px);
-}
-
-.popoverjs.two {
-  @include popoverjs(36px, 10px, 16px, 20px);
-}
-
-.popoverjs.three {
-  @include popoverjs(46px, 10px, 16px, 30px);
-}
-
-.popoverjs.four {
-  @include popoverjs(56px, 10px, 16px, 40px);
-}
-
-.popoverjs.five {
-  @include popoverjs(66px, 10px, 16px, 50px);
-}
-
-.popoverjs.six {
-  @include popoverjs(76px, 10px, 16px, 60px);
-}
