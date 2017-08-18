@@ -1539,6 +1539,10 @@ var defaults = {
   }]
 };
 
+var generateClassesForConstraint = function generateClassesForConstraint(constraint) {
+  return ['popoverjs--popover-primary-' + constraint.popover.primary, 'popoverjs--popover-secondary-' + constraint.popover.secondary, 'popoverjs--attachment-primary-' + constraint.attachment.primary, 'popoverjs--attachment-secondary-' + constraint.attachment.secondary];
+};
+
 var Positioner = function () {
   function Positioner(options) {
     _classCallCheck(this, Positioner);
@@ -1692,7 +1696,7 @@ var Positioner = function () {
 
         id += 1;
 
-        return Object.assign({}, constraint, {
+        var parsedConstraint = {
           id: id,
           attachment: {
             primary: attachmentConstraint[0],
@@ -1704,7 +1708,11 @@ var Positioner = function () {
             secondary: popoverConstraint[1],
             string: constraint.popover
           }
-        });
+        };
+
+        parsedConstraint.classes = generateClassesForConstraint(parsedConstraint);
+
+        return Object.assign({}, constraint, parsedConstraint);
       });
     }
   }, {
@@ -1976,7 +1984,7 @@ var Positioner = function () {
   }, {
     key: 'toggleActiveConstraints',
     value: function toggleActiveConstraints(isToggled) {
-      var constraintClasses = this.getActiveConstraintClasses();
+      var constraintClasses = this.activeConstraint.classes;
 
       this.togglePopoverClasses(constraintClasses, isToggled);
 
@@ -2006,18 +2014,6 @@ var Positioner = function () {
     key: 'togglePopoverClasses',
     value: function togglePopoverClasses(classes, isToggled) {
       (0, _utils.toggleClassesOnElement)(this.popoverElement, classes, isToggled);
-    }
-  }, {
-    key: 'getActiveConstraintClasses',
-    value: function getActiveConstraintClasses() {
-      if (!this.activeConstraint) {
-        return [];
-      }
-
-      var popoverAnchors = this.activeConstraint.popover;
-      var attachmentAnchors = this.activeConstraint.attachment;
-
-      return ['popoverjs--popover-primary-' + popoverAnchors.primary, 'popoverjs--popover-secondary-' + popoverAnchors.secondary, 'popoverjs--attachment-primary-' + attachmentAnchors.primary, 'popoverjs--attachment-secondary-' + attachmentAnchors.secondary];
     }
   }]);
 

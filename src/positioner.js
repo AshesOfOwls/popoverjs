@@ -16,6 +16,13 @@ const defaults = {
   }],
 };
 
+const generateClassesForConstraint = constraint => ([
+  `popoverjs--popover-primary-${constraint.popover.primary}`,
+  `popoverjs--popover-secondary-${constraint.popover.secondary}`,
+  `popoverjs--attachment-primary-${constraint.attachment.primary}`,
+  `popoverjs--attachment-secondary-${constraint.attachment.secondary}`,
+]);
+
 class Positioner {
   constructor(options) {
     this.options = Object.assign({}, defaults, options);
@@ -146,7 +153,7 @@ class Positioner {
 
       id += 1;
 
-      return Object.assign({}, constraint, {
+      const parsedConstraint = {
         id,
         attachment: {
           primary: attachmentConstraint[0],
@@ -158,7 +165,11 @@ class Positioner {
           secondary: popoverConstraint[1],
           string: constraint.popover,
         },
-      });
+      };
+
+      parsedConstraint.classes = generateClassesForConstraint(parsedConstraint);
+
+      return Object.assign({}, constraint, parsedConstraint);
     });
   }
 
@@ -393,7 +404,7 @@ class Positioner {
   }
 
   toggleActiveConstraints(isToggled) {
-    const constraintClasses = this.getActiveConstraintClasses();
+    const constraintClasses = this.activeConstraint.classes;
 
     this.togglePopoverClasses(constraintClasses, isToggled);
 
@@ -416,20 +427,6 @@ class Positioner {
 
   togglePopoverClasses(classes, isToggled) {
     toggleClassesOnElement(this.popoverElement, classes, isToggled);
-  }
-
-  getActiveConstraintClasses() {
-    if (!this.activeConstraint) { return []; }
-
-    const popoverAnchors = this.activeConstraint.popover;
-    const attachmentAnchors = this.activeConstraint.attachment;
-
-    return [
-      `popoverjs--popover-primary-${popoverAnchors.primary}`,
-      `popoverjs--popover-secondary-${popoverAnchors.secondary}`,
-      `popoverjs--attachment-primary-${attachmentAnchors.primary}`,
-      `popoverjs--attachment-secondary-${attachmentAnchors.secondary}`,
-    ];
   }
 }
 
