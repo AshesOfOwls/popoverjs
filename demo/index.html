@@ -40,10 +40,10 @@
 
       .popoverjs {
         opacity: 0;
-        transition: 0.275s linear;
+        transition: opacity 0.275s linear, visibility 0.275s linear;
       }
 
-      .popoverjs.is-visible {
+      .popoverjs.popoverjs--is-visible {
         opacity: 1;
       }
     </style>
@@ -123,7 +123,6 @@
     </div>
     <script>
       window.test = new Popoverjs({
-        themeClass: 'one',
         bodyAttached: true,
         unnecessaryRepositioning: true,
         attachmentElement: document.getElementsByClassName('trigger-0')[0],
@@ -145,7 +144,6 @@
       });
 
       new Popoverjs({
-        themeClass: 'two',
         bodyAttached: true,
         unnecessaryRepositioning: true,
         triggerElement: document.getElementsByClassName('trigger-1')[0],
@@ -160,28 +158,24 @@
 
 
       new Popoverjs({
-        themeClass: 'three',
         unnecessaryRepositioning: true,
         attachmentElement: document.getElementsByClassName('trigger-2')[0],
         popoverElement: document.getElementsByClassName('popover-2')[0],
       });
 
       new Popoverjs({
-        themeClass: 'four',
         unnecessaryRepositioning: true,
         attachmentElement: document.getElementsByClassName('trigger-3')[0],
         popoverElement: document.getElementsByClassName('popover-3')[0],
       });
 
       new Popoverjs({
-        themeClass: 'five',
         unnecessaryRepositioning: true,
         attachmentElement: document.getElementsByClassName('trigger-4')[0],
         popoverElement: document.getElementsByClassName('popover-4')[0],
       });
 
       new Popoverjs({
-        themeClass: 'six',
         unnecessaryRepositioning: true,
         attachmentElement: document.getElementsByClassName('trigger-5')[0],
         popoverElement: document.getElementsByClassName('popover-5')[0],

@@ -1,4 +1,4 @@
-import { oneEvent, addClass, removeClass, whichTransitionEvent } from './utils';
+import { oneEvent, toggleClassesOnElement, whichTransitionEvent } from './utils';
 
 import './styles/main.scss';
 
@@ -39,6 +39,7 @@ class Renderer {
     this.isVisible = false;
     this.triggerElement = this.options.triggerElement;
     this.popoverElement = this.options.popoverElement;
+    this.attachmentElement = this.options.attachmentElement;
   }
 
   listenForPopoverHover() {
@@ -188,11 +189,13 @@ class Renderer {
 
     this.listenForToggleEnd();
 
+    const classes = ['popoverjs--is-visible'];
+
     if (isVisible) {
-      addClass(this.popoverElement, 'is-visible');
-    } else {
-      removeClass(this.popoverElement, 'is-visible');
+      this.toggleRendererClasses(['popoverjs--is-open'], false);
     }
+
+    this.toggleRendererClasses(classes, isVisible);
   }
 
   onToggleEnd() {
@@ -202,9 +205,16 @@ class Renderer {
       this.options.onAfterHide();
       this.options.onToggleEnd();
       this.listenForRender();
+
+      this.toggleRendererClasses(['popoverjs--is-open'], false);
     } else {
       this.options.onAfterShow();
     }
+  }
+
+  toggleRendererClasses(clasess, isToggled) {
+    toggleClassesOnElement(this.popoverElement, clasess, isToggled);
+    toggleClassesOnElement(this.attachmentElement, clasess, isToggled);
   }
 }
 
