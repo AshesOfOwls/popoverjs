@@ -1568,6 +1568,8 @@ var defaults = {
   }]
 };
 
+var sizerClasses = ['popoverjs--popover-primary-bottom', 'popoverjs--popover-secondary-left', 'popoverjs--attachment-primary-top', 'popoverjs--attachment-secondary-left'];
+
 var generateClassesForConstraint = function generateClassesForConstraint(constraint) {
   return ['popoverjs--popover-primary-' + constraint.popover.primary, 'popoverjs--popover-secondary-' + constraint.popover.secondary, 'popoverjs--attachment-primary-' + constraint.attachment.primary, 'popoverjs--attachment-secondary-' + constraint.attachment.secondary];
 };
@@ -1667,8 +1669,6 @@ var Positioner = function () {
   }, {
     key: 'cacheCssOffsets',
     value: function cacheCssOffsets() {
-      var sizerClasses = ['popoverjs--popover-primary-bottom', 'popoverjs--popover-secondary-left', 'popoverjs--attachment-primary-top', 'popoverjs--attachment-secondary-left'];
-
       this.togglePopoverClasses(sizerClasses, true);
 
       this.cssCache = {

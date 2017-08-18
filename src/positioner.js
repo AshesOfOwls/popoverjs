@@ -16,6 +16,13 @@ const defaults = {
   }],
 };
 
+const sizerClasses = [
+  'popoverjs--popover-primary-bottom',
+  'popoverjs--popover-secondary-left',
+  'popoverjs--attachment-primary-top',
+  'popoverjs--attachment-secondary-left',
+];
+
 const generateClassesForConstraint = constraint => ([
   `popoverjs--popover-primary-${constraint.popover.primary}`,
   `popoverjs--popover-secondary-${constraint.popover.secondary}`,
@@ -99,13 +106,6 @@ class Positioner {
   }
 
   cacheCssOffsets() {
-    const sizerClasses = [
-      'popoverjs--popover-primary-bottom',
-      'popoverjs--popover-secondary-left',
-      'popoverjs--attachment-primary-top',
-      'popoverjs--attachment-secondary-left',
-    ];
-
     this.togglePopoverClasses(sizerClasses, true);
 
     this.cssCache = {
