@@ -1,4 +1,4 @@
-import { toggleClassesOnElement, getElementOrigin, getWindowOrigin } from './utils';
+import { toggleClassesOnElement, getElementOrigin, getWindowOrigin, throttle } from './utils';
 
 const defaults = {
   dynamicWidth: false,
@@ -31,6 +31,8 @@ class Positioner {
   }
 
   initialize() {
+    this.throttledUpdate = throttle(this.position, 2500, this);
+
     this.setUpGlobals();
     this.setUpElements();
     this.parseConstraints();

@@ -83,6 +83,7 @@ return /******/ (function(modules) { // webpackBootstrap
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var _arguments = arguments;
 var oneEvent = function oneEvent(target, eventType, callback) {
   var wrappedCallback = function wrappedCallback(eventObject) {
     target.removeEventListener(eventType, wrappedCallback);
@@ -170,6 +171,33 @@ var whichTransitionEvent = function whichTransitionEvent(element) {
   return transitions[rendererType];
 };
 
+var throttle = function throttle(fn, threshhold, scope) {
+  var time = threshhold;
+  if (!time) {
+    time = 250;
+  }
+
+  var last = null;
+  var deferTimer = null;
+  return function () {
+    var context = scope || undefined;
+
+    var now = +new Date();
+    var args = _arguments;
+    if (last && now < last + threshhold) {
+      // hold on to it
+      clearTimeout(deferTimer);
+      deferTimer = setTimeout(function () {
+        last = now;
+        fn.apply(context, args);
+      }, threshhold);
+    } else {
+      last = now;
+      fn.apply(context, args);
+    }
+  };
+};
+
 var error = function error(message) {
   throw new Error(message);
 };
@@ -177,6 +205,7 @@ var error = function error(message) {
 exports.oneEvent = oneEvent;
 exports.addClass = addClass;
 exports.error = error;
+exports.throttle = throttle;
 exports.removeClass = removeClass;
 exports.getElementOrigin = getElementOrigin;
 exports.setHalfPointsOnOrigin = setHalfPointsOnOrigin;
@@ -1555,6 +1584,8 @@ var Positioner = function () {
   _createClass(Positioner, [{
     key: 'initialize',
     value: function initialize() {
+      this.throttledUpdate = (0, _utils.throttle)(this.position, 2500, this);
+
       this.setUpGlobals();
       this.setUpElements();
       this.parseConstraints();

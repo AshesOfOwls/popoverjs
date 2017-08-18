@@ -83,6 +83,31 @@ const whichTransitionEvent = (element) => {
   return transitions[rendererType];
 };
 
+const throttle = (fn, threshhold, scope) => {
+  let time = threshhold;
+  if (!time) { time = 250; }
+
+  let last = null;
+  let deferTimer = null;
+  return () => {
+    const context = scope || this;
+
+    const now = +new Date();
+    const args = arguments;
+    if (last && now < last + threshhold) {
+      // hold on to it
+      clearTimeout(deferTimer);
+      deferTimer = setTimeout(() => {
+        last = now;
+        fn.apply(context, args);
+      }, threshhold);
+    } else {
+      last = now;
+      fn.apply(context, args);
+    }
+  };
+};
+
 const error = (message) => {
   throw new Error(message);
 };
@@ -91,6 +116,7 @@ export {
   oneEvent,
   addClass,
   error,
+  throttle,
   removeClass,
   getElementOrigin,
   setHalfPointsOnOrigin,
