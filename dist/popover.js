@@ -1965,7 +1965,13 @@ var Positioner = function () {
   }, {
     key: 'checkConstraints',
     value: function checkConstraints() {
-      this.applyConstraint(this.getActiveConstraint());
+      var activeConstraint = this.getActiveConstraint();
+
+      (0, _utils.toggleClassesOnElement)(this.popoverElement, ['popoverjs--is-constrained'], !activeConstraint);
+
+      if (activeConstraint) {
+        this.applyConstraint(activeConstraint);
+      }
     }
   }, {
     key: 'getActiveConstraint',
@@ -1976,18 +1982,12 @@ var Positioner = function () {
         return this.activeConstraint;
       }
 
-      var activeConstraint = this.constraints.find(function (constraint) {
+      return this.constraints.find(function (constraint) {
         if (_this.canFitInto(constraint)) {
           return constraint;
         }
         return false;
       });
-
-      if (!activeConstraint) {
-        return this.activeConstraint;
-      }
-
-      return activeConstraint;
     }
   }, {
     key: 'refreshAllElementData',
@@ -2168,7 +2168,7 @@ var Positioner = function () {
   }, {
     key: 'activeConstraintIs',
     value: function activeConstraintIs(constraintObject) {
-      if (!this.activeConstraint) {
+      if (!this.activeConstraint || !constraintObject) {
         return false;
       }
       return this.activeConstraint.id === constraintObject.id;

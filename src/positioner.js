@@ -236,7 +236,13 @@ class Positioner {
   }
 
   checkConstraints() {
-    this.applyConstraint(this.getActiveConstraint());
+    const activeConstraint = this.getActiveConstraint();
+
+    toggleClassesOnElement(this.popoverElement, ['popoverjs--is-constrained'], !activeConstraint);
+
+    if (activeConstraint) {
+      this.applyConstraint(activeConstraint);
+    }
   }
 
   getActiveConstraint() {
@@ -244,14 +250,10 @@ class Positioner {
       return this.activeConstraint;
     }
 
-    const activeConstraint = this.constraints.find((constraint) => {
+    return this.constraints.find((constraint) => {
       if (this.canFitInto(constraint)) { return constraint; }
       return false;
     });
-
-    if (!activeConstraint) { return this.activeConstraint; }
-
-    return activeConstraint;
   }
 
   refreshAllElementData() {
@@ -416,7 +418,7 @@ class Positioner {
   }
 
   activeConstraintIs(constraintObject) {
-    if (!this.activeConstraint) { return false; }
+    if (!this.activeConstraint || !constraintObject) { return false; }
     return this.activeConstraint.id === constraintObject.id;
   }
 
