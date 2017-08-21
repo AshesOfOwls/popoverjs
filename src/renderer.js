@@ -3,8 +3,8 @@ import { oneEvent, toggleClassesOnElement, whichTransitionEvent } from './utils'
 import './styles/main.scss';
 
 const defaults = {
-  showOn: 'click',
-  hideOn: 'documentClick',
+  showOn: ['trigger.click'],
+  hideOn: ['document.click', 'popover.mouseleave'],
   manualShow: false,
   manualHide: false,
   onHideEvent: () => {},
@@ -26,8 +26,8 @@ class Renderer {
 
   initialize() {
     this.setUpGlobals();
+    this.parseEvents();
     this.listenForRender();
-    this.listenForPopoverHover();
   }
 
   destroy() {
@@ -42,55 +42,105 @@ class Renderer {
     this.attachmentElement = this.options.attachmentElement;
   }
 
-  listenForPopoverHover() {
-    if (['mouseleave', 'documentClick'].includes(this.options.hideOn)) { return; }
+  parseEvents() {
+    const showOn = this.options.showOn;
+    if (typeof showOn === 'string') {
+      this.showOnObjects = [this.parseEventObject(showOn)];
+    } else {
+      this.showOnObjects = showOn.map(this.parseEventObject.bind(this));
+    }
 
-    this.popoverElement.addEventListener('mouseenter', this.onPopoverEnter);
-    this.popoverElement.addEventListener('mouseleave', this.onPopoverLeave);
+    const hideOn = this.options.hideOn;
+    if (typeof hideOn === 'string') {
+      this.hideOnObjects = [this.parseEventObject(hideOn)];
+    } else {
+      this.hideOnObjects = hideOn.map(this.parseEventObject.bind(this));
+    }
+  }
+
+  parseEventObject(eventString) {
+    const object = eventString.split('.');
+
+    if (!object[1]) {
+      return {
+        element: this.triggerElement,
+        event: eventString,
+      };
+    }
+
+    if (['body', 'document'].includes(object[0])) {
+      return {
+        element: document.body,
+        event: object[1],
+      };
+    }
+
+    return {
+      element: this[`${object[0]}Element`],
+      event: object[1],
+    };
   }
 
   listenForRender() {
     if (this.options.manualShow) { return; }
 
-    oneEvent(this.triggerElement, this.options.showOn, this.onTriggerClick);
+    this.toggleRenderListeners(true);
   }
 
-  onTriggerClick(e) {
+  toggleRenderListeners(isToggled) {
+    const method = isToggled ? 'addEventListener' : 'removeEventListener';
+    this.showOnObjects.forEach((showOn) => {
+      showOn.element[method](
+        showOn.event,
+        this.onTriggerClick.bind(this, showOn.element, showOn.event),
+      );
+    });
+  }
+
+  onTriggerClick(element, event, e) {
     e.stopImmediatePropagation();
 
-    this.show();
+    this.toggleRenderListeners(false);
+    this.shouldShow();
   }
 
   destroyListeners() {
-    this.clearToggleEvent();
-
-    this.triggerElement.removeEventListener(this.options.showOn, this.render);
-    this.popoverElement.removeEventListener('mouseenter', this.onPopoverEnter);
-    this.triggerElement.removeEventListener(this.options.hideOn, this.onTriggerLeave);
-
-    if (this.options.hideOn === 'documentClick') {
-      document.body.removeEventListener('click', this.onPopoverEnter);
-    }
+    this.clearTransitionListener();
+    this.toggleHideListeners(false);
+    this.toggleRenderListeners(false);
   }
 
   listenForHide() {
-    switch (this.options.hideOn) {
-    case 'documentClick':
-      document.body.addEventListener('click', this.onDocumentClick);
-      break;
-    default:
-      this.triggerElement.addEventListener(this.options.hideOn, this.onTriggerLeave);
+    this.toggleHideListeners(true);
+  }
+
+  toggleHideListeners(isToggled) {
+    const method = isToggled ? 'addEventListener' : 'removeEventListener';
+    this.hideOnObjects.forEach((hideOn) => {
+      hideOn.element[method](
+        hideOn.event,
+        this.isTryingToHide.bind(this, hideOn.element, hideOn.event),
+      );
+    });
+  }
+
+  isTryingToHide(element, event, e) {
+    this.toggleHideListeners(false);
+
+    if (element === document.body) {
+      return this.onDocumentClick(e);
     }
+
+    return this.onTriggerLeave(e);
   }
 
   onTriggerLeave() {
-    this.triggerElement.removeEventListener(this.options.hideOn, this.onTriggerLeave);
     this.onHideEvent('triggerLeave');
   }
 
   onDocumentClick(e) {
     if (this.popoverElement.contains(e.target)) { return; }
-    document.body.removeEventListener('click', this.onDocumentClick);
+
     this.onHideEvent('documentClick');
   }
 
@@ -108,18 +158,21 @@ class Renderer {
       return;
     }
 
-    this.clearToggleEvent();
+    this.clearTransitionListener();
 
-    this.toggleEventData = oneEvent(this.popoverElement,
+    this.transitionEventData = oneEvent(this.popoverElement,
       whichTransitionEvent(this.popoverElement),
       this.onToggleEnd,
       transitionEvent => (transitionEvent.propertyName === 'opacity'),
     );
   }
 
-  clearToggleEvent() {
-    if (!this.toggleEventData) { return; }
-    this.popoverElement.removeEventListener(this.toggleEventData[0], this.toggleEventData[1]);
+  clearTransitionListener() {
+    if (!this.transitionEventData) { return; }
+    this.popoverElement.removeEventListener(
+      this.transitionEventData[0],
+      this.transitionEventData[1],
+    );
   }
 
   clearDelayTimeouts() {
@@ -128,7 +181,10 @@ class Renderer {
   }
 
   shouldShow() {
-    if (this.isVisible || this.isForceClosing) { return; }
+    if (this.isVisible || this.isForceClosing) {
+      this.toggleRenderListeners(true);
+      return;
+    }
 
     this.clearDelayTimeouts();
 

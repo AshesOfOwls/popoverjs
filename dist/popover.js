@@ -228,7 +228,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(6)(content, options);
+var update = __webpack_require__(7)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -263,7 +263,7 @@ var _renderer = __webpack_require__(4);
 
 var _renderer2 = _interopRequireDefault(_renderer);
 
-var _positioner = __webpack_require__(8);
+var _positioner = __webpack_require__(9);
 
 var _positioner2 = _interopRequireDefault(_positioner);
 
@@ -276,8 +276,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var defaults = {
-  showOn: 'click',
-  hideOn: 'documentClick',
   showDelay: 0,
   hideDelay: 0,
   manualShow: false,
@@ -799,8 +797,8 @@ __webpack_require__(1);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var defaults = {
-  showOn: 'click',
-  hideOn: 'documentClick',
+  showOn: ['trigger.click'],
+  hideOn: ['document.click', 'popover.mouseleave'],
   manualShow: false,
   manualHide: false,
   onHideEvent: function onHideEvent() {}
@@ -826,8 +824,8 @@ var Renderer = function () {
     key: 'initialize',
     value: function initialize() {
       this.setUpGlobals();
+      this.parseEvents();
       this.listenForRender();
-      this.listenForPopoverHover();
     }
   }, {
     key: 'destroy',
@@ -844,14 +842,45 @@ var Renderer = function () {
       this.attachmentElement = this.options.attachmentElement;
     }
   }, {
-    key: 'listenForPopoverHover',
-    value: function listenForPopoverHover() {
-      if (['mouseleave', 'documentClick'].includes(this.options.hideOn)) {
-        return;
+    key: 'parseEvents',
+    value: function parseEvents() {
+      var showOn = this.options.showOn;
+      if (typeof showOn === 'string') {
+        this.showOnObjects = [this.parseEventObject(showOn)];
+      } else {
+        this.showOnObjects = showOn.map(this.parseEventObject.bind(this));
       }
 
-      this.popoverElement.addEventListener('mouseenter', this.onPopoverEnter);
-      this.popoverElement.addEventListener('mouseleave', this.onPopoverLeave);
+      var hideOn = this.options.hideOn;
+      if (typeof hideOn === 'string') {
+        this.hideOnObjects = [this.parseEventObject(hideOn)];
+      } else {
+        this.hideOnObjects = hideOn.map(this.parseEventObject.bind(this));
+      }
+    }
+  }, {
+    key: 'parseEventObject',
+    value: function parseEventObject(eventString) {
+      var object = eventString.split('.');
+
+      if (!object[1]) {
+        return {
+          element: this.triggerElement,
+          event: eventString
+        };
+      }
+
+      if (['body', 'document'].includes(object[0])) {
+        return {
+          element: document.body,
+          event: object[1]
+        };
+      }
+
+      return {
+        element: this[object[0] + 'Element'],
+        event: object[1]
+      };
     }
   }, {
     key: 'listenForRender',
@@ -860,43 +889,62 @@ var Renderer = function () {
         return;
       }
 
-      (0, _utils.oneEvent)(this.triggerElement, this.options.showOn, this.onTriggerClick);
+      this.toggleRenderListeners(true);
+    }
+  }, {
+    key: 'toggleRenderListeners',
+    value: function toggleRenderListeners(isToggled) {
+      var _this = this;
+
+      var method = isToggled ? 'addEventListener' : 'removeEventListener';
+      this.showOnObjects.forEach(function (showOn) {
+        showOn.element[method](showOn.event, _this.onTriggerClick.bind(_this, showOn.element, showOn.event));
+      });
     }
   }, {
     key: 'onTriggerClick',
-    value: function onTriggerClick(e) {
+    value: function onTriggerClick(element, event, e) {
       e.stopImmediatePropagation();
 
-      this.show();
+      this.toggleRenderListeners(false);
+      this.shouldShow();
     }
   }, {
     key: 'destroyListeners',
     value: function destroyListeners() {
-      this.clearToggleEvent();
-
-      this.triggerElement.removeEventListener(this.options.showOn, this.render);
-      this.popoverElement.removeEventListener('mouseenter', this.onPopoverEnter);
-      this.triggerElement.removeEventListener(this.options.hideOn, this.onTriggerLeave);
-
-      if (this.options.hideOn === 'documentClick') {
-        document.body.removeEventListener('click', this.onPopoverEnter);
-      }
+      this.clearTransitionListener();
+      this.toggleHideListeners(false);
+      this.toggleRenderListeners(false);
     }
   }, {
     key: 'listenForHide',
     value: function listenForHide() {
-      switch (this.options.hideOn) {
-        case 'documentClick':
-          document.body.addEventListener('click', this.onDocumentClick);
-          break;
-        default:
-          this.triggerElement.addEventListener(this.options.hideOn, this.onTriggerLeave);
+      this.toggleHideListeners(true);
+    }
+  }, {
+    key: 'toggleHideListeners',
+    value: function toggleHideListeners(isToggled) {
+      var _this2 = this;
+
+      var method = isToggled ? 'addEventListener' : 'removeEventListener';
+      this.hideOnObjects.forEach(function (hideOn) {
+        hideOn.element[method](hideOn.event, _this2.isTryingToHide.bind(_this2, hideOn.element, hideOn.event));
+      });
+    }
+  }, {
+    key: 'isTryingToHide',
+    value: function isTryingToHide(element, event, e) {
+      this.toggleHideListeners(false);
+
+      if (element === document.body) {
+        return this.onDocumentClick(e);
       }
+
+      return this.onTriggerLeave(e);
     }
   }, {
     key: 'onTriggerLeave',
     value: function onTriggerLeave() {
-      this.triggerElement.removeEventListener(this.options.hideOn, this.onTriggerLeave);
       this.onHideEvent('triggerLeave');
     }
   }, {
@@ -905,7 +953,7 @@ var Renderer = function () {
       if (this.popoverElement.contains(e.target)) {
         return;
       }
-      document.body.removeEventListener('click', this.onDocumentClick);
+
       this.onHideEvent('documentClick');
     }
   }, {
@@ -927,19 +975,19 @@ var Renderer = function () {
         return;
       }
 
-      this.clearToggleEvent();
+      this.clearTransitionListener();
 
-      this.toggleEventData = (0, _utils.oneEvent)(this.popoverElement, (0, _utils.whichTransitionEvent)(this.popoverElement), this.onToggleEnd, function (transitionEvent) {
+      this.transitionEventData = (0, _utils.oneEvent)(this.popoverElement, (0, _utils.whichTransitionEvent)(this.popoverElement), this.onToggleEnd, function (transitionEvent) {
         return transitionEvent.propertyName === 'opacity';
       });
     }
   }, {
-    key: 'clearToggleEvent',
-    value: function clearToggleEvent() {
-      if (!this.toggleEventData) {
+    key: 'clearTransitionListener',
+    value: function clearTransitionListener() {
+      if (!this.transitionEventData) {
         return;
       }
-      this.popoverElement.removeEventListener(this.toggleEventData[0], this.toggleEventData[1]);
+      this.popoverElement.removeEventListener(this.transitionEventData[0], this.transitionEventData[1]);
     }
   }, {
     key: 'clearDelayTimeouts',
@@ -950,9 +998,10 @@ var Renderer = function () {
   }, {
     key: 'shouldShow',
     value: function shouldShow() {
-      var _this = this;
+      var _this3 = this;
 
       if (this.isVisible || this.isForceClosing) {
+        this.toggleRenderListeners(true);
         return;
       }
 
@@ -960,7 +1009,7 @@ var Renderer = function () {
 
       if (this.options.showDelay > 0) {
         this.showTimeout = setTimeout(function () {
-          _this._show();
+          _this3._show();
         }, this.options.showDelay);
       } else {
         this._show();
@@ -996,7 +1045,7 @@ var Renderer = function () {
   }, {
     key: 'shouldHide',
     value: function shouldHide() {
-      var _this2 = this;
+      var _this4 = this;
 
       if (!this.isVisible) {
         return;
@@ -1006,7 +1055,7 @@ var Renderer = function () {
 
       if (this.options.hideDelay > 0) {
         this.hideTimeout = setTimeout(function () {
-          _this2._hide();
+          _this4._hide();
         }, this.options.hideDelay);
       } else {
         this._hide();
@@ -1071,7 +1120,7 @@ exports.default = Renderer;
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(6)(undefined);
 // imports
 
 
@@ -1083,6 +1132,88 @@ exports.push([module.i, "/**\n  * Local Variables\n  *\n  * $arrow_hypotenuse_to
 
 /***/ }),
 /* 6 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -1128,7 +1259,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(7);
+var	fixUrls = __webpack_require__(8);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -1441,7 +1572,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports) {
 
 
@@ -1536,7 +1667,7 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2052,88 +2183,6 @@ var Positioner = function () {
 }();
 
 exports.default = Positioner;
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
-
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
-
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
-
-	return [content].join('\n');
-}
-
-// Adapted from convert-source-map (MIT)
-function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-
-	return '/*# ' + data + ' */';
-}
-
 
 /***/ })
 /******/ ]);
