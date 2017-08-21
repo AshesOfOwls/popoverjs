@@ -88,6 +88,10 @@ class Popoverjs {
     this.Renderer.hide();
   }
 
+  forceHide() {
+    this.Renderer.forceHide();
+  }
+
   onBeforeShow() {
     this.setUpPositioner();
   }

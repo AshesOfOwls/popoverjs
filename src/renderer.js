@@ -244,6 +244,10 @@ class Renderer {
     }
   }
 
+  forceHide() {
+    this._hide();
+  }
+
   _hide() {
     this.options.onBeforeHide();
     this.toggleVisibility(false);

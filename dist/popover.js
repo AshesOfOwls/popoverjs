@@ -361,6 +361,11 @@ var Popoverjs = function () {
       this.Renderer.hide();
     }
   }, {
+    key: 'forceHide',
+    value: function forceHide() {
+      this.Renderer.forceHide();
+    }
+  }, {
     key: 'onBeforeShow',
     value: function onBeforeShow() {
       this.setUpPositioner();
@@ -1071,6 +1076,11 @@ var Renderer = function () {
       } else {
         this._hide();
       }
+    }
+  }, {
+    key: 'forceHide',
+    value: function forceHide() {
+      this._hide();
     }
   }, {
     key: '_hide',
