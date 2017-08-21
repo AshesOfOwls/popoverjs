@@ -5,8 +5,6 @@ import './styles/main.scss';
 const defaults = {
   showOn: ['trigger.click'],
   hideOn: ['document.click', 'popover.mouseleave'],
-  manualShow: false,
-  manualHide: false,
   onHideEvent: () => {},
 };
 
@@ -40,20 +38,33 @@ class Renderer {
     this.triggerElement = this.options.triggerElement;
     this.popoverElement = this.options.popoverElement;
     this.attachmentElement = this.options.attachmentElement;
+    this.showOnObjects = [];
+    this.hideOnObjects = [];
   }
 
   parseEvents() {
+    this.parseShowEvents();
+    this.parseHideEvents();
+  }
+
+  parseShowEvents() {
     const showOn = this.options.showOn;
+    if (!showOn || showOn.length === 0) { return; }
+
     if (typeof showOn === 'string') {
       this.showOnObjects = [this.parseEventObject(showOn)];
-    } else {
+    } else if (showOn && showOn.length > 0) {
       this.showOnObjects = showOn.map(this.parseEventObject.bind(this));
     }
+  }
 
+  parseHideEvents() {
     const hideOn = this.options.hideOn;
+    if (!hideOn || hideOn.length === 0) { return; }
+
     if (typeof hideOn === 'string') {
       this.hideOnObjects = [this.parseEventObject(hideOn)];
-    } else {
+    } else if (hideOn && hideOn.length > 0) {
       this.hideOnObjects = hideOn.map(this.parseEventObject.bind(this));
     }
   }
@@ -82,19 +93,19 @@ class Renderer {
   }
 
   listenForRender() {
-    if (this.options.manualShow) { return; }
-
     this.toggleRenderListeners(true);
   }
 
   toggleRenderListeners(isToggled) {
-    const method = isToggled ? 'addEventListener' : 'removeEventListener';
-    this.showOnObjects.forEach((showOn) => {
-      showOn.element[method](
-        showOn.event,
-        this.onTriggerClick.bind(this, showOn.element, showOn.event),
-      );
-    });
+    if (this.showOnObjects.length > 0) {
+      const method = isToggled ? 'addEventListener' : 'removeEventListener';
+      this.showOnObjects.forEach((showOn) => {
+        showOn.element[method](
+          showOn.event,
+          this.onTriggerClick.bind(this, showOn.element, showOn.event),
+        );
+      });
+    }
   }
 
   onTriggerClick(element, event, e) {
@@ -115,13 +126,15 @@ class Renderer {
   }
 
   toggleHideListeners(isToggled) {
-    const method = isToggled ? 'addEventListener' : 'removeEventListener';
-    this.hideOnObjects.forEach((hideOn) => {
-      hideOn.element[method](
-        hideOn.event,
-        this.isTryingToHide.bind(this, hideOn.element, hideOn.event),
-      );
-    });
+    if (this.hideOnObjects.length > 0) {
+      const method = isToggled ? 'addEventListener' : 'removeEventListener';
+      this.hideOnObjects.forEach((hideOn) => {
+        hideOn.element[method](
+          hideOn.event,
+          this.isTryingToHide.bind(this, hideOn.element, hideOn.event),
+        );
+      });
+    }
   }
 
   isTryingToHide(element, event, e) {
@@ -146,8 +159,6 @@ class Renderer {
 
   onHideEvent(hideEvent) {
     this.options.onHideEvent(hideEvent);
-
-    if (this.options.manualHide) { return; }
 
     this.shouldHide();
   }

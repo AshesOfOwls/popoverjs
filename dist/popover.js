@@ -278,8 +278,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var defaults = {
   showDelay: 0,
   hideDelay: 0,
-  manualShow: false,
-  manualHide: false,
   themeClass: 'popoverjs--default',
   unnecessaryRepositioning: false,
   resizePositioning: true,
@@ -799,8 +797,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var defaults = {
   showOn: ['trigger.click'],
   hideOn: ['document.click', 'popover.mouseleave'],
-  manualShow: false,
-  manualHide: false,
   onHideEvent: function onHideEvent() {}
 };
 
@@ -840,21 +836,40 @@ var Renderer = function () {
       this.triggerElement = this.options.triggerElement;
       this.popoverElement = this.options.popoverElement;
       this.attachmentElement = this.options.attachmentElement;
+      this.showOnObjects = [];
+      this.hideOnObjects = [];
     }
   }, {
     key: 'parseEvents',
     value: function parseEvents() {
+      this.parseShowEvents();
+      this.parseHideEvents();
+    }
+  }, {
+    key: 'parseShowEvents',
+    value: function parseShowEvents() {
       var showOn = this.options.showOn;
-      if (typeof showOn === 'string') {
-        this.showOnObjects = [this.parseEventObject(showOn)];
-      } else {
-        this.showOnObjects = showOn.map(this.parseEventObject.bind(this));
+      if (!showOn || showOn.length === 0) {
+        return;
       }
 
+      if (typeof showOn === 'string') {
+        this.showOnObjects = [this.parseEventObject(showOn)];
+      } else if (showOn && showOn.length > 0) {
+        this.showOnObjects = showOn.map(this.parseEventObject.bind(this));
+      }
+    }
+  }, {
+    key: 'parseHideEvents',
+    value: function parseHideEvents() {
       var hideOn = this.options.hideOn;
+      if (!hideOn || hideOn.length === 0) {
+        return;
+      }
+
       if (typeof hideOn === 'string') {
         this.hideOnObjects = [this.parseEventObject(hideOn)];
-      } else {
+      } else if (hideOn && hideOn.length > 0) {
         this.hideOnObjects = hideOn.map(this.parseEventObject.bind(this));
       }
     }
@@ -885,10 +900,6 @@ var Renderer = function () {
   }, {
     key: 'listenForRender',
     value: function listenForRender() {
-      if (this.options.manualShow) {
-        return;
-      }
-
       this.toggleRenderListeners(true);
     }
   }, {
@@ -896,10 +907,12 @@ var Renderer = function () {
     value: function toggleRenderListeners(isToggled) {
       var _this = this;
 
-      var method = isToggled ? 'addEventListener' : 'removeEventListener';
-      this.showOnObjects.forEach(function (showOn) {
-        showOn.element[method](showOn.event, _this.onTriggerClick.bind(_this, showOn.element, showOn.event));
-      });
+      if (this.showOnObjects.length > 0) {
+        var method = isToggled ? 'addEventListener' : 'removeEventListener';
+        this.showOnObjects.forEach(function (showOn) {
+          showOn.element[method](showOn.event, _this.onTriggerClick.bind(_this, showOn.element, showOn.event));
+        });
+      }
     }
   }, {
     key: 'onTriggerClick',
@@ -926,10 +939,12 @@ var Renderer = function () {
     value: function toggleHideListeners(isToggled) {
       var _this2 = this;
 
-      var method = isToggled ? 'addEventListener' : 'removeEventListener';
-      this.hideOnObjects.forEach(function (hideOn) {
-        hideOn.element[method](hideOn.event, _this2.isTryingToHide.bind(_this2, hideOn.element, hideOn.event));
-      });
+      if (this.hideOnObjects.length > 0) {
+        var method = isToggled ? 'addEventListener' : 'removeEventListener';
+        this.hideOnObjects.forEach(function (hideOn) {
+          hideOn.element[method](hideOn.event, _this2.isTryingToHide.bind(_this2, hideOn.element, hideOn.event));
+        });
+      }
     }
   }, {
     key: 'isTryingToHide',
@@ -960,10 +975,6 @@ var Renderer = function () {
     key: 'onHideEvent',
     value: function onHideEvent(hideEvent) {
       this.options.onHideEvent(hideEvent);
-
-      if (this.options.manualHide) {
-        return;
-      }
 
       this.shouldHide();
     }

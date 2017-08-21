@@ -10,8 +10,6 @@ import './styles/main.scss';
 const defaults = {
   showDelay: 0,
   hideDelay: 0,
-  manualShow: false,
-  manualHide: false,
   themeClass: 'popoverjs--default',
   unnecessaryRepositioning: false,
   resizePositioning: true,
