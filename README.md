@@ -48,7 +48,7 @@ Static popovers do not solve all of our problems though, we still need a positio
 
 ### How to install
 
-`npm install popoverjs`
+`npm install popover.js`
 
 ### Example
 
@@ -84,20 +84,174 @@ myPopover = new Popoverjs({
 })
 ```
 
-### API
+# API
 
-* popoverElement
-The element which the popover
-* attachmentElement
-* triggerElement
-* showOn
-* hideOn
-*
-* Constraints
-Constraints are an array of objects which determine the positioning of the popover element. For example,
+## Required
 
-```javascript
-  [{
+#### popoverElement
 
-  }]
+The popoverjs element.
+
+| Type | Default | Values |
+| --- |:---|---|
+| DOM node | null | DOM node |
+
+#### attachmentElement
+
+The element which the popover floats around.
+
+| Type | Default | Values |
+| --- |:---|---|
+| DOM node | null | DOM node |
+
+## Optional
+
+#### triggerElement
+
+The element which has listeners set up for rendering/showing the popover.
+
+| Type | Default | Values |
+| --- |:---|---|
+| DOM node | attachmentElement | DOM node |
+
+#### constraints
+
+Constraints are an array of objects which tell the popover how to flow around its attachment. The positioning system will loop over the constraints array to find the first position where it can exist in and style the popover accordingly. Here is an example of a constraints array:
+
 ```
+[{
+  popover: "top left",
+  attachment: "bottom center",
+}, {
+  popover: "top left",
+  attachment: "bottom center",
+}]
+```
+
+Each object must have a `popover` and `attachment` key. The values are a string which determine the popover / attachment positioning for that constraint. For instance, the first object will style the popover with an arrow in its `top left`, and have that arrow point to the `bottom center` of the attachment element. If the popover cannot exist in this position, then it will move on through the constraints array until it finds an acceptable spot.
+
+| Type | Default | Values |
+| --- |:---|---|
+| Array of Objects | See positioner.js | Array of Constraint Objects |
+
+#### unnecessaryRepositioning
+
+This popover system utilizes the constraints array to determine the positioning of the popover. When looping over this list, the popover system will always choose the lowest index constraint object that allows for the popover to exist in. This can have unintended consequences where the popover will try to reposition itself to a constraint object, despite the current popover position being completely fine. This `unnecessaryRepositioning` option, when set to true, will always position to the popover to fit within the lowest index constraint. If set to false, it will always stay in the latest constraint that it fit within to until that spot no longer is viable.
+
+| Type | Default | Values |
+| --- |:---|---|
+| Boolean | false | true \ false |
+
+#### showOn
+
+This is used by the renderer to determine when to show the popover. If set to null, it will not set up any listeners for showing the popover.
+
+Here is an example:
+
+`showOn: ['trigger.click']`
+
+This array of strings determines which elements and what events are tied to rendering/showing the popover. Each string is represented by two parts, the `element` and the `event`, each separated by a `.` (dot). Every time the event is detected on the element provided, it will try to show the popover. This array can have as many element/event pairs as you would like.
+
+**Available Elements:**
+`trigger`, `attachment`, `popover`, `document`
+
+**Events:**
+Any native HTML event names. (e.g. `mouseleave`, `click`)
+
+| Type | Default | Values |
+| --- |:---|---|
+| Array of Strings | `['trigger.click']` | Array of Strings |
+
+#### hideOn
+
+This is used by the renderer to determine when to show the popover. If set to null, it will not set up any listeners for hiding the popover.
+
+Here is an example:
+
+`hideOn: ['document.click']`
+
+This array of strings determines which elements and what events are tied to hiding the popover. Each string is represented by two parts, the `element` and the `event`, each separated by a `.` (dot). Every time the event is detected on the element provided, it will try to hide the popover. This array can have as many element/event pairs as you would like.
+
+**Available Elements:**
+`trigger`, `attachment`, `popover`, `document`
+
+**Events:**
+Any native HTML event names. (e.g. `mouseleave`, `click`)
+
+| Type | Default | Values |
+| --- |:---|---|
+| Array of Strings | `['document.click', 'popover.mouseleave']` | Array of Strings |
+
+#### resizePositioning
+
+If set to true, will try to reposition the popover every time the Document is resized.
+
+| Type | Default | Values |
+| --- |:---|---|
+| Boolean | true | true \ false |
+
+#### scrollPositioning
+
+If set to true, will try to reposition the popover every time the scroll parent is scrolled.
+
+| Type | Default | Values |
+| --- |:---|---|
+| Boolean | true | true \ false |
+
+#### applyClassesToAttachment
+
+Applies all of the constraint classes to the attachment element for more specific styling.
+
+| Type | Default | Values |
+| --- |:---|---|
+| Boolean | false | true \ false |
+
+#### dynamicWidth
+
+If set to true, will set the width of the popover element to the width of contained content.
+
+| Type | Default | Values |
+| --- |:---|---|
+| Boolean | false | true \ false |
+
+#### showDelay
+
+Delay a certain amount of milliseconds prior to showing the popover.
+
+| Type | Default | Values |
+| --- |:---|---|
+| Integer | 0 | Integer |
+
+#### hideDelay
+
+Delay a certain amount of milliseconds prior to hiding the popover.
+
+| Type | Default | Values |
+| --- |:---|---|
+| Integer | 0 | Integer |
+
+#### themeClass
+
+Applies this class to the popover element for theming purposes.
+
+| Type | Default | Values |
+| --- |:---|---|
+| String | null | String |
+
+## Callbacks
+
+#### onBeforeShow
+
+Gets called immediately prior to showing the popover.
+
+#### onAfterShow
+
+Gets called immediately after showing the popover.
+
+#### onBeforeHide
+
+Gets called immediately prior to hiding the popover.
+
+#### onAfterHide
+
+Gets called immediately after hiding the popover.
