@@ -1712,10 +1712,10 @@ var defaults = {
   scrollPositioning: true,
   applyClassesToAttachment: false,
   constraints: [{
-    popover: 'top left',
+    popover: 'top right',
     attachment: 'bottom right'
   }, {
-    popover: 'left center',
+    popover: 'left top',
     attachment: 'right center'
   }]
 };
@@ -1826,8 +1826,8 @@ var Positioner = function () {
       this.cssCache = {
         arrowSize: this.getArrowSize(),
         contentSize: this.getContentSize(),
-        attachmentOffset: Math.abs(this.popoverElement.offsetTop) - 1,
-        triggerOffset: Math.abs(this.popoverElement.offsetLeft),
+        primaryOffset: Math.abs(this.popoverElement.offsetTop) - 1,
+        secondaryOffset: Math.abs(this.popoverElement.offsetLeft),
         contentOffset: Math.abs(this.popoverContent.offsetLeft)
       };
 
@@ -2047,7 +2047,7 @@ var Positioner = function () {
   }, {
     key: 'isConstrainedByPrimary',
     value: function isConstrainedByPrimary(side) {
-      var originCoordinate = this.origins.attachment[side] + this.cssCache.attachmentOffset;
+      var originCoordinate = this.origins.attachment[side] + this.cssCache.primaryOffset;
       var popoverSize = this.getPopoverSizeFromSideCheck(side);
 
       if (side === 'left' || side === 'top') {
@@ -2079,7 +2079,7 @@ var Positioner = function () {
         case 'center':
           return 0;
         default:
-          return this.cssCache.attachmentOffset;
+          return this.cssCache.primaryOffset;
       }
     }
   }, {
@@ -2122,18 +2122,16 @@ var Positioner = function () {
         }
       }
 
-      var attachmentOffset = this.getAttachementOffsetForConstraint(constraint);
-
       switch (constraint.attachment.secondary) {
         default:
         case 'left':
-          return this.origins.attachment.left + this.cssCache.triggerOffset + attachmentOffset;
+          return this.origins.attachment.left + this.cssCache.secondaryOffset;
         case 'right':
-          return this.origins.attachment.right - this.cssCache.triggerOffset - attachmentOffset;
+          return this.origins.attachment.right - this.cssCache.secondaryOffset;
         case 'top':
-          return this.origins.attachment.top + this.cssCache.triggerOffset + attachmentOffset;
+          return this.origins.attachment.top + this.cssCache.secondaryOffset;
         case 'bottom':
-          return this.origins.attachment.bottom - this.cssCache.triggerOffset - attachmentOffset;
+          return this.origins.attachment.bottom - this.cssCache.secondaryOffset;
       }
     }
   }, {
