@@ -6,6 +6,7 @@ const defaults = {
   showOn: ['trigger.click'],
   hideOn: ['document.click', 'popover.mouseleave'],
   onHideEvent: () => {},
+  onShowEvent: () => {},
 };
 
 class Renderer {
@@ -112,6 +113,11 @@ class Renderer {
     e.stopImmediatePropagation();
 
     this.toggleRenderListeners(false);
+    this.onShowEvent(e);
+  }
+
+  onShowEvent(event) {
+    this.options.onShowEvent(event);
     this.shouldShow();
   }
 

@@ -802,7 +802,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var defaults = {
   showOn: ['trigger.click'],
   hideOn: ['document.click', 'popover.mouseleave'],
-  onHideEvent: function onHideEvent() {}
+  onHideEvent: function onHideEvent() {},
+  onShowEvent: function onShowEvent() {}
 };
 
 var Renderer = function () {
@@ -925,6 +926,12 @@ var Renderer = function () {
       e.stopImmediatePropagation();
 
       this.toggleRenderListeners(false);
+      this.onShowEvent(e);
+    }
+  }, {
+    key: 'onShowEvent',
+    value: function onShowEvent(event) {
+      this.options.onShowEvent(event);
       this.shouldShow();
     }
   }, {
