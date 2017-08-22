@@ -800,6 +800,7 @@ __webpack_require__(1);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var defaults = {
+  manualTriggering: false,
   showOn: ['trigger.click'],
   hideOn: ['document.click', 'popover.mouseleave'],
   onHideEvent: function onHideEvent() {},
@@ -932,6 +933,11 @@ var Renderer = function () {
     key: 'onShowEvent',
     value: function onShowEvent(event) {
       this.options.onShowEvent(event);
+
+      if (this.options.manualTriggering) {
+        return;
+      }
+
       this.shouldShow();
     }
   }, {
@@ -987,6 +993,10 @@ var Renderer = function () {
     key: 'onHideEvent',
     value: function onHideEvent(hideEvent) {
       this.options.onHideEvent(hideEvent);
+
+      if (this.options.manualTriggering) {
+        return;
+      }
 
       this.shouldHide();
     }

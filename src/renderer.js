@@ -3,6 +3,7 @@ import { oneEvent, toggleClassesOnElement, whichTransitionEvent } from './utils'
 import './styles/main.scss';
 
 const defaults = {
+  manualTriggering: false,
   showOn: ['trigger.click'],
   hideOn: ['document.click', 'popover.mouseleave'],
   onHideEvent: () => {},
@@ -118,6 +119,9 @@ class Renderer {
 
   onShowEvent(event) {
     this.options.onShowEvent(event);
+
+    if (this.options.manualTriggering) { return; }
+
     this.shouldShow();
   }
 
@@ -165,6 +169,8 @@ class Renderer {
 
   onHideEvent(hideEvent) {
     this.options.onHideEvent(hideEvent);
+
+    if (this.options.manualTriggering) { return; }
 
     this.shouldHide();
   }
