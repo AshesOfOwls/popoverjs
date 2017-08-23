@@ -11,7 +11,7 @@
   },
   "files": [
     "dist",
-    "src/styles/**/*.scss"
+    "src"
   ],
   "keywords": [],
   "author": "",
