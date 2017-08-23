@@ -884,25 +884,28 @@ var Renderer = function () {
     key: 'parseEventObject',
     value: function parseEventObject(eventString) {
       var object = eventString.split('.');
+      var eventObject = {};
 
       if (!object[1]) {
-        return {
+        eventObject = {
           element: this.triggerElement,
           event: eventString
         };
-      }
-
-      if (['body', 'document'].includes(object[0])) {
-        return {
+      } else if (['body', 'document'].includes(object[0])) {
+        eventObject = {
           element: document.body,
+          event: object[1]
+        };
+      } else {
+        eventObject = {
+          element: this[object[0] + 'Element'],
           event: object[1]
         };
       }
 
-      return {
-        element: this[object[0] + 'Element'],
-        event: object[1]
-      };
+      eventObject.callback = this.onTriggerClick.bind(this, eventObject.element, eventObject.event);
+
+      return eventObject;
     }
   }, {
     key: 'listenForRender',
@@ -912,12 +915,10 @@ var Renderer = function () {
   }, {
     key: 'toggleRenderListeners',
     value: function toggleRenderListeners(isToggled) {
-      var _this = this;
-
       if (this.showOnObjects.length > 0) {
         var method = isToggled ? 'addEventListener' : 'removeEventListener';
         this.showOnObjects.forEach(function (showOn) {
-          showOn.element[method](showOn.event, _this.onTriggerClick.bind(_this, showOn.element, showOn.event));
+          showOn.element[method](showOn.event, showOn.callback);
         });
       }
     }
@@ -955,12 +956,10 @@ var Renderer = function () {
   }, {
     key: 'toggleHideListeners',
     value: function toggleHideListeners(isToggled) {
-      var _this2 = this;
-
       if (this.hideOnObjects.length > 0) {
         var method = isToggled ? 'addEventListener' : 'removeEventListener';
         this.hideOnObjects.forEach(function (hideOn) {
-          hideOn.element[method](hideOn.event, _this2.isTryingToHide.bind(_this2, hideOn.element, hideOn.event));
+          hideOn.element[method](hideOn.event, hideOn.callback);
         });
       }
     }
@@ -1031,7 +1030,7 @@ var Renderer = function () {
   }, {
     key: 'shouldShow',
     value: function shouldShow() {
-      var _this3 = this;
+      var _this = this;
 
       if (this.isVisible || this.isForceClosing) {
         this.toggleRenderListeners(true);
@@ -1042,7 +1041,7 @@ var Renderer = function () {
 
       if (this.options.showDelay > 0) {
         this.showTimeout = setTimeout(function () {
-          _this3._show();
+          _this._show();
         }, this.options.showDelay);
       } else {
         this._show();
@@ -1078,7 +1077,7 @@ var Renderer = function () {
   }, {
     key: 'shouldHide',
     value: function shouldHide() {
-      var _this4 = this;
+      var _this2 = this;
 
       if (!this.isVisible) {
         return;
@@ -1088,7 +1087,7 @@ var Renderer = function () {
 
       if (this.options.hideDelay > 0) {
         this.hideTimeout = setTimeout(function () {
-          _this4._hide();
+          _this2._hide();
         }, this.options.hideDelay);
       } else {
         this._hide();

@@ -73,25 +73,28 @@ class Renderer {
 
   parseEventObject(eventString) {
     const object = eventString.split('.');
+    let eventObject = {};
 
     if (!object[1]) {
-      return {
+      eventObject = {
         element: this.triggerElement,
         event: eventString,
       };
-    }
-
-    if (['body', 'document'].includes(object[0])) {
-      return {
+    } else if (['body', 'document'].includes(object[0])) {
+      eventObject = {
         element: document.body,
+        event: object[1],
+      };
+    } else {
+      eventObject = {
+        element: this[`${object[0]}Element`],
         event: object[1],
       };
     }
 
-    return {
-      element: this[`${object[0]}Element`],
-      event: object[1],
-    };
+    eventObject.callback = this.onTriggerClick.bind(this, eventObject.element, eventObject.event);
+
+    return eventObject;
   }
 
   listenForRender() {
@@ -104,7 +107,7 @@ class Renderer {
       this.showOnObjects.forEach((showOn) => {
         showOn.element[method](
           showOn.event,
-          this.onTriggerClick.bind(this, showOn.element, showOn.event),
+          showOn.callback,
         );
       });
     }
@@ -141,7 +144,7 @@ class Renderer {
       this.hideOnObjects.forEach((hideOn) => {
         hideOn.element[method](
           hideOn.event,
-          this.isTryingToHide.bind(this, hideOn.element, hideOn.event),
+          hideOn.callback,
         );
       });
     }
