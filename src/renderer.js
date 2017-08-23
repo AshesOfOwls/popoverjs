@@ -53,10 +53,12 @@ class Renderer {
     const showOn = this.options.showOn;
     if (!showOn || showOn.length === 0) { return; }
 
+    const callback = this.onTriggerClick;
+
     if (typeof showOn === 'string') {
-      this.showOnObjects = [this.parseEventObject(showOn)];
+      this.showOnObjects = [this.parseEventObject(callback, showOn)];
     } else if (showOn && showOn.length > 0) {
-      this.showOnObjects = showOn.map(this.parseEventObject.bind(this));
+      this.showOnObjects = showOn.map(this.parseEventObject.bind(this, callback));
     }
   }
 
@@ -64,14 +66,16 @@ class Renderer {
     const hideOn = this.options.hideOn;
     if (!hideOn || hideOn.length === 0) { return; }
 
+    const callback = this.isTryingToHide;
+
     if (typeof hideOn === 'string') {
-      this.hideOnObjects = [this.parseEventObject(hideOn)];
+      this.hideOnObjects = [this.parseEventObject(callback, hideOn)];
     } else if (hideOn && hideOn.length > 0) {
-      this.hideOnObjects = hideOn.map(this.parseEventObject.bind(this));
+      this.hideOnObjects = hideOn.map(this.parseEventObject.bind(this, callback));
     }
   }
 
-  parseEventObject(eventString) {
+  parseEventObject(callback, eventString) {
     const object = eventString.split('.');
     let eventObject = {};
 
@@ -92,7 +96,7 @@ class Renderer {
       };
     }
 
-    eventObject.callback = this.onTriggerClick.bind(this, eventObject.element, eventObject.event);
+    eventObject.callback = callback.bind(this, eventObject.element, eventObject.event);
 
     return eventObject;
   }
