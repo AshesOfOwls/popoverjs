@@ -970,8 +970,6 @@ var Renderer = function () {
   }, {
     key: 'isTryingToHide',
     value: function isTryingToHide(element, event, e) {
-      this.toggleHideListeners(false);
-
       if (element === document.body) {
         return this.onDocumentClick(e);
       }
