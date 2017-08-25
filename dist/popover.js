@@ -1726,6 +1726,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var defaults = {
   dynamicWidth: false,
+  maintainAttachmentWidth: false,
   attachmentElement: null,
   constraintElement: null,
   unnecessaryRepositioning: true,
@@ -1783,7 +1784,6 @@ var Positioner = function () {
 
       this.resetClasses();
       this.cacheCssOffsets();
-      this.updateContentWidth();
     }
   }, {
     key: 'setUpContainer',
@@ -1873,10 +1873,13 @@ var Positioner = function () {
     key: 'updateContentWidth',
     value: function updateContentWidth() {
       if (!this.options.dynamicWidth) {
-        return;
+        this.popoverContent.style.width = this.cssCache.contentSize + 'px';
       }
 
-      this.popoverContent.style.width = this.cssCache.contentSize + 'px';
+      if (this.options.maintainAttachmentWidth) {
+        console.log("?", this.origins);
+        this.popoverContent.style.width = this.origins.attachment.width + 'px';
+      }
     }
   }, {
     key: 'getConstraintParent',
@@ -2024,6 +2027,7 @@ var Positioner = function () {
     value: function refreshAllElementData() {
       this.refreshParentOrigin();
       this.refreshElementOrigins();
+      this.updateContentWidth();
     }
   }, {
     key: 'refreshParentOrigin',

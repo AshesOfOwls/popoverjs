@@ -2,6 +2,7 @@ import { toggleClassesOnElement, getElementOrigin, getWindowOrigin, throttle } f
 
 const defaults = {
   dynamicWidth: false,
+  maintainAttachmentWidth: false,
   attachmentElement: null,
   constraintElement: null,
   unnecessaryRepositioning: true,
@@ -61,7 +62,6 @@ class Positioner {
 
     this.resetClasses();
     this.cacheCssOffsets();
-    this.updateContentWidth();
   }
 
   setUpContainer() {
@@ -132,9 +132,14 @@ class Positioner {
   }
 
   updateContentWidth() {
-    if (!this.options.dynamicWidth) { return; }
+    if (!this.options.dynamicWidth) {
+      this.popoverContent.style.width = `${this.cssCache.contentSize}px`;
+    }
 
-    this.popoverContent.style.width = `${this.cssCache.contentSize}px`;
+    if (this.options.maintainAttachmentWidth) {
+      console.log("?", this.origins);
+      this.popoverContent.style.width = `${this.origins.attachment.width}px`;
+    }
   }
 
   getConstraintParent() {
@@ -259,6 +264,7 @@ class Positioner {
   refreshAllElementData() {
     this.refreshParentOrigin();
     this.refreshElementOrigins();
+    this.updateContentWidth();
   }
 
   refreshParentOrigin() {
