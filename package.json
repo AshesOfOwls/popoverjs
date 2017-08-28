@@ -1,6 +1,6 @@
 {
   "name": "popover.js",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "",
   "main": "dist/popover.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "test:watch": "./node_modules/karma/bin/karma start"
   },
   "resolutions": {
-    "src/mixin.scss": "src/mixin.scss"
+    "src/styles/mixin.scss": "src/styles/mixin.scss"
   },
   "files": [
     "dist/",
