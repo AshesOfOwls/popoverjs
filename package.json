@@ -1,6 +1,6 @@
 {
   "name": "popover.js",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "",
   "main": "dist/popover.js",
   "scripts": {
@@ -13,8 +13,8 @@
     "src/mixin.scss": "src/mixin.scss"
   },
   "files": [
-    "dist",
-    "src"
+    "dist/",
+    "src/"
   ],
   "keywords": [],
   "author": "",
