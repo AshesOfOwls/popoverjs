@@ -1,6 +1,6 @@
 {
   "name": "popover.js",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "",
   "main": "dist/popover.js",
   "scripts": {
@@ -8,6 +8,9 @@
     "build:watch": "webpack --watch",
     "test": "./node_modules/karma/bin/karma start",
     "test:watch": "./node_modules/karma/bin/karma start"
+  },
+  "resolutions": {
+    "src/mixin.scss": "src/mixin.scss"
   },
   "files": [
     "dist",
