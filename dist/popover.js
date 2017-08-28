@@ -1870,12 +1870,11 @@ var Positioner = function () {
   }, {
     key: 'updateContentWidth',
     value: function updateContentWidth() {
-      if (!this.options.dynamicWidth) {
+      if (this.options.dynamicWidth) {
         this.popoverContent.style.width = this.cssCache.contentSize + 'px';
       }
 
       if (this.options.maintainAttachmentWidth) {
-        console.log("?", this.origins);
         this.popoverContent.style.width = this.origins.attachment.width + 'px';
       }
     }
