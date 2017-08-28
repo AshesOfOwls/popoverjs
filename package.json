@@ -1,6 +1,6 @@
 {
   "name": "popover.js",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "",
   "main": "dist/popover.js",
   "scripts": {
@@ -14,7 +14,8 @@
   },
   "files": [
     "dist/",
-    "src/"
+    "src/",
+    "src/styles/"
   ],
   "keywords": [],
   "author": "",
