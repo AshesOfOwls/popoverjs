@@ -1,7 +1,5 @@
 import { oneEvent, toggleClassesOnElement, whichTransitionEvent } from './utils';
 
-import './styles/main.scss';
-
 const defaults = {
   manualTriggering: false,
   showOn: ['trigger.click'],

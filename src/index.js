@@ -5,7 +5,7 @@ import Positioner from './positioner';
 
 import { error } from './utils';
 
-import './styles/main.scss';
+import './styles/_main.scss';
 
 const defaults = {
   showDelay: 0,
