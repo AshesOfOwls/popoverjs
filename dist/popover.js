@@ -238,7 +238,7 @@ var _positioner2 = _interopRequireDefault(_positioner);
 
 var _utils = __webpack_require__(0);
 
-__webpack_require__(5);
+__webpack_require__(10);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1135,7 +1135,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _documentOffset = __webpack_require__(5);
+
+var _documentOffset2 = _interopRequireDefault(_documentOffset);
+
 var _utils = __webpack_require__(0);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1160,6 +1166,17 @@ var sizerClasses = ['popoverjs--popover-primary-bottom', 'popoverjs--popover-sec
 
 var generateClassesForConstraint = function generateClassesForConstraint(constraint) {
   return ['popoverjs--popover-primary-' + constraint.popover.primary, 'popoverjs--popover-secondary-' + constraint.popover.secondary, 'popoverjs--attachment-primary-' + constraint.attachment.primary, 'popoverjs--attachment-secondary-' + constraint.attachment.secondary];
+};
+
+var getBodyOffsets = function getBodyOffsets() {
+  var computedBodyStyles = getComputedStyle(document.body);
+
+  return {
+    left: parseInt(computedBodyStyles.marginLeft, 10),
+    top: parseInt(computedBodyStyles.marginTop, 10),
+    right: parseInt(computedBodyStyles.marginRight, 10),
+    bottom: parseInt(computedBodyStyles.marginBottom, 10)
+  };
 };
 
 var Positioner = function () {
@@ -1242,13 +1259,12 @@ var Positioner = function () {
       }
 
       var attachmentOrigin = this.origins.attachment;
-      var bodyTopOffset = parseInt(window.getComputedStyle(document.body).marginTop, 10);
-      var top = attachmentOrigin.top - bodyTopOffset;
+
       var origin = {
         height: attachmentOrigin.height + 'px',
         width: attachmentOrigin.width + 'px',
-        left: attachmentOrigin.left + 'px',
-        top: top + 'px'
+        left: attachmentOrigin.left - this.cssCache.body.left + 'px',
+        top: attachmentOrigin.top - this.cssCache.body.top + 'px'
       };
 
       Object.assign(this.containerElement.style, origin);
@@ -1263,7 +1279,8 @@ var Positioner = function () {
         contentSize: this.getContentSize(),
         primaryOffset: Math.abs(this.popoverElement.offsetTop) - 1,
         secondaryOffset: Math.abs(this.popoverElement.offsetLeft),
-        contentOffset: Math.abs(this.popoverContent.offsetLeft)
+        contentOffset: Math.abs(this.popoverContent.offsetLeft),
+        body: getBodyOffsets()
       };
 
       this.togglePopoverClasses(sizerClasses, false);
@@ -1456,9 +1473,14 @@ var Positioner = function () {
   }, {
     key: 'refreshElementOrigins',
     value: function refreshElementOrigins() {
+      this.origins.attachment = this.getAttachmentOrigin();
       this.origins.popover = (0, _utils.getElementOrigin)(this.popoverContent);
-      this.origins.attachment = (0, _utils.getElementOrigin)(this.attachmentElement);
       this.origins.body = (0, _utils.getElementOrigin)(document.body);
+    }
+  }, {
+    key: 'getAttachmentOrigin',
+    value: function getAttachmentOrigin() {
+      return Object.assign({}, (0, _utils.getElementOrigin)(this.attachmentElement), (0, _documentOffset2.default)(this.attachmentElement));
     }
   }, {
     key: 'canFitInto',
@@ -1645,10 +1667,495 @@ exports.default = Positioner;
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var support = __webpack_require__(6)
+var getDocument = __webpack_require__(8)
+var withinElement = __webpack_require__(9)
+
+/**
+ * Get offset of a DOM Element or Range within the document.
+ *
+ * @param {DOMElement|Range} el - the DOM element or Range instance to measure
+ * @return {Object} An object with `top` and `left` Number values
+ * @public
+ */
+
+module.exports = function offset(el) {
+  var doc = getDocument(el)
+  if (!doc) return
+
+  // Make sure it's not a disconnected DOM node
+  if (!withinElement(el, doc)) return
+
+  var body = doc.body
+  if (body === el) {
+    return bodyOffset(el)
+  }
+
+  var box = { top: 0, left: 0 }
+  if ( typeof el.getBoundingClientRect !== "undefined" ) {
+    // If we don't have gBCR, just use 0,0 rather than error
+    // BlackBerry 5, iOS 3 (original iPhone)
+    box = el.getBoundingClientRect()
+
+    if (el.collapsed && box.left === 0 && box.top === 0) {
+      // collapsed Range instances sometimes report 0, 0
+      // see: http://stackoverflow.com/a/6847328/376773
+      var span = doc.createElement("span");
+
+      // Ensure span has dimensions and position by
+      // adding a zero-width space character
+      span.appendChild(doc.createTextNode("\u200b"));
+      el.insertNode(span);
+      box = span.getBoundingClientRect();
+
+      // Remove temp SPAN and glue any broken text nodes back together
+      var spanParent = span.parentNode;
+      spanParent.removeChild(span);
+      spanParent.normalize();
+    }
+  }
+
+  var docEl = doc.documentElement
+  var clientTop  = docEl.clientTop  || body.clientTop  || 0
+  var clientLeft = docEl.clientLeft || body.clientLeft || 0
+  var scrollTop  = window.pageYOffset || docEl.scrollTop
+  var scrollLeft = window.pageXOffset || docEl.scrollLeft
+
+  return {
+    top: box.top  + scrollTop  - clientTop,
+    left: box.left + scrollLeft - clientLeft
+  }
+}
+
+function bodyOffset(body) {
+  var top = body.offsetTop
+  var left = body.offsetLeft
+
+  if (support.doesNotIncludeMarginInBodyOffset) {
+    top  += parseFloat(body.style.marginTop || 0)
+    left += parseFloat(body.style.marginLeft || 0)
+  }
+
+  return {
+    top: top,
+    left: left
+  }
+}
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var domready = __webpack_require__(7)
+
+module.exports = (function() {
+
+	var support,
+		all,
+		a,
+		select,
+		opt,
+		input,
+		fragment,
+		eventName,
+		i,
+		isSupported,
+		clickFn,
+		div = document.createElement("div");
+
+	// Setup
+	div.setAttribute( "className", "t" );
+	div.innerHTML = "  <link/><table></table><a href='/a'>a</a><input type='checkbox'/>";
+
+	// Support tests won't run in some limited or non-browser environments
+	all = div.getElementsByTagName("*");
+	a = div.getElementsByTagName("a")[ 0 ];
+	if ( !all || !a || !all.length ) {
+		return {};
+	}
+
+	// First batch of tests
+	select = document.createElement("select");
+	opt = select.appendChild( document.createElement("option") );
+	input = div.getElementsByTagName("input")[ 0 ];
+
+	a.style.cssText = "top:1px;float:left;opacity:.5";
+	support = {
+		// IE strips leading whitespace when .innerHTML is used
+		leadingWhitespace: ( div.firstChild.nodeType === 3 ),
+
+		// Make sure that tbody elements aren't automatically inserted
+		// IE will insert them into empty tables
+		tbody: !div.getElementsByTagName("tbody").length,
+
+		// Make sure that link elements get serialized correctly by innerHTML
+		// This requires a wrapper element in IE
+		htmlSerialize: !!div.getElementsByTagName("link").length,
+
+		// Get the style information from getAttribute
+		// (IE uses .cssText instead)
+		style: /top/.test( a.getAttribute("style") ),
+
+		// Make sure that URLs aren't manipulated
+		// (IE normalizes it by default)
+		hrefNormalized: ( a.getAttribute("href") === "/a" ),
+
+		// Make sure that element opacity exists
+		// (IE uses filter instead)
+		// Use a regex to work around a WebKit issue. See #5145
+		opacity: /^0.5/.test( a.style.opacity ),
+
+		// Verify style float existence
+		// (IE uses styleFloat instead of cssFloat)
+		cssFloat: !!a.style.cssFloat,
+
+		// Make sure that if no value is specified for a checkbox
+		// that it defaults to "on".
+		// (WebKit defaults to "" instead)
+		checkOn: ( input.value === "on" ),
+
+		// Make sure that a selected-by-default option has a working selected property.
+		// (WebKit defaults to false instead of true, IE too, if it's in an optgroup)
+		optSelected: opt.selected,
+
+		// Test setAttribute on camelCase class. If it works, we need attrFixes when doing get/setAttribute (ie6/7)
+		getSetAttribute: div.className !== "t",
+
+		// Tests for enctype support on a form (#6743)
+		enctype: !!document.createElement("form").enctype,
+
+		// Makes sure cloning an html5 element does not cause problems
+		// Where outerHTML is undefined, this still works
+		html5Clone: document.createElement("nav").cloneNode( true ).outerHTML !== "<:nav></:nav>",
+
+		// jQuery.support.boxModel DEPRECATED in 1.8 since we don't support Quirks Mode
+		boxModel: ( document.compatMode === "CSS1Compat" ),
+
+		// Will be defined later
+		submitBubbles: true,
+		changeBubbles: true,
+		focusinBubbles: false,
+		deleteExpando: true,
+		noCloneEvent: true,
+		inlineBlockNeedsLayout: false,
+		shrinkWrapBlocks: false,
+		reliableMarginRight: true,
+		boxSizingReliable: true,
+		pixelPosition: false
+	};
+
+	// Make sure checked status is properly cloned
+	input.checked = true;
+	support.noCloneChecked = input.cloneNode( true ).checked;
+
+	// Make sure that the options inside disabled selects aren't marked as disabled
+	// (WebKit marks them as disabled)
+	select.disabled = true;
+	support.optDisabled = !opt.disabled;
+
+	// Test to see if it's possible to delete an expando from an element
+	// Fails in Internet Explorer
+	try {
+		delete div.test;
+	} catch( e ) {
+		support.deleteExpando = false;
+	}
+
+	if ( !div.addEventListener && div.attachEvent && div.fireEvent ) {
+		div.attachEvent( "onclick", clickFn = function() {
+			// Cloning a node shouldn't copy over any
+			// bound event handlers (IE does this)
+			support.noCloneEvent = false;
+		});
+		div.cloneNode( true ).fireEvent("onclick");
+		div.detachEvent( "onclick", clickFn );
+	}
+
+	// Check if a radio maintains its value
+	// after being appended to the DOM
+	input = document.createElement("input");
+	input.value = "t";
+	input.setAttribute( "type", "radio" );
+	support.radioValue = input.value === "t";
+
+	input.setAttribute( "checked", "checked" );
+
+	// #11217 - WebKit loses check when the name is after the checked attribute
+	input.setAttribute( "name", "t" );
+
+	div.appendChild( input );
+	fragment = document.createDocumentFragment();
+	fragment.appendChild( div.lastChild );
+
+	// WebKit doesn't clone checked state correctly in fragments
+	support.checkClone = fragment.cloneNode( true ).cloneNode( true ).lastChild.checked;
+
+	// Check if a disconnected checkbox will retain its checked
+	// value of true after appended to the DOM (IE6/7)
+	support.appendChecked = input.checked;
+
+	fragment.removeChild( input );
+	fragment.appendChild( div );
+
+	// Technique from Juriy Zaytsev
+	// http://perfectionkills.com/detecting-event-support-without-browser-sniffing/
+	// We only care about the case where non-standard event systems
+	// are used, namely in IE. Short-circuiting here helps us to
+	// avoid an eval call (in setAttribute) which can cause CSP
+	// to go haywire. See: https://developer.mozilla.org/en/Security/CSP
+	if ( !div.addEventListener ) {
+		for ( i in {
+			submit: true,
+			change: true,
+			focusin: true
+		}) {
+			eventName = "on" + i;
+			isSupported = ( eventName in div );
+			if ( !isSupported ) {
+				div.setAttribute( eventName, "return;" );
+				isSupported = ( typeof div[ eventName ] === "function" );
+			}
+			support[ i + "Bubbles" ] = isSupported;
+		}
+	}
+
+	// Run tests that need a body at doc ready
+	domready(function() {
+		var container, div, tds, marginDiv,
+			divReset = "padding:0;margin:0;border:0;display:block;overflow:hidden;box-sizing:content-box;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;",
+			body = document.getElementsByTagName("body")[0];
+
+		if ( !body ) {
+			// Return for frameset docs that don't have a body
+			return;
+		}
+
+		container = document.createElement("div");
+		container.style.cssText = "visibility:hidden;border:0;width:0;height:0;position:static;top:0;margin-top:1px";
+		body.insertBefore( container, body.firstChild );
+
+		// Construct the test element
+		div = document.createElement("div");
+		container.appendChild( div );
+
+    //Check if table cells still have offsetWidth/Height when they are set
+    //to display:none and there are still other visible table cells in a
+    //table row; if so, offsetWidth/Height are not reliable for use when
+    //determining if an element has been hidden directly using
+    //display:none (it is still safe to use offsets if a parent element is
+    //hidden; don safety goggles and see bug #4512 for more information).
+    //(only IE 8 fails this test)
+		div.innerHTML = "<table><tr><td></td><td>t</td></tr></table>";
+		tds = div.getElementsByTagName("td");
+		tds[ 0 ].style.cssText = "padding:0;margin:0;border:0;display:none";
+		isSupported = ( tds[ 0 ].offsetHeight === 0 );
+
+		tds[ 0 ].style.display = "";
+		tds[ 1 ].style.display = "none";
+
+		// Check if empty table cells still have offsetWidth/Height
+		// (IE <= 8 fail this test)
+		support.reliableHiddenOffsets = isSupported && ( tds[ 0 ].offsetHeight === 0 );
+
+		// Check box-sizing and margin behavior
+		div.innerHTML = "";
+		div.style.cssText = "box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;padding:1px;border:1px;display:block;width:4px;margin-top:1%;position:absolute;top:1%;";
+		support.boxSizing = ( div.offsetWidth === 4 );
+		support.doesNotIncludeMarginInBodyOffset = ( body.offsetTop !== 1 );
+
+		// NOTE: To any future maintainer, we've window.getComputedStyle
+		// because jsdom on node.js will break without it.
+		if ( window.getComputedStyle ) {
+			support.pixelPosition = ( window.getComputedStyle( div, null ) || {} ).top !== "1%";
+			support.boxSizingReliable = ( window.getComputedStyle( div, null ) || { width: "4px" } ).width === "4px";
+
+			// Check if div with explicit width and no margin-right incorrectly
+			// gets computed margin-right based on width of container. For more
+			// info see bug #3333
+			// Fails in WebKit before Feb 2011 nightlies
+			// WebKit Bug 13343 - getComputedStyle returns wrong value for margin-right
+			marginDiv = document.createElement("div");
+			marginDiv.style.cssText = div.style.cssText = divReset;
+			marginDiv.style.marginRight = marginDiv.style.width = "0";
+			div.style.width = "1px";
+			div.appendChild( marginDiv );
+			support.reliableMarginRight =
+				!parseFloat( ( window.getComputedStyle( marginDiv, null ) || {} ).marginRight );
+		}
+
+		if ( typeof div.style.zoom !== "undefined" ) {
+			// Check if natively block-level elements act like inline-block
+			// elements when setting their display to 'inline' and giving
+			// them layout
+			// (IE < 8 does this)
+			div.innerHTML = "";
+			div.style.cssText = divReset + "width:1px;padding:1px;display:inline;zoom:1";
+			support.inlineBlockNeedsLayout = ( div.offsetWidth === 3 );
+
+			// Check if elements with layout shrink-wrap their children
+			// (IE 6 does this)
+			div.style.display = "block";
+			div.style.overflow = "visible";
+			div.innerHTML = "<div></div>";
+			div.firstChild.style.width = "5px";
+			support.shrinkWrapBlocks = ( div.offsetWidth !== 3 );
+
+			container.style.zoom = 1;
+		}
+
+		// Null elements to avoid leaks in IE
+		body.removeChild( container );
+		container = div = tds = marginDiv = null;
+	});
+
+	// Null elements to avoid leaks in IE
+	fragment.removeChild( div );
+	all = a = select = opt = input = fragment = div = null;
+
+	return support;
+})();
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*!
+  * domready (c) Dustin Diaz 2014 - License MIT
+  */
+!function (name, definition) {
+
+  if (true) module.exports = definition()
+  else if (typeof define == 'function' && typeof define.amd == 'object') define(definition)
+  else this[name] = definition()
+
+}('domready', function () {
+
+  var fns = [], listener
+    , doc = document
+    , hack = doc.documentElement.doScroll
+    , domContentLoaded = 'DOMContentLoaded'
+    , loaded = (hack ? /^loaded|^c/ : /^loaded|^i|^c/).test(doc.readyState)
+
+
+  if (!loaded)
+  doc.addEventListener(domContentLoaded, listener = function () {
+    doc.removeEventListener(domContentLoaded, listener)
+    loaded = 1
+    while (listener = fns.shift()) listener()
+  })
+
+  return function (fn) {
+    loaded ? setTimeout(fn, 0) : fns.push(fn)
+  }
+
+});
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports) {
+
+
+/**
+ * Module exports.
+ */
+
+module.exports = getDocument;
+
+// defined by w3c
+var DOCUMENT_NODE = 9;
+
+/**
+ * Returns `true` if `w` is a Document object, or `false` otherwise.
+ *
+ * @param {?} d - Document object, maybe
+ * @return {Boolean}
+ * @private
+ */
+
+function isDocument (d) {
+  return d && d.nodeType === DOCUMENT_NODE;
+}
+
+/**
+ * Returns the `document` object associated with the given `node`, which may be
+ * a DOM element, the Window object, a Selection, a Range. Basically any DOM
+ * object that references the Document in some way, this function will find it.
+ *
+ * @param {Mixed} node - DOM node, selection, or range in which to find the `document` object
+ * @return {Document} the `document` object associated with `node`
+ * @public
+ */
+
+function getDocument(node) {
+  if (isDocument(node)) {
+    return node;
+
+  } else if (isDocument(node.ownerDocument)) {
+    return node.ownerDocument;
+
+  } else if (isDocument(node.document)) {
+    return node.document;
+
+  } else if (node.parentNode) {
+    return getDocument(node.parentNode);
+
+  // Range support
+  } else if (node.commonAncestorContainer) {
+    return getDocument(node.commonAncestorContainer);
+
+  } else if (node.startContainer) {
+    return getDocument(node.startContainer);
+
+  // Selection support
+  } else if (node.anchorNode) {
+    return getDocument(node.anchorNode);
+  }
+}
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports) {
+
+
+/**
+ * Check if the DOM element `child` is within the given `parent` DOM element.
+ *
+ * @param {DOMElement|Range} child - the DOM element or Range to check if it's within `parent`
+ * @param {DOMElement} parent  - the parent node that `child` could be inside of
+ * @return {Boolean} True if `child` is within `parent`. False otherwise.
+ * @public
+ */
+
+module.exports = function within (child, parent) {
+  // don't throw if `child` is null
+  if (!child) return false;
+
+  // Range support
+  if (child.commonAncestorContainer) child = child.commonAncestorContainer;
+  else if (child.endContainer) child = child.endContainer;
+
+  // traverse up the `parentNode` properties until `parent` is found
+  var node = child;
+  while (node = node.parentNode) {
+    if (node == parent) return true;
+  }
+
+  return false;
+};
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(6);
+var content = __webpack_require__(11);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -1656,7 +2163,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(8)(content, options);
+var update = __webpack_require__(13)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -1673,21 +2180,21 @@ if(false) {
 }
 
 /***/ }),
-/* 6 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(7)(undefined);
+exports = module.exports = __webpack_require__(12)(undefined);
 // imports
 
 
 // module
-exports.push([module.i, "/**\n  * Local Variables\n  *\n  * $arrow_hypotenuse_to_side_ratio:\n  * The $arrow_hypotenuse_to_side_ratio is important and should not be changed.\n  * In order to get an arrow, we are currently hacking it to be a square rotated\n  * at a 45 degree angle, and cut off via parent container overflow. Because we\n  * can only control the height/width of a box, setting the size of the arrow\n  * becomes difficult when it is rotated (Because the diagnol hypotenuse within\n  * a box is longer than its sides). To fix this, we can instead take the size\n  * which would be the hypotenuse and convert that to be the correct side\n  * length for the box. Since we are dealing with equal length sides, the .707\n  * will be consistent enough for that conversion.\n  */\n.popoverjs {\n  height: 1px;\n  pointer-events: all;\n  position: absolute;\n  visibility: hidden;\n  width: 1px; }\n  .popoverjs.popoverjs--is-visible {\n    visibility: visible; }\n  .popoverjs-arrow:after {\n    background-color: #ffffff; }\n  .popoverjs-content {\n    background-color: white;\n    box-sizing: border-box;\n    position: absolute; }\n  .popoverjs--detached-container {\n    position: absolute;\n    pointer-events: none; }\n  .popoverjs--wrapper {\n    display: inline-block;\n    position: relative; }\n\n.popoverjs--default > .popoverjs-arrow {\n  overflow: hidden;\n  position: absolute;\n  z-index: 5; }\n\n.popoverjs--default > .popoverjs-arrow:after {\n  content: \"\";\n  position: absolute;\n  width: 11.312px;\n  height: 11.312px;\n  transform: translateX(-50%) translateY(-50%) rotate(45deg);\n  top: 50%;\n  left: 50%; }\n\n.popoverjs--default.popoverjs--popover-primary-bottom > .popoverjs-arrow,\n.popoverjs--default.popoverjs--popover-primary-top > .popoverjs-arrow {\n  left: -8px;\n  height: 8px;\n  width: 16px; }\n\n.popoverjs--default.popoverjs--popover-primary-bottom > .popoverjs-arrow {\n  bottom: auto;\n  top: -8px; }\n  .popoverjs--default.popoverjs--popover-primary-bottom > .popoverjs-arrow:after {\n    margin-top: -4px; }\n\n.popoverjs--default.popoverjs--popover-primary-top > .popoverjs-arrow {\n  bottom: -8px;\n  top: auto; }\n  .popoverjs--default.popoverjs--popover-primary-top > .popoverjs-arrow:after {\n    margin-top: 4px; }\n\n.popoverjs--default.popoverjs--popover-primary-left > .popoverjs-arrow,\n.popoverjs--default.popoverjs--popover-primary-right > .popoverjs-arrow {\n  bottom: -8px;\n  height: 16px;\n  width: 8px; }\n\n.popoverjs--default.popoverjs--popover-primary-right > .popoverjs-arrow {\n  left: -8px;\n  right: auto; }\n  .popoverjs--default.popoverjs--popover-primary-right > .popoverjs-arrow:after {\n    margin-left: -4px; }\n\n.popoverjs--default.popoverjs--popover-primary-left > .popoverjs-arrow {\n  left: auto;\n  right: -8px; }\n  .popoverjs--default.popoverjs--popover-primary-left > .popoverjs-arrow:after {\n    margin-left: 4px; }\n\n.popoverjs--default.popoverjs--attachment-primary-bottom {\n  bottom: -1px; }\n\n.popoverjs--default.popoverjs--attachment-primary-top {\n  top: -1px; }\n\n.popoverjs--default.popoverjs--attachment-primary-right {\n  right: -1px; }\n\n.popoverjs--default.popoverjs--attachment-primary-left {\n  left: -1px; }\n\n.popoverjs--default.popoverjs--attachment-secondary-bottom {\n  bottom: 16px; }\n\n.popoverjs--default.popoverjs--attachment-secondary-top {\n  top: 16px; }\n\n.popoverjs--default.popoverjs--attachment-secondary-right {\n  right: 16px; }\n\n.popoverjs--default.popoverjs--attachment-secondary-left {\n  left: 16px; }\n\n.popoverjs--default.popoverjs--attachment-primary-top.popoverjs--attachment-secondary-middle, .popoverjs--default.popoverjs--attachment-primary-bottom.popoverjs--attachment-secondary-middle, .popoverjs--default.popoverjs--attachment-primary-top.popoverjs--attachment-secondary-center, .popoverjs--default.popoverjs--attachment-primary-bottom.popoverjs--attachment-secondary-center {\n  left: 50%; }\n\n.popoverjs--default.popoverjs--attachment-primary-left.popoverjs--attachment-secondary-middle, .popoverjs--default.popoverjs--attachment-primary-right.popoverjs--attachment-secondary-middle, .popoverjs--default.popoverjs--attachment-primary-left.popoverjs--attachment-secondary-center, .popoverjs--default.popoverjs--attachment-primary-right.popoverjs--attachment-secondary-center {\n  top: 50%; }\n\n.popoverjs--default.popoverjs--popover-primary-bottom > .popoverjs-content {\n  bottom: 9px; }\n\n.popoverjs--default.popoverjs--popover-primary-top > .popoverjs-content {\n  top: 9px; }\n\n.popoverjs--default.popoverjs--popover-primary-right > .popoverjs-content {\n  right: 9px; }\n\n.popoverjs--default.popoverjs--popover-primary-left > .popoverjs-content {\n  left: 9px; }\n\n.popoverjs--default.popoverjs--popover-secondary-bottom > .popoverjs-content {\n  margin-top: 18px;\n  transform: translateY(-100%); }\n\n.popoverjs--default.popoverjs--popover-secondary-top > .popoverjs-content {\n  margin-top: -18px;\n  transform: translateY(0%); }\n\n.popoverjs--default.popoverjs--popover-secondary-right > .popoverjs-content {\n  right: -18px; }\n\n.popoverjs--default.popoverjs--popover-secondary-left > .popoverjs-content {\n  left: -18px; }\n\n.popoverjs--default.popoverjs--popover-primary-bottom.popoverjs--popover-secondary-middle > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-top.popoverjs--popover-secondary-middle > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-bottom.popoverjs--popover-secondary-center > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-top.popoverjs--popover-secondary-center > .popoverjs-content {\n  left: 0;\n  transform: translateX(-50%); }\n\n.popoverjs--default.popoverjs--popover-primary-left.popoverjs--popover-secondary-middle > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-right.popoverjs--popover-secondary-middle > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-left.popoverjs--popover-secondary-center > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-right.popoverjs--popover-secondary-center > .popoverjs-content {\n  top: 0;\n  transform: translateY(-50%); }\n", ""]);
+exports.push([module.i, "/**\n  * Local Variables\n  *\n  * $arrow_hypotenuse_to_side_ratio:\n  * The $arrow_hypotenuse_to_side_ratio is important and should not be changed.\n  * In order to get an arrow, we are currently hacking it to be a square rotated\n  * at a 45 degree angle, and cut off via parent container overflow. Because we\n  * can only control the height/width of a box, setting the size of the arrow\n  * becomes difficult when it is rotated (Because the diagnol hypotenuse within\n  * a box is longer than its sides). To fix this, we can instead take the size\n  * which would be the hypotenuse and convert that to be the correct side\n  * length for the box. Since we are dealing with equal length sides, the .707\n  * will be consistent enough for that conversion.\n  */\n.popoverjs {\n  height: 1px;\n  pointer-events: all;\n  position: absolute;\n  visibility: hidden;\n  width: 1px; }\n  .popoverjs.popoverjs--is-visible {\n    visibility: visible; }\n  .popoverjs-arrow:after {\n    background-color: #ffffff; }\n  .popoverjs-content {\n    background-color: white;\n    box-sizing: border-box;\n    position: absolute; }\n  .popoverjs--detached-container {\n    position: absolute;\n    pointer-events: none; }\n  .popoverjs--wrapper {\n    display: inline-block;\n    position: relative; }\n\n.popoverjs--default > .popoverjs-arrow {\n  overflow: hidden;\n  position: absolute;\n  z-index: 5; }\n\n.popoverjs--default > .popoverjs-arrow:after {\n  content: \"\";\n  position: absolute;\n  width: 11.312px;\n  height: 11.312px;\n  transform: translateX(-50%) translateY(-50%) rotate(45deg);\n  top: 50%;\n  left: 50%; }\n\n.popoverjs--default.popoverjs--popover-primary-bottom > .popoverjs-arrow,\n.popoverjs--default.popoverjs--popover-primary-top > .popoverjs-arrow {\n  left: -8px;\n  height: 8px;\n  width: 16px; }\n\n.popoverjs--default.popoverjs--popover-primary-bottom > .popoverjs-arrow {\n  bottom: auto;\n  top: -8px; }\n  .popoverjs--default.popoverjs--popover-primary-bottom > .popoverjs-arrow:after {\n    margin-top: -4px; }\n\n.popoverjs--default.popoverjs--popover-primary-top > .popoverjs-arrow {\n  bottom: -8px;\n  top: auto; }\n  .popoverjs--default.popoverjs--popover-primary-top > .popoverjs-arrow:after {\n    margin-top: 4px; }\n\n.popoverjs--default.popoverjs--popover-primary-left > .popoverjs-arrow,\n.popoverjs--default.popoverjs--popover-primary-right > .popoverjs-arrow {\n  bottom: -8px;\n  height: 16px;\n  width: 8px; }\n\n.popoverjs--default.popoverjs--popover-primary-right > .popoverjs-arrow {\n  left: -8px;\n  right: auto; }\n  .popoverjs--default.popoverjs--popover-primary-right > .popoverjs-arrow:after {\n    margin-left: -4px; }\n\n.popoverjs--default.popoverjs--popover-primary-left > .popoverjs-arrow {\n  left: auto;\n  right: -8px; }\n  .popoverjs--default.popoverjs--popover-primary-left > .popoverjs-arrow:after {\n    margin-left: 4px; }\n\n.popoverjs--default.popoverjs--attachment-primary-bottom {\n  bottom: -3px; }\n\n.popoverjs--default.popoverjs--attachment-primary-top {\n  top: -3px; }\n\n.popoverjs--default.popoverjs--attachment-primary-right {\n  right: -3px; }\n\n.popoverjs--default.popoverjs--attachment-primary-left {\n  left: -3px; }\n\n.popoverjs--default.popoverjs--attachment-secondary-bottom {\n  bottom: 16px; }\n\n.popoverjs--default.popoverjs--attachment-secondary-top {\n  top: 16px; }\n\n.popoverjs--default.popoverjs--attachment-secondary-right {\n  right: 16px; }\n\n.popoverjs--default.popoverjs--attachment-secondary-left {\n  left: 16px; }\n\n.popoverjs--default.popoverjs--attachment-primary-top.popoverjs--attachment-secondary-middle, .popoverjs--default.popoverjs--attachment-primary-bottom.popoverjs--attachment-secondary-middle, .popoverjs--default.popoverjs--attachment-primary-top.popoverjs--attachment-secondary-center, .popoverjs--default.popoverjs--attachment-primary-bottom.popoverjs--attachment-secondary-center {\n  left: 50%; }\n\n.popoverjs--default.popoverjs--attachment-primary-left.popoverjs--attachment-secondary-middle, .popoverjs--default.popoverjs--attachment-primary-right.popoverjs--attachment-secondary-middle, .popoverjs--default.popoverjs--attachment-primary-left.popoverjs--attachment-secondary-center, .popoverjs--default.popoverjs--attachment-primary-right.popoverjs--attachment-secondary-center {\n  top: 50%; }\n\n.popoverjs--default.popoverjs--popover-primary-bottom > .popoverjs-content {\n  bottom: 9px; }\n\n.popoverjs--default.popoverjs--popover-primary-top > .popoverjs-content {\n  top: 9px; }\n\n.popoverjs--default.popoverjs--popover-primary-right > .popoverjs-content {\n  right: 9px; }\n\n.popoverjs--default.popoverjs--popover-primary-left > .popoverjs-content {\n  left: 9px; }\n\n.popoverjs--default.popoverjs--popover-secondary-bottom > .popoverjs-content {\n  margin-top: 18px;\n  transform: translateY(-100%); }\n\n.popoverjs--default.popoverjs--popover-secondary-top > .popoverjs-content {\n  margin-top: -18px;\n  transform: translateY(0%); }\n\n.popoverjs--default.popoverjs--popover-secondary-right > .popoverjs-content {\n  right: -18px; }\n\n.popoverjs--default.popoverjs--popover-secondary-left > .popoverjs-content {\n  left: -18px; }\n\n.popoverjs--default.popoverjs--popover-primary-bottom.popoverjs--popover-secondary-middle > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-top.popoverjs--popover-secondary-middle > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-bottom.popoverjs--popover-secondary-center > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-top.popoverjs--popover-secondary-center > .popoverjs-content {\n  left: 0;\n  transform: translateX(-50%); }\n\n.popoverjs--default.popoverjs--popover-primary-left.popoverjs--popover-secondary-middle > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-right.popoverjs--popover-secondary-middle > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-left.popoverjs--popover-secondary-center > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-right.popoverjs--popover-secondary-center > .popoverjs-content {\n  top: 0;\n  transform: translateY(-50%); }\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 7 */
+/* 12 */
 /***/ (function(module, exports) {
 
 /*
@@ -1769,7 +2276,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 8 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -1815,7 +2322,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(9);
+var	fixUrls = __webpack_require__(14);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -2128,7 +2635,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 9 */
+/* 14 */
 /***/ (function(module, exports) {
 
 

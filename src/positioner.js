@@ -1,3 +1,4 @@
+import documentOffset from 'document-offset';
 import { toggleClassesOnElement, getElementOrigin, getWindowOrigin, throttle } from './utils';
 
 const defaults = {
@@ -30,6 +31,17 @@ const generateClassesForConstraint = constraint => ([
   `popoverjs--attachment-primary-${constraint.attachment.primary}`,
   `popoverjs--attachment-secondary-${constraint.attachment.secondary}`,
 ]);
+
+const getBodyOffsets = () => {
+  const computedBodyStyles = getComputedStyle(document.body);
+
+  return {
+    left: parseInt(computedBodyStyles.marginLeft, 10),
+    top: parseInt(computedBodyStyles.marginTop, 10),
+    right: parseInt(computedBodyStyles.marginRight, 10),
+    bottom: parseInt(computedBodyStyles.marginBottom, 10),
+  };
+};
 
 class Positioner {
   constructor(options) {
@@ -93,13 +105,12 @@ class Positioner {
     if (!this.options.bodyAttached) { return; }
 
     const attachmentOrigin = this.origins.attachment;
-    const bodyTopOffset = parseInt(window.getComputedStyle(document.body).marginTop, 10);
-    const top = attachmentOrigin.top - bodyTopOffset;
+
     const origin = {
       height: `${attachmentOrigin.height}px`,
       width: `${attachmentOrigin.width}px`,
-      left: `${attachmentOrigin.left}px`,
-      top: `${top}px`,
+      left: `${attachmentOrigin.left - this.cssCache.body.left}px`,
+      top: `${attachmentOrigin.top - this.cssCache.body.top}px`,
     };
 
     Object.assign(this.containerElement.style, origin);
@@ -114,6 +125,7 @@ class Positioner {
       primaryOffset: Math.abs(this.popoverElement.offsetTop) - 1,
       secondaryOffset: Math.abs(this.popoverElement.offsetLeft),
       contentOffset: Math.abs(this.popoverContent.offsetLeft),
+      body: getBodyOffsets(),
     };
 
     this.togglePopoverClasses(sizerClasses, false);
@@ -276,9 +288,15 @@ class Positioner {
   }
 
   refreshElementOrigins() {
+    this.origins.attachment = this.getAttachmentOrigin();
     this.origins.popover = getElementOrigin(this.popoverContent);
-    this.origins.attachment = getElementOrigin(this.attachmentElement);
     this.origins.body = getElementOrigin(document.body);
+  }
+
+  getAttachmentOrigin() {
+    return Object.assign({},
+      getElementOrigin(this.attachmentElement),
+      documentOffset(this.attachmentElement));
   }
 
   canFitInto(constraint) {
