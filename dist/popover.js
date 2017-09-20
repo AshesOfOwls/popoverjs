@@ -1430,6 +1430,7 @@ var Positioner = function () {
     key: 'destroyListeners',
     value: function destroyListeners() {
       window.removeEventListener('resize', this.onResize.bind(this));
+      window.removeEventListener('scroll', this.onScroll.bind(this));
     }
   }, {
     key: 'destroy',
@@ -1659,9 +1660,7 @@ var Positioner = function () {
   }, {
     key: 'toggleActiveConstraints',
     value: function toggleActiveConstraints(isToggled) {
-      console.log("TOGGLE?");
       var constraintClasses = this.activeConstraint.classes;
-      console.log("CONSTRAINT CLASSES", constraintClasses);
 
       this.togglePopoverClasses(constraintClasses, isToggled);
 

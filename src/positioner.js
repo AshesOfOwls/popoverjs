@@ -239,6 +239,7 @@ class Positioner {
 
   destroyListeners() {
     window.removeEventListener('resize', this.onResize.bind(this));
+    window.removeEventListener('scroll', this.onScroll.bind(this));
   }
 
   destroy() {
@@ -445,9 +446,7 @@ class Positioner {
   }
 
   toggleActiveConstraints(isToggled) {
-    console.log("TOGGLE?");
     const constraintClasses = this.activeConstraint.classes;
-    console.log("CONSTRAINT CLASSES", constraintClasses);
 
     this.togglePopoverClasses(constraintClasses, isToggled);
 
