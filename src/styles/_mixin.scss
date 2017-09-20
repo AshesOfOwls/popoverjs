@@ -1,10 +1,10 @@
 @import '_arrows';
 @import '_positioning';
 
-@mixin popoverjs($arrow_width, $content_offset, $arrow_side_offset, $attachment_margin) {
-  $arrow_middle: $arrow_width / 2;
+@mixin popoverjs($arrow: 16px, $content_offset: 10px, $arrow_offset: 16px, $attachment_margin: 2px) {
+  $arrow_middle: $arrow / 2;
   $content_offset: $arrow_middle + $content_offset;
 
-  @include popoverjs-arrows($arrow_width, $arrow_middle);
-  @include popoverjs-positioning($attachment_margin, $arrow_side_offset, $content_offset, $arrow_middle);
+  @include popoverjs-arrows($arrow, $arrow_middle);
+  @include popoverjs-positioning($attachment_margin, $arrow_offset, $content_offset, $arrow_middle);
 }
