@@ -275,10 +275,10 @@ class Renderer {
 
     this.listenForToggleEnd();
 
-    const classes = ['popoverjs--is-visible'];
+    const classes = [this.options.classes.isVisible];
 
     if (isVisible) {
-      this.toggleRendererClasses(['popoverjs--is-open'], false);
+      this.toggleRendererClasses([this.options.classes.isOpen], false);
     }
 
     this.toggleRendererClasses(classes, isVisible);
@@ -292,7 +292,7 @@ class Renderer {
       this.options.onToggleEnd();
       this.listenForRender();
 
-      this.toggleRendererClasses(['popoverjs--is-open'], false);
+      this.toggleRendererClasses([this.options.classes.isOpen], false);
     } else {
       this.options.onAfterShow();
     }

@@ -18,18 +18,18 @@ const defaults = {
   }],
 };
 
-const sizerClasses = [
-  'popoverjs--popover-primary-bottom',
-  'popoverjs--popover-secondary-left',
-  'popoverjs--attachment-primary-top',
-  'popoverjs--attachment-secondary-left',
-];
+const generateSizerClasses = prefix => ([
+  `${prefix}--popover-primary-bottom`,
+  `${prefix}--popover-secondary-left`,
+  `${prefix}--attachment-primary-top`,
+  `${prefix}--attachment-secondary-left`,
+]);
 
-const generateClassesForConstraint = constraint => ([
-  `popoverjs--popover-primary-${constraint.popover.primary}`,
-  `popoverjs--popover-secondary-${constraint.popover.secondary}`,
-  `popoverjs--attachment-primary-${constraint.attachment.primary}`,
-  `popoverjs--attachment-secondary-${constraint.attachment.secondary}`,
+const generateClassesForConstraint = (prefix, constraint) => ([
+  `${prefix}--popover-primary-${constraint.popover.primary}`,
+  `${prefix}--popover-secondary-${constraint.popover.secondary}`,
+  `${prefix}--attachment-primary-${constraint.attachment.primary}`,
+  `${prefix}--attachment-secondary-${constraint.attachment.secondary}`,
 ]);
 
 const getBodyOffsets = () => {
@@ -45,9 +45,18 @@ const getBodyOffsets = () => {
 
 class Positioner {
   constructor(options) {
-    this.options = Object.assign({}, defaults, options);
+    this.generateOptions(options);
 
     this.initialize();
+  }
+
+  generateOptions(options) {
+    this.options = Object.assign({}, defaults, options);
+    const classPrefix = options.classPrefix;
+
+    Object.assign(this.options.classes, {
+      sizer: generateSizerClasses(classPrefix),
+    });
   }
 
   initialize() {
@@ -68,8 +77,8 @@ class Positioner {
     this.attachmentElement = this.options.attachmentElement;
     this.popoverElement = this.options.popoverElement;
     this.triggerElement = this.options.triggerElement;
-    this.popoverContent = this.popoverElement.querySelector('.popoverjs-content');
-    this.popoverArrow = this.popoverElement.querySelector('.popoverjs-arrow');
+    this.popoverContent = this.popoverElement.querySelector(`.${this.options.classes.content}`);
+    this.popoverArrow = this.popoverElement.querySelector(`.${this.options.classes.arrow}`);
     this.constraintElement = this.getConstraintParent();
 
     this.resetClasses();
@@ -96,7 +105,7 @@ class Positioner {
     this.hasAttachedContainer = true;
     this.originalContainer = this.popoverElement.parentElement;
     this.containerElement = document.createElement('div');
-    this.containerElement.classList.add('popoverjs--detached-container');
+    this.containerElement.classList.add(this.options.classes.detachedContainer);
     this.containerElement.appendChild(this.popoverElement);
     document.body.appendChild(this.containerElement);
   }
@@ -117,6 +126,8 @@ class Positioner {
   }
 
   cacheCssOffsets() {
+    const sizerClasses = this.options.classes.sizer;
+
     this.togglePopoverClasses(sizerClasses, true);
 
     this.cssCache = {
@@ -165,6 +176,8 @@ class Positioner {
 
   parseConstraints() {
     let id = 0;
+    const classPrefix = this.options.classPrefix;
+
     this.constraints = this.options.constraints.map((constraint) => {
       const attachmentConstraint = constraint.attachment.split(' ');
       const popoverConstraint = constraint.popover.split(' ');
@@ -185,7 +198,7 @@ class Positioner {
         },
       };
 
-      parsedConstraint.classes = generateClassesForConstraint(parsedConstraint);
+      parsedConstraint.classes = generateClassesForConstraint(classPrefix, parsedConstraint);
 
       return Object.assign({}, constraint, parsedConstraint);
     });
@@ -200,14 +213,14 @@ class Positioner {
   }
 
   resetClasses() {
-    let className = 'popoverjs';
+    let className = this.options.classPrefix;
 
     if (this.options.customClass) {
       className += ` ${this.options.customClass}`;
     }
 
     if (this.options.themeClass) {
-      className += ` ${this.options.themeClass}`;
+      className += ` ${this.options.classes.theme}`;
     }
 
     this.popoverElement.className = className;
@@ -254,7 +267,9 @@ class Positioner {
   checkConstraints() {
     const activeConstraint = this.getActiveConstraint();
 
-    toggleClassesOnElement(this.popoverElement, ['popoverjs--is-constrained'], !activeConstraint);
+    toggleClassesOnElement(this.popoverElement,
+      [this.options.classes.constrained],
+      !activeConstraint);
 
     if (activeConstraint) {
       this.applyConstraint(activeConstraint);
@@ -429,7 +444,9 @@ class Positioner {
   }
 
   toggleActiveConstraints(isToggled) {
+    console.log("TOGGLE?");
     const constraintClasses = this.activeConstraint.classes;
+    console.log("CONSTRAINT CLASSES", constraintClasses);
 
     this.togglePopoverClasses(constraintClasses, isToggled);
 

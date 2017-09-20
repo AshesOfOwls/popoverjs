@@ -245,9 +245,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var defaults = {
+  classPrefix: 'popoverjs',
   showDelay: 0,
   hideDelay: 0,
-  themeClass: 'popoverjs--default',
+  themeClass: 'default',
   unnecessaryRepositioning: false,
   resizePositioning: true,
   onBeforeHide: function onBeforeHide() {},
@@ -256,13 +257,29 @@ var defaults = {
   onAfterShow: function onAfterShow() {}
 };
 
+var generateOptionClassnames = function generateOptionClassnames(options) {
+  var prefix = options.classPrefix;
+
+  return Object.assign({}, options, {
+    classes: {
+      theme: prefix + '--' + options.themeClass,
+      constrained: prefix + '--is-constrained',
+      detachedContainer: prefix + '--detached-container',
+      arrow: prefix + '-content',
+      content: prefix + '-arrow',
+      isVisible: prefix + '--is-visible',
+      isOpen: prefix + '--is-open'
+    }
+  });
+};
+
 var requiredOptions = ['attachmentElement', 'popoverElement'];
 
 var Popoverjs = function () {
   function Popoverjs(options) {
     _classCallCheck(this, Popoverjs);
 
-    this.options = Object.assign({}, defaults, options);
+    this.options = generateOptionClassnames(Object.assign({}, defaults, options));
 
     this.checkForRequiredOptions();
     this.initialize();
@@ -1086,10 +1103,10 @@ var Renderer = function () {
 
       this.listenForToggleEnd();
 
-      var classes = ['popoverjs--is-visible'];
+      var classes = [this.options.classes.isVisible];
 
       if (isVisible) {
-        this.toggleRendererClasses(['popoverjs--is-open'], false);
+        this.toggleRendererClasses([this.options.classes.isOpen], false);
       }
 
       this.toggleRendererClasses(classes, isVisible);
@@ -1104,7 +1121,7 @@ var Renderer = function () {
         this.options.onToggleEnd();
         this.listenForRender();
 
-        this.toggleRendererClasses(['popoverjs--is-open'], false);
+        this.toggleRendererClasses([this.options.classes.isOpen], false);
       } else {
         this.options.onAfterShow();
       }
@@ -1162,10 +1179,12 @@ var defaults = {
   }]
 };
 
-var sizerClasses = ['popoverjs--popover-primary-bottom', 'popoverjs--popover-secondary-left', 'popoverjs--attachment-primary-top', 'popoverjs--attachment-secondary-left'];
+var generateSizerClasses = function generateSizerClasses(prefix) {
+  return [prefix + '--popover-primary-bottom', prefix + '--popover-secondary-left', prefix + '--attachment-primary-top', prefix + '--attachment-secondary-left'];
+};
 
-var generateClassesForConstraint = function generateClassesForConstraint(constraint) {
-  return ['popoverjs--popover-primary-' + constraint.popover.primary, 'popoverjs--popover-secondary-' + constraint.popover.secondary, 'popoverjs--attachment-primary-' + constraint.attachment.primary, 'popoverjs--attachment-secondary-' + constraint.attachment.secondary];
+var generateClassesForConstraint = function generateClassesForConstraint(prefix, constraint) {
+  return [prefix + '--popover-primary-' + constraint.popover.primary, prefix + '--popover-secondary-' + constraint.popover.secondary, prefix + '--attachment-primary-' + constraint.attachment.primary, prefix + '--attachment-secondary-' + constraint.attachment.secondary];
 };
 
 var getBodyOffsets = function getBodyOffsets() {
@@ -1183,12 +1202,22 @@ var Positioner = function () {
   function Positioner(options) {
     _classCallCheck(this, Positioner);
 
-    this.options = Object.assign({}, defaults, options);
+    this.generateOptions(options);
 
     this.initialize();
   }
 
   _createClass(Positioner, [{
+    key: 'generateOptions',
+    value: function generateOptions(options) {
+      this.options = Object.assign({}, defaults, options);
+      var classPrefix = options.classPrefix;
+
+      Object.assign(this.options.classes, {
+        sizer: generateSizerClasses(classPrefix)
+      });
+    }
+  }, {
     key: 'initialize',
     value: function initialize() {
       this.throttledUpdate = (0, _utils.throttle)(this.position, 2500, this);
@@ -1210,8 +1239,8 @@ var Positioner = function () {
       this.attachmentElement = this.options.attachmentElement;
       this.popoverElement = this.options.popoverElement;
       this.triggerElement = this.options.triggerElement;
-      this.popoverContent = this.popoverElement.querySelector('.popoverjs-content');
-      this.popoverArrow = this.popoverElement.querySelector('.popoverjs-arrow');
+      this.popoverContent = this.popoverElement.querySelector('.' + this.options.classes.content);
+      this.popoverArrow = this.popoverElement.querySelector('.' + this.options.classes.arrow);
       this.constraintElement = this.getConstraintParent();
 
       this.resetClasses();
@@ -1247,7 +1276,7 @@ var Positioner = function () {
       this.hasAttachedContainer = true;
       this.originalContainer = this.popoverElement.parentElement;
       this.containerElement = document.createElement('div');
-      this.containerElement.classList.add('popoverjs--detached-container');
+      this.containerElement.classList.add(this.options.classes.detachedContainer);
       this.containerElement.appendChild(this.popoverElement);
       document.body.appendChild(this.containerElement);
     }
@@ -1272,6 +1301,8 @@ var Positioner = function () {
   }, {
     key: 'cacheCssOffsets',
     value: function cacheCssOffsets() {
+      var sizerClasses = this.options.classes.sizer;
+
       this.togglePopoverClasses(sizerClasses, true);
 
       this.cssCache = {
@@ -1327,6 +1358,8 @@ var Positioner = function () {
     key: 'parseConstraints',
     value: function parseConstraints() {
       var id = 0;
+      var classPrefix = this.options.classPrefix;
+
       this.constraints = this.options.constraints.map(function (constraint) {
         var attachmentConstraint = constraint.attachment.split(' ');
         var popoverConstraint = constraint.popover.split(' ');
@@ -1347,7 +1380,7 @@ var Positioner = function () {
           }
         };
 
-        parsedConstraint.classes = generateClassesForConstraint(parsedConstraint);
+        parsedConstraint.classes = generateClassesForConstraint(classPrefix, parsedConstraint);
 
         return Object.assign({}, constraint, parsedConstraint);
       });
@@ -1364,14 +1397,14 @@ var Positioner = function () {
   }, {
     key: 'resetClasses',
     value: function resetClasses() {
-      var className = 'popoverjs';
+      var className = this.options.classPrefix;
 
       if (this.options.customClass) {
         className += ' ' + this.options.customClass;
       }
 
       if (this.options.themeClass) {
-        className += ' ' + this.options.themeClass;
+        className += ' ' + this.options.classes.theme;
       }
 
       this.popoverElement.className = className;
@@ -1431,7 +1464,7 @@ var Positioner = function () {
     value: function checkConstraints() {
       var activeConstraint = this.getActiveConstraint();
 
-      (0, _utils.toggleClassesOnElement)(this.popoverElement, ['popoverjs--is-constrained'], !activeConstraint);
+      (0, _utils.toggleClassesOnElement)(this.popoverElement, [this.options.classes.constrained], !activeConstraint);
 
       if (activeConstraint) {
         this.applyConstraint(activeConstraint);
@@ -1625,7 +1658,9 @@ var Positioner = function () {
   }, {
     key: 'toggleActiveConstraints',
     value: function toggleActiveConstraints(isToggled) {
+      console.log("TOGGLE?");
       var constraintClasses = this.activeConstraint.classes;
+      console.log("CONSTRAINT CLASSES", constraintClasses);
 
       this.togglePopoverClasses(constraintClasses, isToggled);
 

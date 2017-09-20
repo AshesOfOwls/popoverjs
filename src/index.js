@@ -8,15 +8,32 @@ import { error } from './utils';
 import './styles/_main.scss';
 
 const defaults = {
+  classPrefix: 'popoverjs',
   showDelay: 0,
   hideDelay: 0,
-  themeClass: 'popoverjs--default',
+  themeClass: 'default',
   unnecessaryRepositioning: false,
   resizePositioning: true,
   onBeforeHide: () => {},
   onBeforeShow: () => {},
   onAfterHide: () => {},
   onAfterShow: () => {},
+};
+
+const generateOptionClassnames = (options) => {
+  const prefix = options.classPrefix;
+
+  return Object.assign({}, options, {
+    classes: {
+      theme: `${prefix}--${options.themeClass}`,
+      constrained: `${prefix}--is-constrained`,
+      detachedContainer: `${prefix}--detached-container`,
+      arrow: `${prefix}-content`,
+      content: `${prefix}-arrow`,
+      isVisible: `${prefix}--is-visible`,
+      isOpen: `${prefix}--is-open`,
+    },
+  });
 };
 
 const requiredOptions = [
@@ -26,7 +43,7 @@ const requiredOptions = [
 
 class Popoverjs {
   constructor(options) {
-    this.options = Object.assign({}, defaults, options);
+    this.options = generateOptionClassnames(Object.assign({}, defaults, options));
 
     this.checkForRequiredOptions();
     this.initialize();
