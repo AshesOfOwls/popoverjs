@@ -2,6 +2,7 @@ import documentOffset from 'document-offset';
 import { toggleClassesOnElement, getElementOrigin, getWindowOrigin, throttle } from './utils';
 
 const defaults = {
+  bodyAttached: false,
   dynamicWidth: false,
   maintainAttachmentWidth: false,
   attachmentElement: null,
