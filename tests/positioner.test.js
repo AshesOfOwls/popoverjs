@@ -36,7 +36,7 @@ describe('Positioner', () => {
     cleanup();
 
     const fixture = `<div class='trigger'></div>
-                    <div class="popoverjs--wrapper">
+                    <div class="popoverjs--wrapper" style="position: relative;">
                       <div class='attachmentElement' style="height: 200px; width: 300px;"></div>
                       <div class='popoverjs'>
                         <div class='popoverjs-arrow' style='height: ${arrowSize}px; width: 20px;'></div>
@@ -44,7 +44,9 @@ describe('Positioner', () => {
                       </div>
                     </div>`;
 
+
     document.body.insertAdjacentHTML('afterbegin', fixture);
+    document.body.style.position = 'relative';
 
     parentElement = document.getElementsByClassName('popoverjs--wrapper')[0];
     triggerElement = document.getElementsByClassName('trigger')[0];
@@ -52,8 +54,6 @@ describe('Positioner', () => {
     popoverElement = parentElement.getElementsByClassName('popoverjs')[0];
     popoverArrow = popoverElement.getElementsByClassName('popoverjs-arrow')[0];
     popoverContent = popoverElement.getElementsByClassName('popoverjs-content')[0];
-    console.log("WRAPPER TOP IS", popoverElement.offsetTop);
-    console.log("WRAPPER TOP IS", getComputedStyle(popoverElement).getPropertyValue('bottom'));
   });
 
   describe('when setting up', () => {
@@ -111,10 +111,16 @@ describe('Positioner', () => {
       expect(instance.cssCache).toEqual({
         arrowSize: 8,
         contentSize: 0,
-        primaryOffset: 7,
-        secondaryOffset: 8,
-        contentOffset: 8,
-      })
+        primaryOffset: 2,
+        secondaryOffset: 16,
+        contentOffset: 18,
+        body: {
+          top: 8,
+          right: 8,
+          left: 8,
+          bottom: 8,
+        },
+      });
     });
 
     it('should retrieve the correct elements', () => {
@@ -123,10 +129,10 @@ describe('Positioner', () => {
         attachmentElement,
       });
 
-      expect(instance.attachmentElement).toEqual(attachmentElement);
-      expect(instance.popoverElement).toEqual(popoverElement);
-      expect(instance.popoverContent).toEqual(popoverContent);
-      expect(instance.popoverArrow).toEqual(popoverArrow);
+      expect(instance.attachmentElement.isSameNode(attachmentElement)).toEqual(true);
+      expect(instance.popoverElement.isSameNode(popoverElement)).toEqual(true);
+      expect(instance.popoverContent.isSameNode(popoverContent)).toEqual(true);
+      expect(instance.popoverArrow.isSameNode(popoverArrow)).toEqual(true);
     });
 
     it('should apply the custom class option to the popover element', () => {
@@ -146,7 +152,7 @@ describe('Positioner', () => {
         themeClass: 'aThemeClass',
       });
 
-      expect(instance.popoverElement.classList.contains('aThemeClass')).toEqual(true);
+      expect(instance.popoverElement.classList.contains('popoverjs--aThemeClass')).toEqual(true);
     });
 
     it('should keep the popover in place if not body attached', () => {
@@ -183,9 +189,6 @@ describe('Positioner', () => {
 
         const attachmentRect = getCleanRect(instance.attachmentElement);
         const containerRect = getCleanRect(instance.containerElement);
-
-
-        containerRect.top -= bodyTopOffset;
 
         expect(attachmentRect).toEqual(containerRect);
       })

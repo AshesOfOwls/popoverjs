@@ -112,6 +112,26 @@ const error = (message) => {
   throw new Error(message);
 };
 
+const generateOptionClassnames = (options) => {
+  if (options.classes) {
+    return Object.assign({}, options);
+  }
+
+  const prefix = options.classPrefix;
+
+  return Object.assign({}, options, {
+    classes: {
+      theme: `${prefix}--${options.themeClass}`,
+      constrained: `${prefix}--is-constrained`,
+      detachedContainer: `${prefix}--detached-container`,
+      content: `${prefix}-content`,
+      arrow: `${prefix}-arrow`,
+      isVisible: `${prefix}--is-visible`,
+      isOpen: `${prefix}--is-open`,
+    },
+  });
+};
+
 export {
   oneEvent,
   addClass,
@@ -123,4 +143,5 @@ export {
   getWindowOrigin,
   whichTransitionEvent,
   toggleClassesOnElement,
+  generateOptionClassnames,
 };

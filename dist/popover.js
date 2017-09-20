@@ -202,6 +202,26 @@ var error = function error(message) {
   throw new Error(message);
 };
 
+var generateOptionClassnames = function generateOptionClassnames(options) {
+  if (options.classes) {
+    return Object.assign({}, options);
+  }
+
+  var prefix = options.classPrefix;
+
+  return Object.assign({}, options, {
+    classes: {
+      theme: prefix + '--' + options.themeClass,
+      constrained: prefix + '--is-constrained',
+      detachedContainer: prefix + '--detached-container',
+      content: prefix + '-content',
+      arrow: prefix + '-arrow',
+      isVisible: prefix + '--is-visible',
+      isOpen: prefix + '--is-open'
+    }
+  });
+};
+
 exports.oneEvent = oneEvent;
 exports.addClass = addClass;
 exports.error = error;
@@ -212,6 +232,7 @@ exports.setHalfPointsOnOrigin = setHalfPointsOnOrigin;
 exports.getWindowOrigin = getWindowOrigin;
 exports.whichTransitionEvent = whichTransitionEvent;
 exports.toggleClassesOnElement = toggleClassesOnElement;
+exports.generateOptionClassnames = generateOptionClassnames;
 
 /***/ }),
 /* 1 */
@@ -257,29 +278,13 @@ var defaults = {
   onAfterShow: function onAfterShow() {}
 };
 
-var generateOptionClassnames = function generateOptionClassnames(options) {
-  var prefix = options.classPrefix;
-
-  return Object.assign({}, options, {
-    classes: {
-      theme: prefix + '--' + options.themeClass,
-      constrained: prefix + '--is-constrained',
-      detachedContainer: prefix + '--detached-container',
-      arrow: prefix + '-content',
-      content: prefix + '-arrow',
-      isVisible: prefix + '--is-visible',
-      isOpen: prefix + '--is-open'
-    }
-  });
-};
-
 var requiredOptions = ['attachmentElement', 'popoverElement'];
 
 var Popoverjs = function () {
   function Popoverjs(options) {
     _classCallCheck(this, Popoverjs);
 
-    this.options = generateOptionClassnames(Object.assign({}, defaults, options));
+    this.options = (0, _utils.generateOptionClassnames)(Object.assign({}, defaults, options));
 
     this.checkForRequiredOptions();
     this.initialize();
@@ -795,7 +800,7 @@ var Renderer = function () {
   function Renderer(options) {
     _classCallCheck(this, Renderer);
 
-    this.options = Object.assign({}, defaults, options);
+    this.options = (0, _utils.generateOptionClassnames)(Object.assign({}, defaults, options));
 
     this.onTriggerClick = this.onTriggerClick.bind(this);
     this.onDocumentClick = this.onDocumentClick.bind(this);
@@ -1163,6 +1168,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var defaults = {
+  classPrefix: 'popoverjs',
+  themeClass: 'default',
   bodyAttached: false,
   dynamicWidth: false,
   maintainAttachmentWidth: false,
@@ -1211,8 +1218,9 @@ var Positioner = function () {
   _createClass(Positioner, [{
     key: 'generateOptions',
     value: function generateOptions(options) {
-      this.options = Object.assign({}, defaults, options);
-      var classPrefix = options.classPrefix;
+      this.options = (0, _utils.generateOptionClassnames)(Object.assign({}, defaults, options));
+
+      var classPrefix = this.options.classPrefix;
 
       Object.assign(this.options.classes, {
         sizer: generateSizerClasses(classPrefix)
@@ -1404,9 +1412,12 @@ var Positioner = function () {
         className += ' ' + this.options.customClass;
       }
 
-      if (this.options.themeClass) {
+      console.log('IS THERE AN ACUTALY ASDSD', this.options.classes.theme);
+
+      if (this.options.classes.theme) {
         className += ' ' + this.options.classes.theme;
       }
+      console.log("CLASS NAME TURNS OUT TO BE", className);
 
       this.popoverElement.className = className;
     }

@@ -1,4 +1,4 @@
-import { oneEvent, toggleClassesOnElement, whichTransitionEvent } from './utils';
+import { oneEvent, toggleClassesOnElement, whichTransitionEvent, generateOptionClassnames } from './utils';
 
 const defaults = {
   manualTriggering: false,
@@ -10,7 +10,7 @@ const defaults = {
 
 class Renderer {
   constructor(options) {
-    this.options = Object.assign({}, defaults, options);
+    this.options = generateOptionClassnames(Object.assign({}, defaults, options));
 
     this.onTriggerClick = this.onTriggerClick.bind(this);
     this.onDocumentClick = this.onDocumentClick.bind(this);

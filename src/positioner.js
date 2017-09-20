@@ -1,7 +1,9 @@
 import documentOffset from 'document-offset';
-import { toggleClassesOnElement, getElementOrigin, getWindowOrigin, throttle } from './utils';
+import { toggleClassesOnElement, getElementOrigin, getWindowOrigin, throttle, generateOptionClassnames } from './utils';
 
 const defaults = {
+  classPrefix: 'popoverjs',
+  themeClass: 'default',
   bodyAttached: false,
   dynamicWidth: false,
   maintainAttachmentWidth: false,
@@ -52,8 +54,9 @@ class Positioner {
   }
 
   generateOptions(options) {
-    this.options = Object.assign({}, defaults, options);
-    const classPrefix = options.classPrefix;
+    this.options = generateOptionClassnames(Object.assign({}, defaults, options));
+
+    const classPrefix = this.options.classPrefix;
 
     Object.assign(this.options.classes, {
       sizer: generateSizerClasses(classPrefix),
@@ -131,6 +134,7 @@ class Positioner {
 
     this.togglePopoverClasses(sizerClasses, true);
 
+
     this.cssCache = {
       arrowSize: this.getArrowSize(),
       contentSize: this.getContentSize(),
@@ -139,6 +143,7 @@ class Positioner {
       contentOffset: Math.abs(this.popoverContent.offsetLeft),
       body: getBodyOffsets(),
     };
+
 
     this.togglePopoverClasses(sizerClasses, false);
   }
@@ -220,9 +225,12 @@ class Positioner {
       className += ` ${this.options.customClass}`;
     }
 
-    if (this.options.themeClass) {
+    console.log('IS THERE AN ACUTALY ASDSD', this.options.classes.theme);
+
+    if (this.options.classes.theme) {
       className += ` ${this.options.classes.theme}`;
     }
+    console.log("CLASS NAME TURNS OUT TO BE", className);
 
     this.popoverElement.className = className;
   }

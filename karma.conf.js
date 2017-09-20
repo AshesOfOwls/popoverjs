@@ -12,10 +12,18 @@ module.exports = (config) => {
     files: [
       'tests/**/*.test.js',
       'tests/**/*.test.jsx',
+      'src/styles/*.scss',
     ],
     preprocessors: {
       'tests/**/*.test.js': ['webpack'],
       'tests/**/*.test.jsx': ['webpack'],
+      'src/styles/*.scss': ['scss'],
+    },
+    scssPreprocessor: {
+      options: {
+        sourceMap: true,
+        includePaths: ['bower_components'],
+      },
     },
     webpack: webpackConfig,
     reporters: ['mocha'],

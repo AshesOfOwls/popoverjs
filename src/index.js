@@ -3,7 +3,7 @@ import './polyfills';
 import Renderer from './renderer';
 import Positioner from './positioner';
 
-import { error } from './utils';
+import { error, generateOptionClassnames } from './utils';
 
 import './styles/_main.scss';
 
@@ -18,22 +18,6 @@ const defaults = {
   onBeforeShow: () => {},
   onAfterHide: () => {},
   onAfterShow: () => {},
-};
-
-const generateOptionClassnames = (options) => {
-  const prefix = options.classPrefix;
-
-  return Object.assign({}, options, {
-    classes: {
-      theme: `${prefix}--${options.themeClass}`,
-      constrained: `${prefix}--is-constrained`,
-      detachedContainer: `${prefix}--detached-container`,
-      arrow: `${prefix}-content`,
-      content: `${prefix}-arrow`,
-      isVisible: `${prefix}--is-visible`,
-      isOpen: `${prefix}--is-open`,
-    },
-  });
 };
 
 const requiredOptions = [
