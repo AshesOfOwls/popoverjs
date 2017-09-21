@@ -225,12 +225,9 @@ class Positioner {
       className += ` ${this.options.customClass}`;
     }
 
-    console.log('IS THERE AN ACUTALY ASDSD', this.options.classes.theme);
-
     if (this.options.classes.theme) {
       className += ` ${this.options.classes.theme}`;
     }
-    console.log("CLASS NAME TURNS OUT TO BE", className);
 
     this.popoverElement.className = className;
   }

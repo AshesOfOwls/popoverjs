@@ -1,6 +1,7 @@
 @import '_mixin';
 
 .popoverjs {
+  display: none;
   height: 1px;
   pointer-events: all;
   position: absolute;
@@ -8,6 +9,7 @@
   width: 1px;
 
   &.popoverjs--is-visible {
+    display: block;
     visibility: visible;
   }
 
