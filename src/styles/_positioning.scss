@@ -3,16 +3,16 @@
 
   // Attachment Positioning
   &.popoverjs--attachment-primary-bottom {
-    bottom: -1px - $attachment_margin;
+    bottom: $attachment_margin;
   }
   &.popoverjs--attachment-primary-top {
-    top: -1px - $attachment_margin;
+    top: $attachment_margin;
   }
   &.popoverjs--attachment-primary-right {
-    right: -1px - $attachment_margin;
+    right: $attachment_margin;
   }
   &.popoverjs--attachment-primary-left {
-    left: -1px - $attachment_margin;
+    left: $attachment_margin;
   }
 
   &.popoverjs--attachment-secondary-bottom {
