@@ -3,7 +3,7 @@ import { toggleClassesOnElement, getElementOrigin, getWindowOrigin, throttle, ge
 
 const defaults = {
   classPrefix: 'popoverjs',
-  themeClass: 'default',
+  themeClass: 'popoverjs--default',
   bodyAttached: false,
   dynamicWidth: false,
   maintainAttachmentWidth: false,
@@ -225,8 +225,8 @@ class Positioner {
       className += ` ${this.options.customClass}`;
     }
 
-    if (this.options.classes.theme) {
-      className += ` ${this.options.classes.theme}`;
+    if (this.options.themeClass) {
+      className += ` ${this.options.themeClass}`;
     }
 
     this.popoverElement.className = className;

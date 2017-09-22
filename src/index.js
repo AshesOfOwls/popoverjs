@@ -11,7 +11,7 @@ const defaults = {
   classPrefix: 'popoverjs',
   showDelay: 0,
   hideDelay: 0,
-  themeClass: 'default',
+  themeClass: 'popoverjs--default',
   unnecessaryRepositioning: false,
   resizePositioning: true,
   onBeforeHide: () => {},

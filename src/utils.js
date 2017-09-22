@@ -121,7 +121,6 @@ const generateOptionClassnames = (options) => {
 
   return Object.assign({}, options, {
     classes: {
-      theme: `${prefix}--${options.themeClass}`,
       constrained: `${prefix}--is-constrained`,
       detachedContainer: `${prefix}--detached-container`,
       content: `${prefix}-content`,
