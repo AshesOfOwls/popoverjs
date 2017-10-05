@@ -131,6 +131,25 @@ const generateOptionClassnames = (options) => {
   });
 };
 
+const getScrollParent = (element, includeHidden) => {
+  let style = getComputedStyle(element);
+  const excludeStaticParent = style.position === 'absolute';
+  const overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/;
+
+  if (style.position === 'fixed') return document.body;
+  let parent = element;
+  while (parent = parent.parentElement) {
+    style = getComputedStyle(parent);
+    if (excludeStaticParent && style.position === 'static') {
+
+    } else if (overflowRegex.test(style.overflow + style.overflowY + style.overflowX)) {
+      return parent;
+    }
+  }
+
+  return document.body;
+};
+
 export {
   oneEvent,
   addClass,
@@ -141,6 +160,7 @@ export {
   setHalfPointsOnOrigin,
   getWindowOrigin,
   whichTransitionEvent,
+  getScrollParent,
   toggleClassesOnElement,
   generateOptionClassnames,
 };

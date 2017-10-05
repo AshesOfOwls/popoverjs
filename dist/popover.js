@@ -221,6 +221,23 @@ var generateOptionClassnames = function generateOptionClassnames(options) {
   });
 };
 
+var getScrollParent = function getScrollParent(element, includeHidden) {
+  var style = getComputedStyle(element);
+  var excludeStaticParent = style.position === 'absolute';
+  var overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/;
+
+  if (style.position === 'fixed') return document.body;
+  var parent = element;
+  while (parent = parent.parentElement) {
+    style = getComputedStyle(parent);
+    if (excludeStaticParent && style.position === 'static') {} else if (overflowRegex.test(style.overflow + style.overflowY + style.overflowX)) {
+      return parent;
+    }
+  }
+
+  return document.body;
+};
+
 exports.oneEvent = oneEvent;
 exports.addClass = addClass;
 exports.error = error;
@@ -230,6 +247,7 @@ exports.getElementOrigin = getElementOrigin;
 exports.setHalfPointsOnOrigin = setHalfPointsOnOrigin;
 exports.getWindowOrigin = getWindowOrigin;
 exports.whichTransitionEvent = whichTransitionEvent;
+exports.getScrollParent = getScrollParent;
 exports.toggleClassesOnElement = toggleClassesOnElement;
 exports.generateOptionClassnames = generateOptionClassnames;
 
@@ -1176,6 +1194,7 @@ var defaults = {
   constraintElement: null,
   unnecessaryRepositioning: true,
   scrollPositioning: true,
+  scrollParentConstraint: true,
   applyClassesToAttachment: false,
   constraints: [{
     popover: 'top right',
@@ -1354,6 +1373,10 @@ var Positioner = function () {
   }, {
     key: 'getConstraintParent',
     value: function getConstraintParent() {
+      if (this.options.scrollParentConstraint) {
+        return this.getScrollParent();
+      }
+
       var constraintElement = this.options.constraintElement;
 
       if (!constraintElement) {
@@ -1361,6 +1384,11 @@ var Positioner = function () {
       }
 
       return constraintElement;
+    }
+  }, {
+    key: 'getScrollParent',
+    value: function getScrollParent() {
+      return (0, _utils.getScrollParent)(this.triggerElement);
     }
   }, {
     key: 'parseConstraints',
@@ -1423,7 +1451,7 @@ var Positioner = function () {
       if (!this.options.resizePositioning) {
         return;
       }
-      window.addEventListener('resize', this.onResize.bind(this));
+      window.addEventListener('resize', this.onScroll.bind(this));
     }
   }, {
     key: 'listenForScroll',
@@ -1432,12 +1460,21 @@ var Positioner = function () {
         return;
       }
       window.addEventListener('scroll', this.onScroll.bind(this));
+
+      this.scrollParent = this.getScrollParent();
+      if (this.scrollParent) {
+        this.scrollParent.addEventListener('scroll', this.onResize.bind(this));
+      }
     }
   }, {
     key: 'destroyListeners',
     value: function destroyListeners() {
       window.removeEventListener('resize', this.onResize.bind(this));
       window.removeEventListener('scroll', this.onScroll.bind(this));
+
+      if (this.scrollParent) {
+        this.scrollParent.removeEventListener('scroll', this.onScroll.bind(this));
+      }
     }
   }, {
     key: 'destroy',

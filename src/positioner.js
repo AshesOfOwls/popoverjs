@@ -1,5 +1,5 @@
 import documentOffset from 'document-offset';
-import { toggleClassesOnElement, getElementOrigin, getWindowOrigin, throttle, generateOptionClassnames } from './utils';
+import { toggleClassesOnElement, getScrollParent, getElementOrigin, getWindowOrigin, throttle, generateOptionClassnames } from './utils';
 
 const defaults = {
   classPrefix: 'popoverjs',
@@ -11,6 +11,7 @@ const defaults = {
   constraintElement: null,
   unnecessaryRepositioning: true,
   scrollPositioning: true,
+  scrollParentConstraint: true,
   applyClassesToAttachment: false,
   constraints: [{
     popover: 'top right',
@@ -134,7 +135,6 @@ class Positioner {
 
     this.togglePopoverClasses(sizerClasses, true);
 
-
     this.cssCache = {
       arrowSize: this.getArrowSize(),
       contentSize: this.getContentSize(),
@@ -143,7 +143,6 @@ class Positioner {
       contentOffset: Math.abs(this.popoverContent.offsetLeft),
       body: getBodyOffsets(),
     };
-
 
     this.togglePopoverClasses(sizerClasses, false);
   }
@@ -171,6 +170,10 @@ class Positioner {
   }
 
   getConstraintParent() {
+    if (this.options.scrollParentConstraint) {
+      return this.getScrollParent();
+    }
+
     const constraintElement = this.options.constraintElement;
 
     if (!constraintElement) {
@@ -178,6 +181,10 @@ class Positioner {
     }
 
     return constraintElement;
+  }
+
+  getScrollParent() {
+    return getScrollParent(this.triggerElement);
   }
 
   parseConstraints() {
@@ -234,17 +241,26 @@ class Positioner {
 
   listenForResize() {
     if (!this.options.resizePositioning) { return; }
-    window.addEventListener('resize', this.onResize.bind(this));
+    window.addEventListener('resize', this.onScroll.bind(this));
   }
 
   listenForScroll() {
     if (!this.options.scrollPositioning) { return; }
     window.addEventListener('scroll', this.onScroll.bind(this));
+
+    this.scrollParent = this.getScrollParent();
+    if (this.scrollParent) {
+      this.scrollParent.addEventListener('scroll', this.onResize.bind(this));
+    }
   }
 
   destroyListeners() {
     window.removeEventListener('resize', this.onResize.bind(this));
     window.removeEventListener('scroll', this.onScroll.bind(this));
+
+    if (this.scrollParent) {
+      this.scrollParent.removeEventListener('scroll', this.onScroll.bind(this));
+    }
   }
 
   destroy() {
