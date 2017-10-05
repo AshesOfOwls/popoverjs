@@ -116,8 +116,6 @@ class Renderer {
   }
 
   onTriggerClick(element, event, e) {
-    e.stopImmediatePropagation();
-
     this.toggleRenderListeners(false);
     this.onShowEvent(e);
   }

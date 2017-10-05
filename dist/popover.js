@@ -935,8 +935,6 @@ var Renderer = function () {
   }, {
     key: 'onTriggerClick',
     value: function onTriggerClick(element, event, e) {
-      e.stopImmediatePropagation();
-
       this.toggleRenderListeners(false);
       this.onShowEvent(e);
     }
