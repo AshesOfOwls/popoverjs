@@ -105,19 +105,21 @@ class Renderer {
 
   toggleRenderListeners(isToggled) {
     if (this.showOnObjects.length > 0) {
-      const method = isToggled ? 'addEventListener' : 'removeEventListener';
-      this.showOnObjects.forEach((showOn) => {
-        showOn.element[method](
-          showOn.event,
-          showOn.callback,
-        );
+      setTimeout(() => {
+        const method = isToggled ? 'addEventListener' : 'removeEventListener';
+        this.showOnObjects.forEach((showOn) => {
+          showOn.element[method](
+            showOn.event,
+            showOn.callback,
+          );
+        });
       });
     }
   }
 
   onTriggerClick(element, event, e) {
-    this.toggleRenderListeners(false);
     this.onShowEvent(e);
+    this.toggleRenderListeners(false);
   }
 
   onShowEvent(event) {
@@ -140,12 +142,14 @@ class Renderer {
 
   toggleHideListeners(isToggled) {
     if (this.hideOnObjects.length > 0) {
-      const method = isToggled ? 'addEventListener' : 'removeEventListener';
-      this.hideOnObjects.forEach((hideOn) => {
-        hideOn.element[method](
-          hideOn.event,
-          hideOn.callback,
-        );
+      setTimeout(() => {
+        const method = isToggled ? 'addEventListener' : 'removeEventListener';
+        this.hideOnObjects.forEach((hideOn) => {
+          hideOn.element[method](
+            hideOn.event,
+            hideOn.callback,
+          );
+        });
       });
     }
   }
@@ -264,6 +268,7 @@ class Renderer {
   _hide() {
     this.options.onBeforeHide();
     this.toggleVisibility(false);
+    this.toggleHideListeners(false);
   }
 
   toggleVisibility(isVisible = false) {

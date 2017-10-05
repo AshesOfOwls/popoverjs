@@ -925,18 +925,22 @@ var Renderer = function () {
   }, {
     key: 'toggleRenderListeners',
     value: function toggleRenderListeners(isToggled) {
+      var _this = this;
+
       if (this.showOnObjects.length > 0) {
-        var method = isToggled ? 'addEventListener' : 'removeEventListener';
-        this.showOnObjects.forEach(function (showOn) {
-          showOn.element[method](showOn.event, showOn.callback);
+        setTimeout(function () {
+          var method = isToggled ? 'addEventListener' : 'removeEventListener';
+          _this.showOnObjects.forEach(function (showOn) {
+            showOn.element[method](showOn.event, showOn.callback);
+          });
         });
       }
     }
   }, {
     key: 'onTriggerClick',
     value: function onTriggerClick(element, event, e) {
-      this.toggleRenderListeners(false);
       this.onShowEvent(e);
+      this.toggleRenderListeners(false);
     }
   }, {
     key: 'onShowEvent',
@@ -964,10 +968,14 @@ var Renderer = function () {
   }, {
     key: 'toggleHideListeners',
     value: function toggleHideListeners(isToggled) {
+      var _this2 = this;
+
       if (this.hideOnObjects.length > 0) {
-        var method = isToggled ? 'addEventListener' : 'removeEventListener';
-        this.hideOnObjects.forEach(function (hideOn) {
-          hideOn.element[method](hideOn.event, hideOn.callback);
+        setTimeout(function () {
+          var method = isToggled ? 'addEventListener' : 'removeEventListener';
+          _this2.hideOnObjects.forEach(function (hideOn) {
+            hideOn.element[method](hideOn.event, hideOn.callback);
+          });
         });
       }
     }
@@ -1036,7 +1044,7 @@ var Renderer = function () {
   }, {
     key: 'shouldShow',
     value: function shouldShow() {
-      var _this = this;
+      var _this3 = this;
 
       if (this.isVisible || this.isForceClosing) {
         this.toggleRenderListeners(true);
@@ -1047,7 +1055,7 @@ var Renderer = function () {
 
       if (this.options.showDelay > 0) {
         this.showTimeout = setTimeout(function () {
-          _this._show();
+          _this3._show();
         }, this.options.showDelay);
       } else {
         this._show();
@@ -1083,7 +1091,7 @@ var Renderer = function () {
   }, {
     key: 'shouldHide',
     value: function shouldHide() {
-      var _this2 = this;
+      var _this4 = this;
 
       if (!this.isVisible) {
         return;
@@ -1093,7 +1101,7 @@ var Renderer = function () {
 
       if (this.options.hideDelay > 0) {
         this.hideTimeout = setTimeout(function () {
-          _this2._hide();
+          _this4._hide();
         }, this.options.hideDelay);
       } else {
         this._hide();
@@ -1109,6 +1117,7 @@ var Renderer = function () {
     value: function _hide() {
       this.options.onBeforeHide();
       this.toggleVisibility(false);
+      this.toggleHideListeners(false);
     }
   }, {
     key: 'toggleVisibility',
