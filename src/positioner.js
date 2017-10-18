@@ -70,7 +70,8 @@ class Positioner {
     this.setUpGlobals();
     this.setUpElements();
     this.parseConstraints();
-    this.applyDefaultConstraint();
+    this.applyHiddenConstraint();
+    this.toggleEnabledClasses(false);
   }
 
   setUpGlobals() {
@@ -131,9 +132,7 @@ class Positioner {
   }
 
   cacheCssOffsets() {
-    const sizerClasses = this.options.classes.sizer;
-
-    this.togglePopoverClasses(sizerClasses, true);
+    this.toggleSizerClasses(true);
 
     this.cssCache = {
       arrowSize: this.getArrowSize(),
@@ -144,7 +143,12 @@ class Positioner {
       body: getBodyOffsets(),
     };
 
-    this.togglePopoverClasses(sizerClasses, false);
+    this.toggleSizerClasses(false);
+  }
+
+  toggleSizerClasses(isToggled) {
+    const sizerClasses = this.options.classes.sizer;
+    this.togglePopoverClasses(sizerClasses, isToggled);
   }
 
   getArrowSize() {
@@ -218,6 +222,7 @@ class Positioner {
   }
 
   enable() {
+    this.toggleEnabledClasses(true);
     this.listenForResize();
     this.listenForScroll();
     this.refreshAllElementData();
@@ -279,6 +284,11 @@ class Positioner {
 
   disable() {
     this.destroy();
+    this.toggleEnabledClasses(false);
+  }
+
+  toggleEnabledClasses(isToggled) {
+    this.togglePopoverClasses([this.options.classes.isEnabled], isToggled);
   }
 
   position() {
@@ -453,7 +463,7 @@ class Positioner {
     return this.origins.popover.width + size;
   }
 
-  applyDefaultConstraint() {
+  applyHiddenConstraint() {
     const defaultConstraint = this.constraints[0];
     this.applyConstraint(defaultConstraint);
   }

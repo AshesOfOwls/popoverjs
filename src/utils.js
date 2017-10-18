@@ -126,6 +126,7 @@ const generateOptionClassnames = (options) => {
       content: `${prefix}-content`,
       arrow: `${prefix}-arrow`,
       isVisible: `${prefix}--is-visible`,
+      isEnabled: `${prefix}--is-enabled`,
       isOpen: `${prefix}--is-open`,
     },
   });
