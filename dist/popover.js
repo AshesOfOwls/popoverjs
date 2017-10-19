@@ -1193,6 +1193,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var defaults = {
+  contentReference: function contentReference() {},
   classPrefix: 'popoverjs',
   themeClass: 'popoverjs--default',
   bodyAttached: false,
@@ -1285,11 +1286,11 @@ var Positioner = function () {
   }, {
     key: 'setUpContainer',
     value: function setUpContainer() {
-      if (!this.options.bodyAttached) {
-        return;
+      if (this.options.bodyAttached) {
+        this.createDetachedContainer();
       }
 
-      this.createDetachedContainer();
+      this.options.contentReference(this.popoverContent);
     }
   }, {
     key: 'destroyContainer',

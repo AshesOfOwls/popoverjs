@@ -2,6 +2,7 @@ import documentOffset from 'document-offset';
 import { toggleClassesOnElement, getScrollParent, getElementOrigin, getWindowOrigin, throttle, generateOptionClassnames } from './utils';
 
 const defaults = {
+  contentReference: () => {},
   classPrefix: 'popoverjs',
   themeClass: 'popoverjs--default',
   bodyAttached: false,
@@ -92,9 +93,11 @@ class Positioner {
   }
 
   setUpContainer() {
-    if (!this.options.bodyAttached) { return; }
+    if (this.options.bodyAttached) {
+      this.createDetachedContainer();
+    }
 
-    this.createDetachedContainer();
+    this.options.contentReference(this.popoverContent);
   }
 
   destroyContainer() {
