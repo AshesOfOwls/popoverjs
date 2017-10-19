@@ -429,7 +429,9 @@ var Popoverjs = function () {
   }, {
     key: 'positionerOptions',
     get: function get() {
-      return Object.assign({}, this.options);
+      return Object.assign({
+        hide: this.forceHide.bind(this)
+      }, this.options);
     }
   }]);
 
@@ -1205,6 +1207,7 @@ var defaults = {
   scrollPositioning: true,
   scrollParentConstraint: true,
   applyClassesToAttachment: false,
+  closeOnCutoff: false,
   constraints: [{
     popover: 'top right',
     attachment: 'bottom right'
@@ -1478,7 +1481,7 @@ var Positioner = function () {
 
       this.scrollParent = this.getScrollParent();
       if (this.scrollParent) {
-        this.scrollParent.addEventListener('scroll', this.onResize.bind(this));
+        this.scrollParent.addEventListener('scroll', this.onScroll.bind(this));
       }
     }
   }, {
@@ -1502,11 +1505,20 @@ var Positioner = function () {
     key: 'onResize',
     value: function onResize() {
       this.position();
+      this.attemptAutoClose();
     }
   }, {
     key: 'onScroll',
     value: function onScroll() {
       this.position();
+      this.attemptAutoClose();
+    }
+  }, {
+    key: 'attemptAutoClose',
+    value: function attemptAutoClose() {
+      if (this.isCompletelyConstrained && this.options.closeOnCutoff) {
+        this.options.hide();
+      }
     }
   }, {
     key: 'disable',
@@ -1536,6 +1548,8 @@ var Positioner = function () {
       if (activeConstraint) {
         this.applyConstraint(activeConstraint);
       }
+
+      this.isCompletelyConstrained = !activeConstraint;
     }
   }, {
     key: 'getActiveConstraint',

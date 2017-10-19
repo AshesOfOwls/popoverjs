@@ -115,7 +115,9 @@ class Popoverjs {
   }
 
   get positionerOptions() {
-    return Object.assign({}, this.options);
+    return Object.assign({
+      hide: this.forceHide.bind(this),
+    }, this.options);
   }
 
   setUpPositioner() {

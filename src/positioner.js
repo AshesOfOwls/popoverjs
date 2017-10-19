@@ -14,6 +14,7 @@ const defaults = {
   scrollPositioning: true,
   scrollParentConstraint: true,
   applyClassesToAttachment: false,
+  closeOnCutoff: false,
   constraints: [{
     popover: 'top right',
     attachment: 'bottom right',
@@ -258,7 +259,7 @@ class Positioner {
 
     this.scrollParent = this.getScrollParent();
     if (this.scrollParent) {
-      this.scrollParent.addEventListener('scroll', this.onResize.bind(this));
+      this.scrollParent.addEventListener('scroll', this.onScroll.bind(this));
     }
   }
 
@@ -279,10 +280,18 @@ class Positioner {
 
   onResize() {
     this.position();
+    this.attemptAutoClose();
   }
 
   onScroll() {
     this.position();
+    this.attemptAutoClose();
+  }
+
+  attemptAutoClose() {
+    if (this.isCompletelyConstrained && this.options.closeOnCutoff) {
+      this.options.hide();
+    }
   }
 
   disable() {
@@ -310,6 +319,8 @@ class Positioner {
     if (activeConstraint) {
       this.applyConstraint(activeConstraint);
     }
+
+    this.isCompletelyConstrained = !activeConstraint;
   }
 
   getActiveConstraint() {
