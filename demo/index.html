@@ -28,13 +28,14 @@
       .container {
         border: 1px solid black;
         height: 100%;
+        overflow: scroll;
         width: 100%;
       }
 
       .attachment {
         background: #CCC;
         height: 300px;
-        margin: 100px 200px;
+        margin: 1200px 200px;
         position: relative;
         width: 300px;
       }
@@ -160,6 +161,7 @@
         triggerElement: document.getElementsByClassName('trigger-1')[0],
         attachmentElement: document.getElementsByClassName('attachment')[0],
         popoverElement: document.getElementsByClassName('popover-1')[0],
+        constraintElement: 'scroll',
         closeOnCutoff: true,
         onBeforeHide: function() { },
         onBeforeShow: function() { },
