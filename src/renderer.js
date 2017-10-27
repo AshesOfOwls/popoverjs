@@ -100,6 +100,11 @@ class Renderer {
   }
 
   listenForRender() {
+    if (this.options.alwaysOpen) {
+      this.shouldShow();
+      return;
+    }
+
     this.toggleRenderListeners(true);
   }
 
@@ -137,6 +142,10 @@ class Renderer {
   }
 
   listenForHide() {
+    if (this.options.alwaysOpen) {
+      return;
+    }
+
     this.toggleHideListeners(true);
   }
 

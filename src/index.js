@@ -8,6 +8,7 @@ import { error, generateOptionClassnames } from './utils';
 import './styles/_main.scss';
 
 const defaults = {
+  alwaysOpen: true,
   classPrefix: 'popoverjs',
   showDelay: 0,
   hideDelay: 0,

@@ -231,7 +231,7 @@ class Positioner {
     this.listenForScroll();
     this.refreshAllElementData();
     this.setUpContainer();
-    this.position();
+    this._position();
   }
 
   resetClasses() {
@@ -304,6 +304,14 @@ class Positioner {
   }
 
   position() {
+    if (this.constraints.length === 1) {
+      return;
+    }
+
+    this._position();
+  }
+
+  _position() {
     this.refreshAllElementData();
     this.maintainDetachedContainerPosition();
     this.checkConstraints();
