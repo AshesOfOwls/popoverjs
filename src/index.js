@@ -90,6 +90,10 @@ class Popoverjs {
     this.Renderer.hide();
   }
 
+  triggerHideEvent(event) {
+    this.Renderer.onHideEvent(event);
+  }
+
   forceHide() {
     this.Renderer.forceHide();
   }
@@ -117,7 +121,7 @@ class Popoverjs {
 
   get positionerOptions() {
     return Object.assign({
-      hide: this.forceHide.bind(this),
+      triggerHideEvent: this.triggerHideEvent.bind(this),
     }, this.options);
   }
 

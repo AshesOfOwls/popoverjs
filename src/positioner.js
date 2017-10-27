@@ -290,7 +290,7 @@ class Positioner {
 
   attemptAutoClose() {
     if (this.isCompletelyConstrained && this.options.closeOnCutoff) {
-      this.options.hide();
+      this.options.triggerHideEvent('closeOnCutoff');
     }
   }
 

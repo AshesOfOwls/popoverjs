@@ -371,6 +371,11 @@ var Popoverjs = function () {
       this.Renderer.hide();
     }
   }, {
+    key: 'triggerHideEvent',
+    value: function triggerHideEvent(event) {
+      this.Renderer.onHideEvent(event);
+    }
+  }, {
     key: 'forceHide',
     value: function forceHide() {
       this.Renderer.forceHide();
@@ -431,7 +436,7 @@ var Popoverjs = function () {
     key: 'positionerOptions',
     get: function get() {
       return Object.assign({
-        hide: this.forceHide.bind(this)
+        triggerHideEvent: this.triggerHideEvent.bind(this)
       }, this.options);
     }
   }]);
@@ -1527,7 +1532,7 @@ var Positioner = function () {
     key: 'attemptAutoClose',
     value: function attemptAutoClose() {
       if (this.isCompletelyConstrained && this.options.closeOnCutoff) {
-        this.options.hide();
+        this.options.triggerHideEvent('closeOnCutoff');
       }
     }
   }, {
