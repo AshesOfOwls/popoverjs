@@ -1,6 +1,13 @@
 import documentOffset from 'document-offset';
 import { toggleClassesOnElement, getScrollParent, getElementOrigin, getWindowOrigin, throttle, generateOptionClassnames } from './utils';
 
+const sides = ['top', 'bottom', 'left', 'right', 'center', 'middle'];
+const sidesReversed = ['bottom', 'top', 'right', 'left', 'center', 'middle'];
+
+const getOppositeSide = side => (
+  sidesReversed[sides.indexOf(side)]
+);
+
 const defaults = {
   contentReference: () => {},
   classPrefix: 'popoverjs',
@@ -128,8 +135,8 @@ class Positioner {
     const origin = {
       height: `${attachmentOrigin.height}px`,
       width: `${attachmentOrigin.width}px`,
-      left: `${attachmentOrigin.left - this.cssCache.body.left}px`,
-      top: `${attachmentOrigin.top - this.cssCache.body.top}px`,
+      left: `${attachmentOrigin.document.left - this.cssCache.body.left}px`,
+      top: `${attachmentOrigin.document.top - this.cssCache.body.top}px`,
     };
 
     Object.assign(this.containerElement.style, origin);
@@ -178,11 +185,11 @@ class Positioner {
   }
 
   getConstraintParent() {
-    if (this.options.scrollParentConstraint) {
+    const constraintElement = this.options.constraintElement;
+
+    if (constraintElement === 'scroll') {
       return this.getScrollParent();
     }
-
-    const constraintElement = this.options.constraintElement;
 
     if (!constraintElement) {
       return window;
@@ -366,7 +373,7 @@ class Positioner {
   getAttachmentOrigin() {
     return Object.assign({},
       getElementOrigin(this.attachmentElement),
-      documentOffset(this.attachmentElement));
+      { document: documentOffset(this.attachmentElement) });
   }
 
   canFitInto(constraint) {
@@ -385,6 +392,10 @@ class Positioner {
         isOutsideConstraint = this.isConstrainedBySecondary(constraint, 'bottom') ||
           this.isConstrainedBySecondary(constraint, 'top');
       }
+    }
+
+    if (!isOutsideConstraint) {
+      isOutsideConstraint = this.isConstrainedByTertiary(constraint.attachment.primary);
     }
 
     return !isOutsideConstraint;
@@ -413,6 +424,18 @@ class Positioner {
     default:
       return originCoordinate + popoverSize >= parentCoord;
     }
+  }
+
+  isConstrainedByTertiary(side) {
+    let originCoordinate = this.origins.attachment[side];
+
+    if (side === 'left' || side === 'top') {
+      originCoordinate -= this.cssCache.primaryOffset;
+      return originCoordinate > this.origins.parent[getOppositeSide(side)];
+    }
+
+    originCoordinate += this.cssCache.primaryOffset;
+    return originCoordinate < 0;
   }
 
   getAttachementOffsetForConstraint(constraint) {

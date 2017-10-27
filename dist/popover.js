@@ -1209,6 +1209,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var sides = ['top', 'bottom', 'left', 'right', 'center', 'middle'];
+var sidesReversed = ['bottom', 'top', 'right', 'left', 'center', 'middle'];
+
+var getOppositeSide = function getOppositeSide(side) {
+  return sidesReversed[sides.indexOf(side)];
+};
+
 var defaults = {
   contentReference: function contentReference() {},
   classPrefix: 'popoverjs',
@@ -1347,8 +1354,8 @@ var Positioner = function () {
       var origin = {
         height: attachmentOrigin.height + 'px',
         width: attachmentOrigin.width + 'px',
-        left: attachmentOrigin.left - this.cssCache.body.left + 'px',
-        top: attachmentOrigin.top - this.cssCache.body.top + 'px'
+        left: attachmentOrigin.document.left - this.cssCache.body.left + 'px',
+        top: attachmentOrigin.document.top - this.cssCache.body.top + 'px'
       };
 
       Object.assign(this.containerElement.style, origin);
@@ -1405,11 +1412,11 @@ var Positioner = function () {
   }, {
     key: 'getConstraintParent',
     value: function getConstraintParent() {
-      if (this.options.scrollParentConstraint) {
+      var constraintElement = this.options.constraintElement;
+
+      if (constraintElement === 'scroll') {
         return this.getScrollParent();
       }
-
-      var constraintElement = this.options.constraintElement;
 
       if (!constraintElement) {
         return window;
@@ -1618,7 +1625,7 @@ var Positioner = function () {
   }, {
     key: 'getAttachmentOrigin',
     value: function getAttachmentOrigin() {
-      return Object.assign({}, (0, _utils.getElementOrigin)(this.attachmentElement), (0, _documentOffset2.default)(this.attachmentElement));
+      return Object.assign({}, (0, _utils.getElementOrigin)(this.attachmentElement), { document: (0, _documentOffset2.default)(this.attachmentElement) });
     }
   }, {
     key: 'canFitInto',
@@ -1638,6 +1645,10 @@ var Positioner = function () {
           default:
             isOutsideConstraint = this.isConstrainedBySecondary(constraint, 'bottom') || this.isConstrainedBySecondary(constraint, 'top');
         }
+      }
+
+      if (!isOutsideConstraint) {
+        isOutsideConstraint = this.isConstrainedByTertiary(constraint.attachment.primary);
       }
 
       return !isOutsideConstraint;
@@ -1668,6 +1679,19 @@ var Positioner = function () {
         default:
           return originCoordinate + popoverSize >= parentCoord;
       }
+    }
+  }, {
+    key: 'isConstrainedByTertiary',
+    value: function isConstrainedByTertiary(side) {
+      var originCoordinate = this.origins.attachment[side];
+
+      if (side === 'left' || side === 'top') {
+        originCoordinate -= this.cssCache.primaryOffset;
+        return originCoordinate > this.origins.parent[getOppositeSide(side)];
+      }
+
+      originCoordinate += this.cssCache.primaryOffset;
+      return originCoordinate < 0;
     }
   }, {
     key: 'getAttachementOffsetForConstraint',
