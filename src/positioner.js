@@ -427,15 +427,14 @@ class Positioner {
   }
 
   isConstrainedByTertiary(side) {
-    let originCoordinate = this.origins.attachment[side];
+    const originCoordinate = this.origins.attachment[side];
+    const parentCoordinate = this.origins.parent[getOppositeSide(side)];
 
     if (side === 'left' || side === 'top') {
-      originCoordinate -= this.cssCache.primaryOffset;
-      return originCoordinate > this.origins.parent[getOppositeSide(side)];
+      return originCoordinate - this.cssCache.primaryOffset > parentCoordinate;
     }
 
-    originCoordinate += this.cssCache.primaryOffset;
-    return originCoordinate < 0;
+    return originCoordinate + this.cssCache.primaryOffset < parentCoordinate;
   }
 
   getAttachementOffsetForConstraint(constraint) {

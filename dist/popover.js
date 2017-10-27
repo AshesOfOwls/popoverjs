@@ -1684,14 +1684,13 @@ var Positioner = function () {
     key: 'isConstrainedByTertiary',
     value: function isConstrainedByTertiary(side) {
       var originCoordinate = this.origins.attachment[side];
+      var parentCoordinate = this.origins.parent[getOppositeSide(side)];
 
       if (side === 'left' || side === 'top') {
-        originCoordinate -= this.cssCache.primaryOffset;
-        return originCoordinate > this.origins.parent[getOppositeSide(side)];
+        return originCoordinate - this.cssCache.primaryOffset > parentCoordinate;
       }
 
-      originCoordinate += this.cssCache.primaryOffset;
-      return originCoordinate < 0;
+      return originCoordinate + this.cssCache.primaryOffset < parentCoordinate;
     }
   }, {
     key: 'getAttachementOffsetForConstraint',
