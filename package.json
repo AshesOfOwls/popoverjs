@@ -1,6 +1,6 @@
 {
   "name": "popover.js",
-  "version": "0.2.14",
+  "version": "0.2.15",
   "description": "",
   "main": "dist/popover.js",
   "scripts": {
