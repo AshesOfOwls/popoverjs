@@ -1264,6 +1264,8 @@ var Positioner = function () {
 
     this.generateOptions(options);
 
+    this.onDomEvent = this.onDomEvent.bind(this);
+
     this.initialize();
   }
 
@@ -1491,7 +1493,7 @@ var Positioner = function () {
       if (!this.options.resizePositioning) {
         return;
       }
-      window.addEventListener('resize', this.onScroll.bind(this));
+      window.addEventListener('resize', this.onDomEvent);
     }
   }, {
     key: 'listenForScroll',
@@ -1499,21 +1501,21 @@ var Positioner = function () {
       if (!this.options.scrollPositioning) {
         return;
       }
-      window.addEventListener('scroll', this.onScroll.bind(this));
+      window.addEventListener('scroll', this.onDomEvent);
 
       this.scrollParent = this.getScrollParent();
       if (this.scrollParent) {
-        this.scrollParent.addEventListener('scroll', this.onScroll.bind(this));
+        this.scrollParent.addEventListener('scroll', this.onDomEvent);
       }
     }
   }, {
     key: 'destroyListeners',
     value: function destroyListeners() {
-      window.removeEventListener('resize', this.onResize.bind(this));
-      window.removeEventListener('scroll', this.onScroll.bind(this));
+      window.removeEventListener('resize', this.onDomEvent);
+      window.removeEventListener('scroll', this.onDomEvent);
 
       if (this.scrollParent) {
-        this.scrollParent.removeEventListener('scroll', this.onScroll.bind(this));
+        this.scrollParent.removeEventListener('scroll', this.onDomEvent);
       }
     }
   }, {
@@ -1524,14 +1526,8 @@ var Positioner = function () {
       this.destroyContainer();
     }
   }, {
-    key: 'onResize',
-    value: function onResize() {
-      this.position();
-      this.attemptAutoClose();
-    }
-  }, {
-    key: 'onScroll',
-    value: function onScroll() {
+    key: 'onDomEvent',
+    value: function onDomEvent() {
       this.position();
       this.attemptAutoClose();
     }
