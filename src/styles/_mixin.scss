@@ -1,7 +1,7 @@
 @import '_arrows';
 @import '_positioning';
 
-@mixin popoverjs($arrow: 16px, $content_offset: 10px, $arrow_offset: 16px, $attachment_margin: 2px) {
+@mixin popoverjs($arrow: 16px, $content_offset: 10px, $arrow_offset: 16px, $attachment_margin: 0px) {
   $arrow_middle: $arrow / 2;
   $content_offset: $arrow_middle + $content_offset;
 
