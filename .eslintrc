@@ -6,6 +6,9 @@
     },
     "extends": "airbnb",
     "rules": {
-        "indent": ["error", 2]
+        "indent": ["error", 2],
+        'react/forbid-prop-types': 'off',
+        'react/no-find-dom-node': 'off',
+        'react/jsx-filename-extension': 'off'
     }
 }
