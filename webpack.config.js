@@ -1,9 +1,12 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/index.js',
+  entry: {
+    popover: './src/index.js',
+    react: './src/react/index.js',
+  },
   output: {
-    filename: 'popover.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
     library: 'popoverjs',
     libraryTarget: 'umd',
@@ -22,7 +25,7 @@ module.exports = {
       test: [/\.js$/],
       exclude: [/node_modules/],
       loader: 'babel-loader',
-      options: { presets: ['es2015'] },
+      options: { presets: ['react', 'es2015', 'stage-0'] },
     }],
   },
 };
