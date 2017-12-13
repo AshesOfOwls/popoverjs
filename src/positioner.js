@@ -45,17 +45,6 @@ const generateClassesForConstraint = (prefix, constraint) => ([
   `${prefix}--attachment-secondary-${constraint.attachment.secondary}`,
 ]);
 
-const getBodyOffsets = () => {
-  const computedBodyStyles = getComputedStyle(document.body);
-
-  return {
-    left: parseInt(computedBodyStyles.marginLeft, 10),
-    top: parseInt(computedBodyStyles.marginTop, 10),
-    right: parseInt(computedBodyStyles.marginRight, 10),
-    bottom: parseInt(computedBodyStyles.marginBottom, 10),
-  };
-};
-
 class Positioner {
   constructor(options) {
     this.generateOptions(options);
@@ -137,8 +126,8 @@ class Positioner {
     const origin = {
       height: `${attachmentOrigin.height}px`,
       width: `${attachmentOrigin.width}px`,
-      left: `${attachmentOrigin.document.left - this.cssCache.body.left}px`,
-      top: `${attachmentOrigin.document.top - this.cssCache.body.top}px`,
+      left: `${attachmentOrigin.document.left}px`,
+      top: `${attachmentOrigin.document.top}px`,
     };
 
     Object.assign(this.containerElement.style, origin);
@@ -153,7 +142,6 @@ class Positioner {
       primaryOffset: Math.abs(this.popoverElement.offsetTop) - 1,
       secondaryOffset: Math.abs(this.popoverElement.offsetLeft),
       contentOffset: Math.abs(this.popoverContent.offsetLeft),
-      body: getBodyOffsets(),
     };
 
     this.toggleSizerClasses(false);

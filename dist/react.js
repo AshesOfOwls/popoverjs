@@ -20436,17 +20436,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return [prefix + '--popover-primary-' + constraint.popover.primary, prefix + '--popover-secondary-' + constraint.popover.secondary, prefix + '--attachment-primary-' + constraint.attachment.primary, prefix + '--attachment-secondary-' + constraint.attachment.secondary];
       };
 
-      var getBodyOffsets = function getBodyOffsets() {
-        var computedBodyStyles = getComputedStyle(document.body);
-
-        return {
-          left: parseInt(computedBodyStyles.marginLeft, 10),
-          top: parseInt(computedBodyStyles.marginTop, 10),
-          right: parseInt(computedBodyStyles.marginRight, 10),
-          bottom: parseInt(computedBodyStyles.marginBottom, 10)
-        };
-      };
-
       var Positioner = function () {
         function Positioner(options) {
           _classCallCheck(this, Positioner);
@@ -20545,8 +20534,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             var origin = {
               height: attachmentOrigin.height + 'px',
               width: attachmentOrigin.width + 'px',
-              left: attachmentOrigin.document.left - this.cssCache.body.left + 'px',
-              top: attachmentOrigin.document.top - this.cssCache.body.top + 'px'
+              left: attachmentOrigin.document.left + 'px',
+              top: attachmentOrigin.document.top + 'px'
             };
 
             Object.assign(this.containerElement.style, origin);
@@ -20561,8 +20550,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
               contentSize: this.getContentSize(),
               primaryOffset: Math.abs(this.popoverElement.offsetTop) - 1,
               secondaryOffset: Math.abs(this.popoverElement.offsetLeft),
-              contentOffset: Math.abs(this.popoverContent.offsetLeft),
-              body: getBodyOffsets()
+              contentOffset: Math.abs(this.popoverContent.offsetLeft)
             };
 
             this.toggleSizerClasses(false);
