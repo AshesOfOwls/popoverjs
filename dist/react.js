@@ -19992,7 +19992,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       var defaults = {
         manualTriggering: false,
         showOn: ['trigger.click'],
-        hideOn: ['document.click', 'popover.mouseleave'],
+        hideOn: ['document.click', 'trigger.click'],
         onHideEvent: function onHideEvent() {},
         onShowEvent: function onShowEvent() {}
       };

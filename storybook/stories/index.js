@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
-import { storiesOf } from '@storybook/react';
+import './styles.scss';
 
-import './styles.css'
-
-import stateful from './stateful';
+import './css';
+import './react';
+import './vanilla';

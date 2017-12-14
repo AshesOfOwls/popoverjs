@@ -3,7 +3,7 @@ import { oneEvent, toggleClassesOnElement, whichTransitionEvent, generateOptionC
 const defaults = {
   manualTriggering: false,
   showOn: ['trigger.click'],
-  hideOn: ['document.click', 'popover.mouseleave'],
+  hideOn: ['document.click', 'trigger.click'],
   onHideEvent: () => {},
   onShowEvent: () => {},
 };

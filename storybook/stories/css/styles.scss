@@ -1,0 +1,9 @@
+@import '../../../src/styles/mixin';
+
+.popoverjs--dropdown {
+  @include popoverjs(0,0,0,0);
+}
+
+.popoverjs--bigArrow {
+  @include popoverjs(60px);
+}
