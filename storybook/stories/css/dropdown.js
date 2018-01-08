@@ -18,7 +18,7 @@ const popoverOptions = {
 storiesOf('Custom SCSS', module)
   .add('dropdown style', () => (
     <PopoverjsReact popoverOptions={popoverOptions}>
-      <div>I am the trigger</div>
-      <div>I am the content</div>
+      <div className="demo-trigger">I am the trigger</div>
+      <div className="demo-content">I am the content</div>
     </PopoverjsReact>
   ));

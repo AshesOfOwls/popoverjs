@@ -8,6 +8,16 @@ body {
   padding: 15px;
 }
 
+.demo-trigger {
+  background: #dcdcdc;
+  border-radius: 3px;
+  padding: 10px;
+}
+
+.demo-content {
+  padding: 20px;
+}
+
 .popoverjs {
   opacity: 0;
   transition: opacity .2s, visibility .2s;

@@ -28,8 +28,8 @@ class TestHarness extends Component {
   render() {
     return (
       <PopoverjsReact open={this.state.open} popoverOptions={this.popoverOptions}>
-        <div>I am the trigger</div>
-        <div>I am the content</div>
+        <div className="demo-trigger">I am the trigger</div>
+        <div className="demo-content">I am the content</div>
       </PopoverjsReact>
     );
   }

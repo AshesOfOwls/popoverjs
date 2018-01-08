@@ -19,11 +19,11 @@ storiesOf('Custom SCSS', module)
   .add('Big Arrow', () => (
     <div>
       <div className="description">
-        
+
       </div>
       <PopoverjsReact popoverOptions={popoverOptions}>
-        <div>I am the trigger</div>
-        <div>I am the content</div>
+        <div className="demo-trigger">I am the trigger</div>
+        <div className="demo-content">I am the content</div>
       </PopoverjsReact>
     </div>
   ));

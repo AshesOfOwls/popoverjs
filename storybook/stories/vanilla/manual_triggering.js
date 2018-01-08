@@ -36,13 +36,15 @@ class TestHarness extends Component {
   render() {
     return (
       <div className="popoverjs--wrapper">
-        <div className="triggerElement">
+        <div className="demo-trigger">
           Manually triggered popover. Open console to see events getting triggered.
         </div>
         <div className="popoverjs">
           <div className="popoverjs-arrow" />
           <div className="popoverjs-content">
-            Hello, I am the content for the popover.
+            <div className="demo-content">
+              Hello, I am the content for the popover.
+            </div>
           </div>
         </div>
       </div>

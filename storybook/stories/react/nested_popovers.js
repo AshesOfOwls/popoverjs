@@ -17,10 +17,10 @@ const innerPopoverOptions = {
 storiesOf('React Adapter', module)
   .add('Nested Popovers', () => (
     <PopoverjsReact popoverOptions={outerPopoverOptions}>
-      <div>I am the trigger</div>
+      <div className="demo-trigger">I am the trigger</div>
       <PopoverjsReact popoverOptions={innerPopoverOptions}>
-        <div>I am the trigger</div>
-        <div>I am the content</div>
+        <div className="demo-trigger">I am the trigger</div>
+        <div className="demo-content">I am the content</div>
       </PopoverjsReact>
     </PopoverjsReact>
   ));
