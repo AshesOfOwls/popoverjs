@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { storiesOf } from '@storybook/react';
 import { PopoverjsReact } from '../../../dist';
+import README from './README/manual_triggering.md';
+import { withReadme }  from 'storybook-readme';
 
 class TestHarness extends Component {
   constructor(props) {
@@ -36,4 +38,5 @@ class TestHarness extends Component {
 }
 
 storiesOf('React Adapter', module)
+  .addDecorator(withReadme(README))
   .add('Manual Triggering', () => (<TestHarness />));

@@ -1,6 +1,8 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { PopoverjsReact } from '../../../dist';
+import README from './README/nested_popovers.md';
+import { withReadme }  from 'storybook-readme';
 
 const outerPopoverOptions = {
   bodyAttached: true,
@@ -15,6 +17,7 @@ const innerPopoverOptions = {
 };
 
 storiesOf('React Adapter', module)
+  .addDecorator(withReadme(README))
   .add('Nested Popovers', () => (
     <PopoverjsReact popoverOptions={outerPopoverOptions}>
       <div className="demo-trigger">I am the trigger</div>

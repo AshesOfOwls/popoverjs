@@ -1249,8 +1249,20 @@ var defaults = {
     popover: 'top right',
     attachment: 'bottom right'
   }, {
-    popover: 'left top',
+    popover: 'top left',
+    attachment: 'bottom left'
+  }, {
+    popover: 'bottom right',
+    attachment: 'top right'
+  }, {
+    popover: 'bottom left',
+    attachment: 'top left'
+  }, {
+    popover: 'left center',
     attachment: 'right center'
+  }, {
+    popover: 'right center',
+    attachment: 'left center'
   }]
 };
 
