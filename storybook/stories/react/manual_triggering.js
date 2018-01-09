@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { storiesOf } from '@storybook/react';
+import { withReadme } from 'storybook-readme';
 import { PopoverjsReact } from '../../../dist';
 import README from './README/manual_triggering.md';
-import { withReadme }  from 'storybook-readme';
 
 class TestHarness extends Component {
   constructor(props) {

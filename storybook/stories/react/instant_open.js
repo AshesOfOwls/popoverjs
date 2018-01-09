@@ -1,8 +1,8 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { PopoverjsReact } from '../../../dist';
+import { withReadme } from 'storybook-readme';
 import README from './README/instant_open.md';
-import { withReadme }  from 'storybook-readme';
 
 storiesOf('React Adapter', module)
   .addDecorator(withReadme(README))

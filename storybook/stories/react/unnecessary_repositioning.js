@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
-import { findDOMNode } from 'react-dom';
+import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { PopoverjsReact } from '../../../dist';
+import { withReadme } from 'storybook-readme';
 import README from './README/unnecessary_repositioning.md';
-import { withReadme }  from 'storybook-readme';
 
 const popoverOptions = {
   constraintElement: 'scroll',
