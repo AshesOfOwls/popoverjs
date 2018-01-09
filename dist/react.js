@@ -1112,7 +1112,6 @@ var Popover = function (_Component) {
     key: 'popoverOptions',
     get: function get() {
       var options = _extends({
-        bodyAttached: true,
         attachmentElement: this.attachmentElement,
         triggerElement: this.attachmentElement,
         popoverElement: this.popoverElement
@@ -20420,11 +20419,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         applyClassesToAttachment: false,
         closeOnCutoff: false,
         constraints: [{
-          popover: 'top right',
-          attachment: 'bottom right'
-        }, {
           popover: 'top left',
           attachment: 'bottom left'
+        }, {
+          popover: 'top right',
+          attachment: 'bottom right'
         }, {
           popover: 'bottom right',
           attachment: 'top right'

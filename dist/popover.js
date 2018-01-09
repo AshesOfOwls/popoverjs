@@ -1246,11 +1246,11 @@ var defaults = {
   applyClassesToAttachment: false,
   closeOnCutoff: false,
   constraints: [{
-    popover: 'top right',
-    attachment: 'bottom right'
-  }, {
     popover: 'top left',
     attachment: 'bottom left'
+  }, {
+    popover: 'top right',
+    attachment: 'bottom right'
   }, {
     popover: 'bottom right',
     attachment: 'top right'

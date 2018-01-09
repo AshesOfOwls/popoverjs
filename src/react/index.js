@@ -53,7 +53,6 @@ export default class Popover extends Component {
 
   get popoverOptions() {
     const options = {
-      bodyAttached: true,
       attachmentElement: this.attachmentElement,
       triggerElement: this.attachmentElement,
       popoverElement: this.popoverElement,
