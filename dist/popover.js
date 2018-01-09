@@ -398,6 +398,7 @@ var Popoverjs = function () {
   }, {
     key: 'onBeforeShow',
     value: function onBeforeShow() {
+      this.options.onBeforeShow();
       this.setUpPositioner();
     }
   }, {

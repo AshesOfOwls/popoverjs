@@ -6,3 +6,4 @@ import './constraint_element';
 import './unnecessary_repositioning';
 import './show_and_hide_delays';
 import './always_open';
+import './callbacks';
