@@ -1242,7 +1242,6 @@ var defaults = {
   constraintElement: null,
   unnecessaryRepositioning: true,
   scrollPositioning: true,
-  scrollParentConstraint: true,
   applyClassesToAttachment: false,
   closeOnCutoff: false,
   constraints: [{
