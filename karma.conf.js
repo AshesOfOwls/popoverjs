@@ -11,12 +11,10 @@ module.exports = (config) => {
     frameworks: ['jasmine'],
     files: [
       'tests/**/*.test.js',
-      'tests/**/*.test.jsx',
       'src/styles/*.scss',
     ],
     preprocessors: {
       'tests/**/*.test.js': ['webpack'],
-      'tests/**/*.test.jsx': ['webpack'],
       'src/styles/*.scss': ['scss'],
     },
     scssPreprocessor: {

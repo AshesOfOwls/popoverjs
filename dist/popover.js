@@ -1372,8 +1372,8 @@ var Positioner = function () {
       var origin = {
         height: attachmentOrigin.height + 'px',
         width: attachmentOrigin.width + 'px',
-        left: attachmentOrigin.document.left + 'px',
-        top: attachmentOrigin.document.top + 'px'
+        left: attachmentOrigin.document.left - this.cssCache.bodyMargins.left + 'px',
+        top: attachmentOrigin.document.top - this.cssCache.bodyMargins.top + 'px'
       };
 
       Object.assign(this.containerElement.style, origin);
@@ -1381,6 +1381,8 @@ var Positioner = function () {
   }, {
     key: 'cacheCssOffsets',
     value: function cacheCssOffsets() {
+      var bodyStyle = window.getComputedStyle(document.body);
+
       this.toggleSizerClasses(true);
 
       this.cssCache = {
@@ -1388,7 +1390,11 @@ var Positioner = function () {
         contentSize: this.getContentSize(),
         primaryOffset: Math.abs(this.popoverElement.offsetTop) - 1,
         secondaryOffset: Math.abs(this.popoverElement.offsetLeft),
-        contentOffset: Math.abs(this.popoverContent.offsetLeft)
+        contentOffset: Math.abs(this.popoverContent.offsetLeft),
+        bodyMargins: {
+          left: parseInt(bodyStyle.marginLeft, 10),
+          top: parseInt(bodyStyle.marginTop, 10)
+        }
       };
 
       this.toggleSizerClasses(false);
@@ -1518,6 +1524,9 @@ var Positioner = function () {
       }
       window.addEventListener('scroll', this.onDomEvent);
 
+      if (this.options.bodyAttached) {
+        return;
+      }
       this.scrollParent = this.getScrollParent();
       if (this.scrollParent) {
         this.scrollParent.addEventListener('scroll', this.onDomEvent);

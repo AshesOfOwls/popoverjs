@@ -1,17 +1,13 @@
 import Positioner from '../src/positioner';
 
 let instance = null;
+let bodyElement = null;
 let popoverElement = null;
-let triggerElement = null;
 let parentElement = null;
 let attachmentElement = null;
 let popoverArrow = null;
 let popoverContent = null;
 const arrowSize = 8;
-const popoverHeight = 200;
-const popoverWidth = 100;
-const popoverHeightFull = popoverHeight + arrowSize;
-const popoverWidthFull = popoverWidth + arrowSize;
 
 const cleanup = () => {
   if (instance) {
@@ -48,8 +44,8 @@ describe('Positioner', () => {
     document.body.insertAdjacentHTML('afterbegin', fixture);
     document.body.style.position = 'relative';
 
+    bodyElement = document.body;
     parentElement = document.getElementsByClassName('popoverjs--wrapper')[0];
-    triggerElement = document.getElementsByClassName('trigger')[0];
     attachmentElement = parentElement.getElementsByClassName('attachmentElement')[0];
     popoverElement = parentElement.getElementsByClassName('popoverjs')[0];
     popoverArrow = popoverElement.getElementsByClassName('popoverjs-arrow')[0];
@@ -111,14 +107,12 @@ describe('Positioner', () => {
       expect(instance.cssCache).toEqual({
         arrowSize: 8,
         contentSize: 0,
-        primaryOffset: 2,
+        primaryOffset: -1,
         secondaryOffset: 16,
         contentOffset: 18,
-        body: {
-          top: 8,
-          right: 8,
+        bodyMargins: {
           left: 8,
-          bottom: 8,
+          top: 8,
         },
       });
     });
@@ -149,7 +143,7 @@ describe('Positioner', () => {
       instance = new Positioner({
         popoverElement,
         attachmentElement,
-        themeClass: 'aThemeClass',
+        themeClass: 'popoverjs--aThemeClass',
       });
 
       expect(instance.popoverElement.classList.contains('popoverjs--aThemeClass')).toEqual(true);
@@ -185,7 +179,6 @@ describe('Positioner', () => {
       it('should maintain the detached container position with the attachment element attributes', () => {
         instance.position();
         instance.maintainDetachedContainerPosition();
-        const bodyTopOffset = parseInt(window.getComputedStyle(document.body).marginTop, 10);
 
         const attachmentRect = getCleanRect(instance.attachmentElement);
         const containerRect = getCleanRect(instance.containerElement);

@@ -7,7 +7,7 @@
     "build": "webpack",
     "build:watch": "webpack --watch",
     "test": "./node_modules/karma/bin/karma start",
-    "test:watch": "./node_modules/karma/bin/karma start"
+    "test:watch": "./node_modules/karma/bin/karma start --auto-watch"
   },
   "resolutions": {
     "src/styles/_mixin.scss": "src/styles/_mixin.scss"
