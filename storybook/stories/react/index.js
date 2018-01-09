@@ -8,3 +8,4 @@ import './show_and_hide_delays';
 import './always_open';
 import './callbacks';
 import './show_on_and_hide_on';
+import './close_on_cutoff';
