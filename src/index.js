@@ -99,6 +99,7 @@ class Popoverjs {
   }
 
   onBeforeShow() {
+    this.options.onBeforeShow();
     this.setUpPositioner();
   }
 
