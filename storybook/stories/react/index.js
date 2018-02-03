@@ -11,3 +11,4 @@ import './show_on_and_hide_on';
 import './close_on_cutoff';
 import './body_attached';
 import './consecutive_popovers';
+import './popover_inside_trigger';

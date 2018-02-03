@@ -168,6 +168,10 @@ class Renderer {
       return this.onDocumentClick(e);
     }
 
+    if (element === this.triggerElement) {
+      if (this.elementInPopover(e.target)) { return; }
+    }
+
     return this.onTriggerLeave(e);
   }
 
@@ -176,9 +180,13 @@ class Renderer {
   }
 
   onDocumentClick(e) {
-    if (this.popoverElement.contains(e.target)) { return; }
+    if (this.elementInPopover(e.target)) { return; }
 
     this.onHideEvent('documentClick');
+  }
+
+  elementInPopover(element) {
+    return this.popoverElement.contains(element);
   }
 
   onHideEvent(hideEvent) {
