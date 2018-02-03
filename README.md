@@ -2,9 +2,17 @@
 
 CSS focused popover system. Create static popovers without the need for javascript, or utilize our plugin for dynamically changing popover locations around another element.
 
+## NEW: Check out our storybook examples!
+
+`git clone git@github.com:AshesOfOwls/popoverjs.git`
+`cd popoverjs/storybook`
+`npm run storybook`
+
+Each story has a README tab at the bottom to explain functionality further.
+
 ## How it Works
 
-Popovers have been a bane of existance for a lot of developers. Without any native solutions in HTML for implementing them, developers have resorted to using Javascript for the placement of popovers on a page. This can be fragile as the logic becomes more complex and difficult to maintain.
+Popovers have been a bane of existence for a lot of developers. Without any native solutions in HTML for implementing them, developers have resorted to using Javascript for the placement of popovers on a page. This can be fragile as the logic becomes more complex and difficult to maintain.
 
 With the use of some clever CSS we can avoid most of these complications though, and enable us to use static popovers without the need for Javascript. To begin understanding we need to discuss what a popover is. In my definition, it is a element which exists above most other elements, which is positioned in a way which makes it look attached to another element.
 
