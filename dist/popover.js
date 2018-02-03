@@ -1524,9 +1524,6 @@ var Positioner = function () {
       }
       window.addEventListener('scroll', this.onDomEvent);
 
-      if (this.options.bodyAttached) {
-        return;
-      }
       this.scrollParent = this.getScrollParent();
       if (this.scrollParent) {
         this.scrollParent.addEventListener('scroll', this.onDomEvent);

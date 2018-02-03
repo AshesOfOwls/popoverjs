@@ -64,18 +64,6 @@
     <div class="container">
       <button class="button" type="button">Button Here</button>
       <div class="attachment">
-        <div class="trigger trigger-0">
-          Click me
-        </div>
-
-        <div class="popoverjs popover-0">
-          <div class="popoverjs-arrow"></div>
-          <div class="popoverjs-content">
-            <div class="content">
-            </div>
-          </div>
-        </div>
-
         <div class="trigger trigger-1">
           Click me
         </div>
@@ -134,27 +122,6 @@
       </div>
     </div>
     <script>
-      window.test = new Popoverjs({
-        bodyAttached: true,
-        unnecessaryRepositioning: true,
-        attachmentElement: document.getElementsByClassName('trigger-0')[0],
-        popoverElement: document.getElementsByClassName('popover-0')[0],
-        constraintElement: document.getElementsByClassName('container')[0],
-        constraints: [{
-          popover: 'top left',
-          attachment: 'bottom left',
-        }, {
-          popover: 'left center',
-          attachment: 'left center',
-        }],
-        showOn: 'trigger.mouseenter',
-        hideOn: null,
-        onBeforeHide: function() { },
-        onBeforeShow: function() { },
-        onAfterHide: function() { },
-        onAfterShow: function() { },
-      });
-
       new Popoverjs({
         bodyAttached: true,
         unnecessaryRepositioning: true,

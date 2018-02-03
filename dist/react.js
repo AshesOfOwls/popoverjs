@@ -20697,9 +20697,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             }
             window.addEventListener('scroll', this.onDomEvent);
 
-            if (this.options.bodyAttached) {
-              return;
-            }
             this.scrollParent = this.getScrollParent();
             if (this.scrollParent) {
               this.scrollParent.addEventListener('scroll', this.onDomEvent);
