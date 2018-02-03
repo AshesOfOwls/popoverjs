@@ -7,7 +7,7 @@ import {
 
 import { bool, node, object, string } from 'prop-types';
 
-import Popoverjs from '../../dist/popover';
+import Popoverjs from '../popover';
 
 export default class Popover extends Component {
   static propTypes = {

@@ -2,8 +2,7 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    popover: './src/index.js',
-    react: './src/react/index.js',
+    index: './src/index.js',
   },
   output: {
     filename: '[name].js',
