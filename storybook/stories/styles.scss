@@ -13,7 +13,9 @@ body {
 .demo-trigger {
   background: #dcdcdc;
   border-radius: 3px;
+  display: inline-block;
   padding: 10px;
+  position: relative;
 }
 
 .demo-content {

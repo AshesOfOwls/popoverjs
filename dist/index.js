@@ -7,7 +7,7 @@
 		exports["popoverjs"] = factory();
 	else
 		root["popoverjs"] = factory();
-})(this, function() {
+})(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -1281,7 +1281,7 @@ module.exports = shallowEqual;
  * 
  */
 
-var isTextNode = __webpack_require__(36);
+var isTextNode = __webpack_require__(37);
 
 /*eslint-disable no-bitwise */
 
@@ -3265,7 +3265,7 @@ exports = module.exports = __webpack_require__(28)(undefined);
 
 
 // module
-exports.push([module.i, "/**\n  * Local Variables\n  *\n  * $arrow_hypotenuse_to_side_ratio:\n  * The $arrow_hypotenuse_to_side_ratio is important and should not be changed.\n  * In order to get an arrow, we are currently hacking it to be a square rotated\n  * at a 45 degree angle, and cut off via parent container overflow. Because we\n  * can only control the height/width of a box, setting the size of the arrow\n  * becomes difficult when it is rotated (Because the diagnol hypotenuse within\n  * a box is longer than its sides). To fix this, we can instead take the size\n  * which would be the hypotenuse and convert that to be the correct side\n  * length for the box. Since we are dealing with equal length sides, the .707\n  * will be consistent enough for that conversion.\n  */\n.popoverjs {\n  height: 1px;\n  pointer-events: all;\n  position: absolute;\n  visibility: hidden;\n  width: 1px; }\n  .popoverjs.popoverjs--is-visible {\n    visibility: visible; }\n  .popoverjs:not(.popoverjs--is-visible) * {\n    pointer-events: none; }\n  .popoverjs-arrow:after {\n    background-color: #ffffff; }\n  .popoverjs-content {\n    background-color: white;\n    box-sizing: border-box;\n    position: absolute; }\n  .popoverjs--detached-container {\n    position: absolute;\n    pointer-events: none; }\n  .popoverjs--wrapper {\n    display: inline-block;\n    position: relative; }\n  .popoverjs:not(.popoverjs--is-enabled) .popoverjs-content {\n    transform: translateY(-100%); }\n\n.popoverjs--default > .popoverjs-arrow {\n  overflow: hidden;\n  position: absolute;\n  z-index: 5; }\n\n.popoverjs--default > .popoverjs-arrow:after {\n  content: \"\";\n  position: absolute;\n  width: 11.312px;\n  height: 11.312px;\n  transform: translateX(-50%) translateY(-50%) rotate(45deg);\n  top: 50%;\n  left: 50%; }\n\n.popoverjs--default.popoverjs--popover-primary-bottom > .popoverjs-arrow,\n.popoverjs--default.popoverjs--popover-primary-top > .popoverjs-arrow {\n  left: -8px;\n  height: 8px;\n  width: 16px; }\n\n.popoverjs--default.popoverjs--popover-primary-bottom > .popoverjs-arrow {\n  bottom: auto;\n  top: -8px; }\n  .popoverjs--default.popoverjs--popover-primary-bottom > .popoverjs-arrow:after {\n    margin-top: -4px; }\n\n.popoverjs--default.popoverjs--popover-primary-top > .popoverjs-arrow {\n  bottom: -8px;\n  top: auto; }\n  .popoverjs--default.popoverjs--popover-primary-top > .popoverjs-arrow:after {\n    margin-top: 4px; }\n\n.popoverjs--default.popoverjs--popover-primary-left > .popoverjs-arrow,\n.popoverjs--default.popoverjs--popover-primary-right > .popoverjs-arrow {\n  bottom: -8px;\n  height: 16px;\n  width: 8px; }\n\n.popoverjs--default.popoverjs--popover-primary-right > .popoverjs-arrow {\n  left: -8px;\n  right: auto; }\n  .popoverjs--default.popoverjs--popover-primary-right > .popoverjs-arrow:after {\n    margin-left: -4px; }\n\n.popoverjs--default.popoverjs--popover-primary-left > .popoverjs-arrow {\n  left: auto;\n  right: -8px; }\n  .popoverjs--default.popoverjs--popover-primary-left > .popoverjs-arrow:after {\n    margin-left: 4px; }\n\n.popoverjs--default.popoverjs--attachment-primary-bottom {\n  bottom: 0px; }\n\n.popoverjs--default.popoverjs--attachment-primary-top {\n  top: 0px; }\n\n.popoverjs--default.popoverjs--attachment-primary-right {\n  right: 0px; }\n\n.popoverjs--default.popoverjs--attachment-primary-left {\n  left: 0px; }\n\n.popoverjs--default.popoverjs--attachment-secondary-bottom {\n  bottom: 16px; }\n\n.popoverjs--default.popoverjs--attachment-secondary-top {\n  top: 16px; }\n\n.popoverjs--default.popoverjs--attachment-secondary-right {\n  right: 16px; }\n\n.popoverjs--default.popoverjs--attachment-secondary-left {\n  left: 16px; }\n\n.popoverjs--default.popoverjs--attachment-primary-top.popoverjs--attachment-secondary-middle, .popoverjs--default.popoverjs--attachment-primary-bottom.popoverjs--attachment-secondary-middle, .popoverjs--default.popoverjs--attachment-primary-top.popoverjs--attachment-secondary-center, .popoverjs--default.popoverjs--attachment-primary-bottom.popoverjs--attachment-secondary-center {\n  left: 50%; }\n\n.popoverjs--default.popoverjs--attachment-primary-left.popoverjs--attachment-secondary-middle, .popoverjs--default.popoverjs--attachment-primary-right.popoverjs--attachment-secondary-middle, .popoverjs--default.popoverjs--attachment-primary-left.popoverjs--attachment-secondary-center, .popoverjs--default.popoverjs--attachment-primary-right.popoverjs--attachment-secondary-center {\n  top: 50%; }\n\n.popoverjs--default.popoverjs--popover-primary-bottom > .popoverjs-content {\n  bottom: 9px; }\n\n.popoverjs--default.popoverjs--popover-primary-top > .popoverjs-content {\n  top: 9px; }\n\n.popoverjs--default.popoverjs--popover-primary-right > .popoverjs-content {\n  right: 9px; }\n\n.popoverjs--default.popoverjs--popover-primary-left > .popoverjs-content {\n  left: 9px; }\n\n.popoverjs--default.popoverjs--popover-secondary-bottom > .popoverjs-content {\n  margin-top: 18px;\n  transform: translateY(-100%); }\n\n.popoverjs--default.popoverjs--popover-secondary-top > .popoverjs-content {\n  margin-top: -18px;\n  transform: translateY(0%); }\n\n.popoverjs--default.popoverjs--popover-secondary-right > .popoverjs-content {\n  right: -18px; }\n\n.popoverjs--default.popoverjs--popover-secondary-left > .popoverjs-content {\n  left: -18px; }\n\n.popoverjs--default.popoverjs--popover-primary-bottom.popoverjs--popover-secondary-middle > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-top.popoverjs--popover-secondary-middle > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-bottom.popoverjs--popover-secondary-center > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-top.popoverjs--popover-secondary-center > .popoverjs-content {\n  left: 0;\n  transform: translateX(-50%); }\n\n.popoverjs--default.popoverjs--popover-primary-left.popoverjs--popover-secondary-middle > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-right.popoverjs--popover-secondary-middle > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-left.popoverjs--popover-secondary-center > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-right.popoverjs--popover-secondary-center > .popoverjs-content {\n  top: 0;\n  transform: translateY(-50%); }\n", ""]);
+exports.push([module.i, "/**\n  * Local Variables\n  *\n  * $arrow_hypotenuse_to_side_ratio:\n  * The $arrow_hypotenuse_to_side_ratio is important and should not be changed.\n  * In order to get an arrow, we are currently hacking it to be a square rotated\n  * at a 45 degree angle, and cut off via parent container overflow. Because we\n  * can only control the height/width of a box, setting the size of the arrow\n  * becomes difficult when it is rotated (Because the diagnol hypotenuse within\n  * a box is longer than its sides). To fix this, we can instead take the size\n  * which would be the hypotenuse and convert that to be the correct side\n  * length for the box. Since we are dealing with equal length sides, the .707\n  * will be consistent enough for that conversion.\n  */\n.popoverjs {\n  height: 1px;\n  pointer-events: all;\n  position: absolute;\n  visibility: hidden;\n  width: 1px; }\n  .popoverjs.popoverjs--is-visible {\n    visibility: visible; }\n  .popoverjs:not(.popoverjs--is-visible) * {\n    pointer-events: none; }\n  .popoverjs-arrow:after {\n    background-color: #ffffff; }\n  .popoverjs-content {\n    background-color: white;\n    box-sizing: border-box;\n    position: absolute; }\n  .popoverjs--detached-container {\n    position: absolute;\n    pointer-events: none; }\n  .popoverjs--wrapper {\n    display: inline-block;\n    position: relative;\n    pointer-events: none; }\n  .popoverjs--expanded-wrapper {\n    bottom: 0;\n    left: 0;\n    position: absolute;\n    right: 0;\n    top: 0; }\n  .popoverjs:not(.popoverjs--is-enabled) .popoverjs-content {\n    transform: translateY(-100%); }\n\n.popoverjs--default > .popoverjs-arrow {\n  overflow: hidden;\n  position: absolute;\n  z-index: 5; }\n\n.popoverjs--default > .popoverjs-arrow:after {\n  content: \"\";\n  position: absolute;\n  width: 11.312px;\n  height: 11.312px;\n  transform: translateX(-50%) translateY(-50%) rotate(45deg);\n  top: 50%;\n  left: 50%; }\n\n.popoverjs--default.popoverjs--popover-primary-bottom > .popoverjs-arrow,\n.popoverjs--default.popoverjs--popover-primary-top > .popoverjs-arrow {\n  left: -8px;\n  height: 8px;\n  width: 16px; }\n\n.popoverjs--default.popoverjs--popover-primary-bottom > .popoverjs-arrow {\n  bottom: auto;\n  top: -8px; }\n  .popoverjs--default.popoverjs--popover-primary-bottom > .popoverjs-arrow:after {\n    margin-top: -4px; }\n\n.popoverjs--default.popoverjs--popover-primary-top > .popoverjs-arrow {\n  bottom: -8px;\n  top: auto; }\n  .popoverjs--default.popoverjs--popover-primary-top > .popoverjs-arrow:after {\n    margin-top: 4px; }\n\n.popoverjs--default.popoverjs--popover-primary-left > .popoverjs-arrow,\n.popoverjs--default.popoverjs--popover-primary-right > .popoverjs-arrow {\n  bottom: -8px;\n  height: 16px;\n  width: 8px; }\n\n.popoverjs--default.popoverjs--popover-primary-right > .popoverjs-arrow {\n  left: -8px;\n  right: auto; }\n  .popoverjs--default.popoverjs--popover-primary-right > .popoverjs-arrow:after {\n    margin-left: -4px; }\n\n.popoverjs--default.popoverjs--popover-primary-left > .popoverjs-arrow {\n  left: auto;\n  right: -8px; }\n  .popoverjs--default.popoverjs--popover-primary-left > .popoverjs-arrow:after {\n    margin-left: 4px; }\n\n.popoverjs--default.popoverjs--attachment-primary-bottom {\n  bottom: 0px; }\n\n.popoverjs--default.popoverjs--attachment-primary-top {\n  top: 0px; }\n\n.popoverjs--default.popoverjs--attachment-primary-right {\n  right: 0px; }\n\n.popoverjs--default.popoverjs--attachment-primary-left {\n  left: 0px; }\n\n.popoverjs--default.popoverjs--attachment-secondary-bottom {\n  bottom: 16px; }\n\n.popoverjs--default.popoverjs--attachment-secondary-top {\n  top: 16px; }\n\n.popoverjs--default.popoverjs--attachment-secondary-right {\n  right: 16px; }\n\n.popoverjs--default.popoverjs--attachment-secondary-left {\n  left: 16px; }\n\n.popoverjs--default.popoverjs--attachment-primary-top.popoverjs--attachment-secondary-middle, .popoverjs--default.popoverjs--attachment-primary-bottom.popoverjs--attachment-secondary-middle, .popoverjs--default.popoverjs--attachment-primary-top.popoverjs--attachment-secondary-center, .popoverjs--default.popoverjs--attachment-primary-bottom.popoverjs--attachment-secondary-center {\n  left: 50%; }\n\n.popoverjs--default.popoverjs--attachment-primary-left.popoverjs--attachment-secondary-middle, .popoverjs--default.popoverjs--attachment-primary-right.popoverjs--attachment-secondary-middle, .popoverjs--default.popoverjs--attachment-primary-left.popoverjs--attachment-secondary-center, .popoverjs--default.popoverjs--attachment-primary-right.popoverjs--attachment-secondary-center {\n  top: 50%; }\n\n.popoverjs--default.popoverjs--popover-primary-bottom > .popoverjs-content {\n  bottom: 9px; }\n\n.popoverjs--default.popoverjs--popover-primary-top > .popoverjs-content {\n  top: 9px; }\n\n.popoverjs--default.popoverjs--popover-primary-right > .popoverjs-content {\n  right: 9px; }\n\n.popoverjs--default.popoverjs--popover-primary-left > .popoverjs-content {\n  left: 9px; }\n\n.popoverjs--default.popoverjs--popover-secondary-bottom > .popoverjs-content {\n  margin-top: 18px;\n  transform: translateY(-100%); }\n\n.popoverjs--default.popoverjs--popover-secondary-top > .popoverjs-content {\n  margin-top: -18px;\n  transform: translateY(0%); }\n\n.popoverjs--default.popoverjs--popover-secondary-right > .popoverjs-content {\n  right: -18px; }\n\n.popoverjs--default.popoverjs--popover-secondary-left > .popoverjs-content {\n  left: -18px; }\n\n.popoverjs--default.popoverjs--popover-primary-bottom.popoverjs--popover-secondary-middle > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-top.popoverjs--popover-secondary-middle > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-bottom.popoverjs--popover-secondary-center > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-top.popoverjs--popover-secondary-center > .popoverjs-content {\n  left: 0;\n  transform: translateX(-50%); }\n\n.popoverjs--default.popoverjs--popover-primary-left.popoverjs--popover-secondary-middle > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-right.popoverjs--popover-secondary-middle > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-left.popoverjs--popover-secondary-center > .popoverjs-content,\n.popoverjs--default.popoverjs--popover-primary-right.popoverjs--popover-secondary-center > .popoverjs-content {\n  top: 0;\n  transform: translateY(-50%); }\n", ""]);
 
 // exports
 
@@ -3825,9 +3825,13 @@ var _react = __webpack_require__(7);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = __webpack_require__(34);
+var _classnames = __webpack_require__(34);
 
-var _propTypes = __webpack_require__(43);
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _reactDom = __webpack_require__(35);
+
+var _propTypes = __webpack_require__(44);
 
 var _popover = __webpack_require__(10);
 
@@ -3879,7 +3883,7 @@ var Popover = function (_Component) {
       var _this2 = this;
 
       if (this.mounted && this.popoverjs) {
-        (0, _reactDom.unstable_renderSubtreeIntoContainer)(this, this.popoverContent, this.popoverContentElement, function () {
+        (0, _reactDom.unstable_renderSubtreeIntoContainer)(this, this.popoverChildNode, this.popoverContentElement, function () {
           _this2.updatePopover();
         });
       }
@@ -3927,7 +3931,7 @@ var Popover = function (_Component) {
     value: function render() {
       return _react2.default.createElement(
         'div',
-        { className: 'popoverjs--wrapper' },
+        { className: (0, _classnames2.default)("popoverjs--wrapper", { "popoverjs--expanded-wrapper": this.isWithoutTrigger }) },
         this.triggerContent,
         _react2.default.createElement(
           'div',
@@ -3957,17 +3961,21 @@ var Popover = function (_Component) {
     key: 'popoverElement',
     get: function get() {
       if (this.targetNode) {
-        return this.targetNode.children[1];
+        return this.popoverElementNode;
       }
       this.targetNode = (0, _reactDom.findDOMNode)(this);
       if (this.targetNode) {
-        return this.targetNode.children[1];
+        return this.popoverElementNode;
       }
       return undefined;
     }
   }, {
     key: 'attachmentElement',
     get: function get() {
+      if (this.isWithoutTrigger) {
+        return this.targetNode.parentElement;
+      }
+
       return this.targetNode.children[0];
     }
   }, {
@@ -3976,9 +3984,19 @@ var Popover = function (_Component) {
       return this.props.children[0];
     }
   }, {
-    key: 'popoverContent',
+    key: 'isWithoutTrigger',
     get: function get() {
-      return this.props.children[1];
+      return !Boolean(this.props.children[1]);
+    }
+  }, {
+    key: 'popoverElementNode',
+    get: function get() {
+      return this.targetNode.children[1] || this.targetNode.children[0];
+    }
+  }, {
+    key: 'popoverChildNode',
+    get: function get() {
+      return this.props.children[1] || this.props.children;
     }
   }]);
 
@@ -5400,6 +5418,61 @@ module.exports = react;
 /* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+  Copyright (c) 2016 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/
+/* global define */
+
+(function () {
+	'use strict';
+
+	var hasOwn = {}.hasOwnProperty;
+
+	function classNames () {
+		var classes = [];
+
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			if (!arg) continue;
+
+			var argType = typeof arg;
+
+			if (argType === 'string' || argType === 'number') {
+				classes.push(arg);
+			} else if (Array.isArray(arg)) {
+				classes.push(classNames.apply(null, arg));
+			} else if (argType === 'object') {
+				for (var key in arg) {
+					if (hasOwn.call(arg, key) && arg[key]) {
+						classes.push(key);
+					}
+				}
+			}
+		}
+
+		return classes.join(' ');
+	}
+
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = classNames;
+	} else if (true) {
+		// register as 'classnames', consistent with npm package name
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function () {
+			return classNames;
+		}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else {
+		window.classNames = classNames;
+	}
+}());
+
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
@@ -5435,15 +5508,15 @@ if (process.env.NODE_ENV === 'production') {
   // DCE check should happen before ReactDOM bundle executes so that
   // DevTools can report bad minification during injection.
   checkDCE();
-  module.exports = __webpack_require__(35);
+  module.exports = __webpack_require__(36);
 } else {
-  module.exports = __webpack_require__(38);
+  module.exports = __webpack_require__(39);
 }
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5679,7 +5752,7 @@ Z.injectIntoDevTools({findFiberByHostInstance:pb,bundleType:0,version:"16.2.0",r
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5694,7 +5767,7 @@ Z.injectIntoDevTools({findFiberByHostInstance:pb,bundleType:0,version:"16.2.0",r
  * @typechecks
  */
 
-var isNode = __webpack_require__(37);
+var isNode = __webpack_require__(38);
 
 /**
  * @param {*} object The object to check.
@@ -5707,7 +5780,7 @@ function isTextNode(object) {
 module.exports = isTextNode;
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5735,7 +5808,7 @@ function isNode(object) {
 module.exports = isNode;
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5769,8 +5842,8 @@ var containsNode = __webpack_require__(15);
 var focusNode = __webpack_require__(16);
 var emptyObject = __webpack_require__(4);
 var checkPropTypes = __webpack_require__(8);
-var hyphenateStyleName = __webpack_require__(39);
-var camelizeStyleName = __webpack_require__(41);
+var hyphenateStyleName = __webpack_require__(40);
+var camelizeStyleName = __webpack_require__(42);
 
 /**
  * WARNING: DO NOT manually require this module.
@@ -21137,7 +21210,7 @@ module.exports = reactDom;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21152,7 +21225,7 @@ module.exports = reactDom;
 
 
 
-var hyphenate = __webpack_require__(40);
+var hyphenate = __webpack_require__(41);
 
 var msPattern = /^ms-/;
 
@@ -21179,7 +21252,7 @@ function hyphenateStyleName(string) {
 module.exports = hyphenateStyleName;
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21215,7 +21288,7 @@ function hyphenate(string) {
 module.exports = hyphenate;
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21230,7 +21303,7 @@ module.exports = hyphenate;
 
 
 
-var camelize = __webpack_require__(42);
+var camelize = __webpack_require__(43);
 
 var msPattern = /^-ms-/;
 
@@ -21258,7 +21331,7 @@ function camelizeStyleName(string) {
 module.exports = camelizeStyleName;
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21293,7 +21366,7 @@ function camelize(string) {
 module.exports = camelize;
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process) {/**
@@ -21318,17 +21391,17 @@ if (process.env.NODE_ENV !== 'production') {
   // By explicitly using `prop-types` you are opting into new development behavior.
   // http://fb.me/prop-types-in-prod
   var throwOnDirectAccess = true;
-  module.exports = __webpack_require__(44)(isValidElement, throwOnDirectAccess);
+  module.exports = __webpack_require__(45)(isValidElement, throwOnDirectAccess);
 } else {
   // By explicitly using `prop-types` you are opting into new production behavior.
   // http://fb.me/prop-types-in-prod
-  module.exports = __webpack_require__(45)();
+  module.exports = __webpack_require__(46)();
 }
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21878,7 +21951,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

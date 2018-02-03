@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classnames from 'classnames';
 
 import {
   findDOMNode,
@@ -70,16 +71,20 @@ export default class Popover extends Component {
 
   get popoverElement() {
     if (this.targetNode) {
-      return this.targetNode.children[1];
+      return this.popoverElementNode;
     }
     this.targetNode = findDOMNode(this);
     if (this.targetNode) {
-      return this.targetNode.children[1];
+      return this.popoverElementNode;
     }
     return undefined;
   }
 
   get attachmentElement() {
+    if (this.isWithoutTrigger) {
+      return this.targetNode.parentElement;
+    }
+
     return this.targetNode.children[0];
   }
 
@@ -87,13 +92,21 @@ export default class Popover extends Component {
     return this.props.children[0];
   }
 
-  get popoverContent() {
-    return this.props.children[1];
+  get isWithoutTrigger() {
+    return !Boolean(this.props.children[1]);
+  }
+
+  get popoverElementNode() {
+    return this.targetNode.children[1] || this.targetNode.children[0];
+  }
+
+  get popoverChildNode() {
+    return this.props.children[1] || this.props.children;
   }
 
   update() {
     if (this.mounted && this.popoverjs) {
-      renderSubtreeIntoContainer(this, this.popoverContent, this.popoverContentElement, () => {
+      renderSubtreeIntoContainer(this, this.popoverChildNode, this.popoverContentElement, () => {
         this.updatePopover();
       });
     }
@@ -132,7 +145,7 @@ export default class Popover extends Component {
 
   render() {
     return (
-      <div className="popoverjs--wrapper">
+      <div className={classnames("popoverjs--wrapper", { "popoverjs--expanded-wrapper": this.isWithoutTrigger })}>
         { this.triggerContent }
 
         <div className="popoverjs">
