@@ -35,14 +35,14 @@
 
   &.popoverjs--popover-primary-bottom > .popoverjs-arrow,
   &.popoverjs--popover-primary-top > .popoverjs-arrow {
-    left: -$arrow_width / 2;
+    left: -$arrow_middle ;
     height: $arrow_middle;
     width: $arrow_width;
   }
 
   &.popoverjs--popover-primary-bottom > .popoverjs-arrow {
     bottom: auto;
-    top: -$arrow_middle;
+    top: -$arrow_middle - 1;
 
     &:after {
       margin-top: -$arrow_middle / 2;
@@ -50,7 +50,7 @@
   }
 
   &.popoverjs--popover-primary-top > .popoverjs-arrow {
-    bottom: -$arrow_middle;
+    bottom: -$arrow_middle - 1;
     top: auto;
 
     &:after {
@@ -66,7 +66,7 @@
   }
 
   &.popoverjs--popover-primary-right > .popoverjs-arrow {
-    left: -$arrow_width / 2;
+    left: -$arrow_middle - 1;
     right: auto;
 
     &:after {
@@ -76,7 +76,7 @@
 
   &.popoverjs--popover-primary-left > .popoverjs-arrow {
     left: auto;
-    right: -$arrow_width / 2;
+    right: -$arrow_middle - 1;
 
     &:after {
       margin-left: $arrow_middle / 2;

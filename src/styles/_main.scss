@@ -6,6 +6,7 @@
   position: absolute;
   visibility: hidden;
   width: 1px;
+  z-index: 999;
 
   &.popoverjs--is-visible {
     visibility: visible;
@@ -32,7 +33,7 @@
 
   &--wrapper {
     display: inline-block;
-    pointer-events: none;
+    pointer-events: all;
     position: relative;
   }
 
