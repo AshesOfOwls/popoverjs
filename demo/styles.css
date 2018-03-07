@@ -47,6 +47,7 @@ body {
 .popoverjs.popoverjs--is-constrained {
   opacity: 0;
 }
+
 .button {
   position: absolute;
   left: 550px;
