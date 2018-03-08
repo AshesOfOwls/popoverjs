@@ -155,29 +155,29 @@ class Renderer {
       polygon = [
         [contentRect.left - 1, contentRect.top + 1],
         [contentRect.right + 1, contentRect.top + 1],
-        [attachmentRect.right + 1, attachmentRect.top],
-        [attachmentRect.left - 1, attachmentRect.top],
+        [attachmentRect.right + 1, attachmentRect.bottom - 1],
+        [attachmentRect.left - 1, attachmentRect.bottom - 1],
       ];
     } else if (contentRect.bottom <= attachmentRect.top) {
       polygon = [
         [contentRect.left - 1, contentRect.bottom - 1],
         [contentRect.right + 1, contentRect.bottom - 1],
-        [attachmentRect.right + 1, attachmentRect.bottom],
-        [attachmentRect.left - 1, attachmentRect.bottom],
+        [attachmentRect.right + 1, attachmentRect.top + 1],
+        [attachmentRect.left - 1, attachmentRect.top + 1],
       ];
     } else if (contentRect.left >= attachmentRect.right) {
       polygon = [
         [contentRect.left + 1, contentRect.top - 1],
         [contentRect.left + 1, contentRect.bottom + 1],
-        [attachmentRect.left, attachmentRect.bottom + 1],
-        [attachmentRect.left, attachmentRect.top - 1],
+        [attachmentRect.right - 1, attachmentRect.bottom + 1],
+        [attachmentRect.right - 1, attachmentRect.top - 1],
       ];
     } else if (contentRect.right <= attachmentRect.left) {
       polygon = [
         [contentRect.right - 1, contentRect.top - 1],
         [contentRect.right - 1, contentRect.bottom + 1],
-        [attachmentRect.right, attachmentRect.bottom + 1],
-        [attachmentRect.right, attachmentRect.top - 1],
+        [attachmentRect.left - 1, attachmentRect.bottom + 1],
+        [attachmentRect.left - 1, attachmentRect.top - 1],
       ];
     }
 
@@ -228,14 +228,14 @@ class Renderer {
   }
 
   toggleHideListeners(isToggled) {
-    // if (this.options.hideOn === 'cursorTracing') {
-    if (isToggled) {
-      this.setupCursorTraceListening();
-    } else {
-      this.destroyCursorTraceListening();
+    if (this.options.hideOn === 'cursorTracing') {
+      if (isToggled) {
+        this.setupCursorTraceListening();
+      } else {
+        this.destroyCursorTraceListening();
+      }
+      return;
     }
-      // return;
-    // }
 
     if (this.hideOnObjects.length > 0) {
       setTimeout(() => {
