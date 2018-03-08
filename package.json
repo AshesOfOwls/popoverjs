@@ -1,6 +1,6 @@
 {
   "name": "popover.js",
-  "version": "0.2.26",
+  "version": "0.2.27",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -45,6 +45,7 @@
     "karma-scss-preprocessor": "^3.0.0",
     "karma-webpack": "^2.0.4",
     "node-sass": "^4.5.3",
+    "point-in-polygon": "^1.0.1",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
     "webpack": "^3.3.0"

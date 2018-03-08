@@ -1,4 +1,5 @@
 import { oneEvent, toggleClassesOnElement, whichTransitionEvent, generateOptionClassnames } from './utils';
+import inside from 'point-in-polygon';
 
 const defaults = {
   manualTriggering: false,
@@ -18,6 +19,9 @@ class Renderer {
     this.onPopoverLeave = this.onPopoverLeave.bind(this);
     this.onToggleEnd = this.onToggleEnd.bind(this);
     this.onTriggerLeave = this.onTriggerLeave.bind(this);
+    this.onDocumentMousemove = this.onDocumentMousemove.bind(this);
+
+    this.cursorPosition = [0, 0];
 
     this.initialize();
   }
@@ -63,6 +67,7 @@ class Renderer {
   parseHideEvents() {
     const hideOn = this.options.hideOn;
     if (!hideOn || hideOn.length === 0) { return; }
+    if (hideOn === 'cursorTracing') { return; }
 
     const callback = this.isTryingToHide;
 
@@ -122,6 +127,79 @@ class Renderer {
     }
   }
 
+  setupCursorTraceListening() {
+    document.addEventListener('mousemove', this.onDocumentMousemove);
+  }
+
+  destroyCursorTraceListening() {
+    document.removeEventListener('mousemove', this.onDocumentMousemove);
+  }
+
+  onDocumentMousemove(event) {
+    this.cursorPosition = [event.pageX, event.pageY];
+    if (!this.isCursorWithinBoundaries()) {
+      this.shouldHide();
+    }
+  }
+
+  isCursorWithinBoundaries() {
+    const { attachmentElement, popoverElement } = this.options;
+    const content = popoverElement.querySelector('.popoverjs-content');
+
+    const contentRect = content.getBoundingClientRect();
+    const attachmentRect = attachmentElement.getBoundingClientRect();
+
+    let polygon = [];
+
+    if (contentRect.top >= attachmentRect.bottom) {
+      polygon = [
+        [contentRect.left - 1, contentRect.top + 1],
+        [contentRect.right + 1, contentRect.top + 1],
+        [attachmentRect.right + 1, attachmentRect.top],
+        [attachmentRect.left - 1, attachmentRect.top],
+      ];
+    } else if (contentRect.bottom <= attachmentRect.top) {
+      polygon = [
+        [contentRect.left - 1, contentRect.bottom - 1],
+        [contentRect.right + 1, contentRect.bottom - 1],
+        [attachmentRect.right + 1, attachmentRect.bottom],
+        [attachmentRect.left - 1, attachmentRect.bottom],
+      ];
+    } else if (contentRect.left >= attachmentRect.right) {
+      polygon = [
+        [contentRect.left + 1, contentRect.top - 1],
+        [contentRect.left + 1, contentRect.bottom + 1],
+        [attachmentRect.left, attachmentRect.bottom + 1],
+        [attachmentRect.left, attachmentRect.top - 1],
+      ];
+    } else if (contentRect.right <= attachmentRect.left) {
+      polygon = [
+        [contentRect.right - 1, contentRect.top - 1],
+        [contentRect.right - 1, contentRect.bottom + 1],
+        [attachmentRect.right, attachmentRect.bottom + 1],
+        [attachmentRect.right, attachmentRect.top - 1],
+      ];
+    }
+
+    const attachmentPolygon = [
+      [attachmentRect.left, attachmentRect.top],
+      [attachmentRect.left, attachmentRect.bottom],
+      [attachmentRect.right, attachmentRect.bottom],
+      [attachmentRect.right, attachmentRect.top],
+    ];
+
+    const contentPolygon = [
+      [contentRect.left, contentRect.top],
+      [contentRect.left, contentRect.bottom],
+      [contentRect.right, contentRect.bottom],
+      [contentRect.right, contentRect.top],
+    ];
+
+    return inside(this.cursorPosition, polygon) ||
+      inside(this.cursorPosition, attachmentPolygon) ||
+      inside(this.cursorPosition, contentPolygon);
+  }
+
   onTriggerClick(element, event, e) {
     this.onShowEvent(e);
     this.toggleRenderListeners(false);
@@ -150,6 +228,15 @@ class Renderer {
   }
 
   toggleHideListeners(isToggled) {
+    // if (this.options.hideOn === 'cursorTracing') {
+    if (isToggled) {
+      this.setupCursorTraceListening();
+    } else {
+      this.destroyCursorTraceListening();
+    }
+      // return;
+    // }
+
     if (this.hideOnObjects.length > 0) {
       setTimeout(() => {
         const method = isToggled ? 'addEventListener' : 'removeEventListener';
@@ -266,6 +353,10 @@ class Renderer {
 
   shouldHide() {
     if (!this.isVisible) { return; }
+
+    if (this.options.hideOn === 'cursorTracing' && this.isCursorWithinBoundaries()) {
+      return;
+    }
 
     this.clearDelayTimeouts();
 

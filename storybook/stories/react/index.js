@@ -12,3 +12,4 @@ import './close_on_cutoff';
 import './body_attached';
 import './consecutive_popovers';
 import './popover_inside_trigger';
+import './cursor_tracing';
