@@ -877,7 +877,8 @@ var defaults = {
   onBeforeHide: function onBeforeHide() {},
   onBeforeShow: function onBeforeShow() {},
   onAfterHide: function onAfterHide() {},
-  onAfterShow: function onAfterShow() {}
+  onAfterShow: function onAfterShow() {},
+  onClick: function onClick() {}
 };
 
 var requiredOptions = ['attachmentElement', 'popoverElement'];

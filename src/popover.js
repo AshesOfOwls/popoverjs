@@ -19,6 +19,7 @@ const defaults = {
   onBeforeShow: () => {},
   onAfterHide: () => {},
   onAfterShow: () => {},
+  onClick: () => {},
 };
 
 const requiredOptions = [
