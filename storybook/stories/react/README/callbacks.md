@@ -1,6 +1,6 @@
 ## Description
 
-There are four callbacks which can be used in the event cycle for Popover.js, `onBeforeShow`, `onAfterShow`, `onBeforeHide`, and `onAfterHide`. Check the console for example logs.
+There are four callbacks which can be used in the event cycle for Popover.js, `onClick`, `onBeforeShow`, `onAfterShow`, `onBeforeHide`, and `onAfterHide`. Check the console for example logs.
 
 ## Example
 
@@ -17,6 +17,9 @@ const popoverOptions = {
     ...
   },
   onAfterHide: () => {
+    ...
+  },
+  onClick: () => {
     ...
   },
 };

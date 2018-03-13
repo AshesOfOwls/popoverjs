@@ -17,6 +17,9 @@ const popoverOptions = {
   onAfterHide: () => {
     console.log('on after hide');
   },
+  onClick: (e) => {
+    console.log('on click', e);
+  },
 };
 
 storiesOf('React Adapter', module)

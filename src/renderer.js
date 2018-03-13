@@ -267,7 +267,10 @@ class Renderer {
   }
 
   onDocumentClick(e) {
-    if (this.elementInPopover(e.target)) { return; }
+    if (this.elementInPopover(e.target)) {
+      this.options.onClick(e);
+      return;
+    }
 
     this.onHideEvent('documentClick');
   }
