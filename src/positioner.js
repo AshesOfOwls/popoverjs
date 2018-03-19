@@ -234,8 +234,8 @@ class Positioner {
     const attachmentConstraints = generatePossibleConstraintsFor(constraint.attachment);
     const popoverConstraints = generatePossibleConstraintsFor(constraint.popover);
 
-    popoverConstraints.forEach((attachment) => {
-      attachmentConstraints.forEach((popover) => {
+    popoverConstraints.forEach((popover) => {
+      attachmentConstraints.forEach((attachment) => {
         validConstraints.push({ popover, attachment });
       });
     });

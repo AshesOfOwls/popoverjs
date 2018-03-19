@@ -2495,8 +2495,8 @@ var Positioner = function () {
       var attachmentConstraints = generatePossibleConstraintsFor(constraint.attachment);
       var popoverConstraints = generatePossibleConstraintsFor(constraint.popover);
 
-      popoverConstraints.forEach(function (attachment) {
-        attachmentConstraints.forEach(function (popover) {
+      popoverConstraints.forEach(function (popover) {
+        attachmentConstraints.forEach(function (attachment) {
           validConstraints.push({ popover: popover, attachment: attachment });
         });
       });
@@ -3408,7 +3408,7 @@ if(false) {
 /* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(29)(undefined);
+exports = module.exports = __webpack_require__(29)(false);
 // imports
 
 
