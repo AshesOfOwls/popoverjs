@@ -392,7 +392,7 @@ class Renderer {
     const classes = [this.options.classes.isVisible];
 
     if (isVisible) {
-      this.toggleRendererClasses([this.options.classes.isOpen], false);
+      this.toggleRendererClasses([this.options.classes.isOpen], true);
     }
 
     this.toggleRendererClasses(classes, isVisible);

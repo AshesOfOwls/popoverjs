@@ -540,7 +540,6 @@ class Positioner {
   clearActiveConstraint() {
     if (!this.activeConstraint) { return; }
 
-    this.toggleActiveConstraints(false);
     this.activeConstraint = null;
   }
 

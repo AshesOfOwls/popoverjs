@@ -2,11 +2,16 @@
 
 .popoverjs {
   height: 1px;
+  overflow: hidden;
   pointer-events: all;
   position: absolute;
   visibility: hidden;
   width: 1px;
   z-index: 999;
+
+  &.popoverjs--is-open {
+    overflow: visible;
+  }
 
   &.popoverjs--is-visible {
     visibility: visible;
@@ -47,10 +52,6 @@
     position: absolute;
     right: 0;
     top: 0;
-  }
-
-  &:not(&--is-enabled) &-content {
-    transform: translateY(-100%);
   }
 }
 
