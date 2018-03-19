@@ -2283,6 +2283,19 @@ var generateClassesForConstraint = function generateClassesForConstraint(prefix,
   return [prefix + '--popover-primary-' + constraint.popover.primary, prefix + '--popover-secondary-' + constraint.popover.secondary, prefix + '--attachment-primary-' + constraint.attachment.primary, prefix + '--attachment-secondary-' + constraint.attachment.secondary];
 };
 
+var generatePossibleConstraintsFor = function generatePossibleConstraintsFor(side) {
+  switch (side) {
+    case 'top':
+    case 'bottom':
+      return [side + ' left', side + ' center', side + ' right'];
+    case 'left':
+    case 'right':
+      return [side + ' top', side + ' center', side + ' bottom'];
+    default:
+      return [side.join(' ')];
+  }
+};
+
 var Positioner = function () {
   function Positioner(options) {
     _classCallCheck(this, Positioner);
@@ -2464,33 +2477,58 @@ var Positioner = function () {
   }, {
     key: 'parseConstraints',
     value: function parseConstraints() {
-      var id = 0;
-      var classPrefix = this.options.classPrefix;
+      var _this = this;
 
-      this.constraints = this.options.constraints.map(function (constraint) {
-        var attachmentConstraint = constraint.attachment.split(' ');
-        var popoverConstraint = constraint.popover.split(' ');
+      this.constraints = [];
 
-        id += 1;
-
-        var parsedConstraint = {
-          id: id,
-          attachment: {
-            primary: attachmentConstraint[0],
-            secondary: attachmentConstraint[1],
-            string: constraint.attachment
-          },
-          popover: {
-            primary: popoverConstraint[0],
-            secondary: popoverConstraint[1],
-            string: constraint.popover
-          }
-        };
-
-        parsedConstraint.classes = generateClassesForConstraint(classPrefix, parsedConstraint);
-
-        return Object.assign({}, constraint, parsedConstraint);
+      this.options.constraints.forEach(function (constraint) {
+        return _this.parseConstraint(constraint);
       });
+    }
+  }, {
+    key: 'parseConstraint',
+    value: function parseConstraint(constraint) {
+      var _this2 = this;
+
+      var validConstraints = [];
+
+      var attachmentConstraints = generatePossibleConstraintsFor(constraint.attachment);
+      var popoverConstraints = generatePossibleConstraintsFor(constraint.popover);
+
+      popoverConstraints.forEach(function (attachment) {
+        attachmentConstraints.forEach(function (popover) {
+          validConstraints.push({ popover: popover, attachment: attachment });
+        });
+      });
+
+      validConstraints.forEach(function (validConstraint) {
+        return _this2.addConstraint(validConstraint);
+      });
+    }
+  }, {
+    key: 'addConstraint',
+    value: function addConstraint(constraint) {
+      var classPrefix = this.options.classPrefix;
+      var attachmentConstraint = constraint.attachment.split(' ');
+      var popoverConstraint = constraint.popover.split(' ');
+
+      var parsedConstraint = {
+        id: this.constraints.length,
+        attachment: {
+          primary: attachmentConstraint[0],
+          secondary: attachmentConstraint[1],
+          string: constraint.attachment
+        },
+        popover: {
+          primary: popoverConstraint[0],
+          secondary: popoverConstraint[1],
+          string: constraint.popover
+        }
+      };
+
+      parsedConstraint.classes = generateClassesForConstraint(classPrefix, parsedConstraint);
+
+      this.constraints.push(Object.assign({}, constraint, parsedConstraint));
     }
   }, {
     key: 'enable',
@@ -2551,7 +2589,7 @@ var Positioner = function () {
   }, {
     key: 'destroy',
     value: function destroy() {
-      this.clearActiveConstraint();
+      // this.clearActiveConstraint();
       this.destroyListeners();
       this.destroyContainer();
     }
@@ -2611,14 +2649,14 @@ var Positioner = function () {
   }, {
     key: 'getActiveConstraint',
     value: function getActiveConstraint() {
-      var _this = this;
+      var _this3 = this;
 
       if (!this.options.unnecessaryRepositioning && this.canFitInto(this.activeConstraint)) {
         return this.activeConstraint;
       }
 
       return this.constraints.find(function (constraint) {
-        if (_this.canFitInto(constraint)) {
+        if (_this3.canFitInto(constraint)) {
           return constraint;
         }
         return false;
@@ -2835,6 +2873,7 @@ var Positioner = function () {
         return;
       }
 
+      this.toggleActiveConstraints(false);
       this.activeConstraint = null;
     }
   }, {

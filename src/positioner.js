@@ -56,6 +56,19 @@ const generateClassesForConstraint = (prefix, constraint) => ([
   `${prefix}--attachment-secondary-${constraint.attachment.secondary}`,
 ]);
 
+const generatePossibleConstraintsFor = (side) => {
+  switch (side) {
+  case 'top':
+  case 'bottom':
+    return [`${side} left`, `${side} center`, `${side} right`];
+  case 'left':
+  case 'right':
+    return [`${side} top`, `${side} center`, `${side} bottom`];
+  default:
+    return [side.join(' ')];
+  }
+};
+
 class Positioner {
   constructor(options) {
     this.generateOptions(options);
@@ -210,33 +223,48 @@ class Positioner {
   }
 
   parseConstraints() {
-    let id = 0;
-    const classPrefix = this.options.classPrefix;
+    this.constraints = [];
 
-    this.constraints = this.options.constraints.map((constraint) => {
-      const attachmentConstraint = constraint.attachment.split(' ');
-      const popoverConstraint = constraint.popover.split(' ');
+    this.options.constraints.forEach(constraint => this.parseConstraint(constraint));
+  }
 
-      id += 1;
+  parseConstraint(constraint) {
+    const validConstraints = [];
 
-      const parsedConstraint = {
-        id,
-        attachment: {
-          primary: attachmentConstraint[0],
-          secondary: attachmentConstraint[1],
-          string: constraint.attachment,
-        },
-        popover: {
-          primary: popoverConstraint[0],
-          secondary: popoverConstraint[1],
-          string: constraint.popover,
-        },
-      };
+    const attachmentConstraints = generatePossibleConstraintsFor(constraint.attachment);
+    const popoverConstraints = generatePossibleConstraintsFor(constraint.popover);
 
-      parsedConstraint.classes = generateClassesForConstraint(classPrefix, parsedConstraint);
-
-      return Object.assign({}, constraint, parsedConstraint);
+    popoverConstraints.forEach((attachment) => {
+      attachmentConstraints.forEach((popover) => {
+        validConstraints.push({ popover, attachment });
+      });
     });
+
+    validConstraints.forEach(validConstraint => this.addConstraint(validConstraint));
+  }
+
+  addConstraint(constraint) {
+    const classPrefix = this.options.classPrefix;
+    const attachmentConstraint = constraint.attachment.split(' ');
+    const popoverConstraint = constraint.popover.split(' ');
+
+    const parsedConstraint = {
+      id: this.constraints.length,
+      attachment: {
+        primary: attachmentConstraint[0],
+        secondary: attachmentConstraint[1],
+        string: constraint.attachment,
+      },
+      popover: {
+        primary: popoverConstraint[0],
+        secondary: popoverConstraint[1],
+        string: constraint.popover,
+      },
+    };
+
+    parsedConstraint.classes = generateClassesForConstraint(classPrefix, parsedConstraint);
+
+    this.constraints.push(Object.assign({}, constraint, parsedConstraint));
   }
 
   enable() {
@@ -287,7 +315,7 @@ class Positioner {
   }
 
   destroy() {
-    this.clearActiveConstraint();
+    // this.clearActiveConstraint();
     this.destroyListeners();
     this.destroyContainer();
   }
@@ -540,6 +568,7 @@ class Positioner {
   clearActiveConstraint() {
     if (!this.activeConstraint) { return; }
 
+    this.toggleActiveConstraints(false);
     this.activeConstraint = null;
   }
 
