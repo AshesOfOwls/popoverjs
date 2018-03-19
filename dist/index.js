@@ -2292,7 +2292,7 @@ var generatePossibleConstraintsFor = function generatePossibleConstraintsFor(sid
     case 'right':
       return [side + ' top', side + ' center', side + ' bottom'];
     default:
-      return [side.join(' ')];
+      return [side];
   }
 };
 
