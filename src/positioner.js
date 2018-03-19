@@ -60,10 +60,10 @@ const generatePossibleConstraintsFor = (side) => {
   switch (side) {
   case 'top':
   case 'bottom':
-    return [`${side} left`, `${side} center`, `${side} right`];
+    return [`${side} center`, `${side} left`, `${side} right`];
   case 'left':
   case 'right':
-    return [`${side} top`, `${side} center`, `${side} bottom`];
+    return [`${side} center`, `${side} top`, `${side} bottom`];
   default:
     return [side];
   }
