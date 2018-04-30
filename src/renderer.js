@@ -1,5 +1,5 @@
-import { oneEvent, toggleClassesOnElement, whichTransitionEvent, generateOptionClassnames } from './utils';
 import inside from 'point-in-polygon';
+import { getScrollParent, oneEvent, toggleClassesOnElement, whichTransitionEvent, generateOptionClassnames } from './utils';
 
 const defaults = {
   manualTriggering: false,
@@ -20,6 +20,7 @@ class Renderer {
     this.onToggleEnd = this.onToggleEnd.bind(this);
     this.onTriggerLeave = this.onTriggerLeave.bind(this);
     this.onDocumentMousemove = this.onDocumentMousemove.bind(this);
+    this.onDocumentScroll = this.onDocumentScroll.bind(this);
 
     this.cursorPosition = [0, 0];
 
@@ -128,11 +129,23 @@ class Renderer {
   }
 
   setupCursorTraceListening() {
+    const scrollParent = getScrollParent(this.triggerElement);
+
     document.addEventListener('mousemove', this.onDocumentMousemove);
+    scrollParent.addEventListener('scroll', this.onDocumentScroll);
   }
 
   destroyCursorTraceListening() {
+    const scrollParent = getScrollParent(this.triggerElement);
+
     document.removeEventListener('mousemove', this.onDocumentMousemove);
+    scrollParent.removeEventListener('scroll', this.onDocumentScroll);
+  }
+
+  onDocumentScroll(event) {
+    if (!this.isCursorWithinBoundaries()) {
+      this.shouldHide();
+    }
   }
 
   onDocumentMousemove(event) {

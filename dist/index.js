@@ -1726,11 +1726,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _utils = __webpack_require__(6);
-
 var _pointInPolygon = __webpack_require__(20);
 
 var _pointInPolygon2 = _interopRequireDefault(_pointInPolygon);
+
+var _utils = __webpack_require__(6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1757,6 +1757,7 @@ var Renderer = function () {
     this.onToggleEnd = this.onToggleEnd.bind(this);
     this.onTriggerLeave = this.onTriggerLeave.bind(this);
     this.onDocumentMousemove = this.onDocumentMousemove.bind(this);
+    this.onDocumentScroll = this.onDocumentScroll.bind(this);
 
     this.cursorPosition = [0, 0];
 
@@ -1881,12 +1882,25 @@ var Renderer = function () {
   }, {
     key: 'setupCursorTraceListening',
     value: function setupCursorTraceListening() {
+      var scrollParent = (0, _utils.getScrollParent)(this.triggerElement);
+
       document.addEventListener('mousemove', this.onDocumentMousemove);
+      scrollParent.addEventListener('scroll', this.onDocumentScroll);
     }
   }, {
     key: 'destroyCursorTraceListening',
     value: function destroyCursorTraceListening() {
+      var scrollParent = (0, _utils.getScrollParent)(this.triggerElement);
+
       document.removeEventListener('mousemove', this.onDocumentMousemove);
+      scrollParent.removeEventListener('scroll', this.onDocumentScroll);
+    }
+  }, {
+    key: 'onDocumentScroll',
+    value: function onDocumentScroll(event) {
+      if (!this.isCursorWithinBoundaries()) {
+        this.shouldHide();
+      }
     }
   }, {
     key: 'onDocumentMousemove',
