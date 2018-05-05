@@ -32,6 +32,10 @@ export default class Popover extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      popoverOpen: this.props.open,
+    };
+
     this.update = this.update.bind(this);
   }
 
@@ -40,7 +44,6 @@ export default class Popover extends Component {
     this.open = false;
     this.targetNode = findDOMNode(this);
     this.createPopover();
-    this.update();
   }
 
   componentDidUpdate() {
@@ -52,6 +55,22 @@ export default class Popover extends Component {
     this.destroy();
   }
 
+  onHideEvent() {
+    this.setState({ popoverOpen: false });
+
+    if (this.props.popoverOptions.onHideEvent) {
+      this.props.popoverOptions.onHideEvent();
+    }
+  }
+
+  onShowEvent() {
+    this.setState({ popoverOpen: true });
+
+    if (this.props.popoverOptions.onShowEvent) {
+      this.props.popoverOptions.onShowEvent();
+    }
+  }
+
   get popoverOptions() {
     const options = {
       attachmentElement: this.attachmentElement,
@@ -59,6 +78,8 @@ export default class Popover extends Component {
       popoverElement: this.popoverElement,
       ...this.props.popoverOptions,
       ...this.props.options,
+      onHideEvent: this.onHideEvent.bind(this),
+      onShowEvent: this.onShowEvent.bind(this),
     };
 
     if (this.props.themeClass) {
@@ -105,7 +126,7 @@ export default class Popover extends Component {
   }
 
   update() {
-    if (this.mounted && this.popoverjs) {
+    if (this.mounted && this.popoverjs && this.state.popoverOpen) {
       renderSubtreeIntoContainer(this, this.popoverChildNode, this.popoverContentElement, () => {
         this.updatePopover();
       });

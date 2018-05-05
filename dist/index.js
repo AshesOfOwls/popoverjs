@@ -4015,6 +4015,10 @@ var Popover = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (Popover.__proto__ || Object.getPrototypeOf(Popover)).call(this, props));
 
+    _this.state = {
+      popoverOpen: _this.props.open
+    };
+
     _this.update = _this.update.bind(_this);
     return _this;
   }
@@ -4026,7 +4030,6 @@ var Popover = function (_Component) {
       this.open = false;
       this.targetNode = (0, _reactDom.findDOMNode)(this);
       this.createPopover();
-      this.update();
     }
   }, {
     key: 'componentDidUpdate',
@@ -4040,11 +4043,29 @@ var Popover = function (_Component) {
       this.destroy();
     }
   }, {
+    key: 'onHideEvent',
+    value: function onHideEvent() {
+      this.setState({ popoverOpen: false });
+
+      if (this.props.popoverOptions.onHideEvent) {
+        this.props.popoverOptions.onHideEvent();
+      }
+    }
+  }, {
+    key: 'onShowEvent',
+    value: function onShowEvent() {
+      this.setState({ popoverOpen: true });
+
+      if (this.props.popoverOptions.onShowEvent) {
+        this.props.popoverOptions.onShowEvent();
+      }
+    }
+  }, {
     key: 'update',
     value: function update() {
       var _this2 = this;
 
-      if (this.mounted && this.popoverjs) {
+      if (this.mounted && this.popoverjs && this.state.popoverOpen) {
         (0, _reactDom.unstable_renderSubtreeIntoContainer)(this, this.popoverChildNode, this.popoverContentElement, function () {
           _this2.updatePopover();
         });
@@ -4110,7 +4131,10 @@ var Popover = function (_Component) {
         attachmentElement: this.attachmentElement,
         triggerElement: this.attachmentElement,
         popoverElement: this.popoverElement
-      }, this.props.popoverOptions, this.props.options);
+      }, this.props.popoverOptions, this.props.options, {
+        onHideEvent: this.onHideEvent.bind(this),
+        onShowEvent: this.onShowEvent.bind(this)
+      });
 
       if (this.props.themeClass) {
         var themeClass = this.props.themeClass;
