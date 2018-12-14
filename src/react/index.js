@@ -33,7 +33,7 @@ export default class Popover extends Component {
     super(props);
 
     this.state = {
-      popoverOpen: this.props.open,
+      popoverIsOpen: false,
     };
 
     this.update = this.update.bind(this);
@@ -56,7 +56,7 @@ export default class Popover extends Component {
   }
 
   onHideEvent() {
-    this.setState({ popoverOpen: false });
+    this.setState({ popoverIsOpen: false });
 
     if (this.props.popoverOptions.onHideEvent) {
       this.props.popoverOptions.onHideEvent();
@@ -64,7 +64,7 @@ export default class Popover extends Component {
   }
 
   onShowEvent() {
-    this.setState({ popoverOpen: true });
+    this.setState({ popoverIsOpen: true });
 
     if (this.props.popoverOptions.onShowEvent) {
       this.props.popoverOptions.onShowEvent();
@@ -114,7 +114,7 @@ export default class Popover extends Component {
   }
 
   get isWithoutTrigger() {
-    return !Boolean(this.props.children[1]);
+    return !this.props.children[1];
   }
 
   get popoverElementNode() {
@@ -126,7 +126,7 @@ export default class Popover extends Component {
   }
 
   update() {
-    if (this.mounted && this.popoverjs && this.state.popoverOpen) {
+    if (this.mounted && this.popoverjs) {
       renderSubtreeIntoContainer(this, this.popoverChildNode, this.popoverContentElement, () => {
         this.updatePopover();
       });
@@ -148,11 +148,15 @@ export default class Popover extends Component {
     }
 
     if (this.props.open !== this.open) {
-      this.open = this.props.open;
-      this.popoverjs.toggle(this.open);
+      this.togglePopover(this.props.open);
     } else if (this.props.open) {
       this.popoverjs.update();
     }
+  }
+
+  togglePopover(isOpen) {
+    this.open = isOpen;
+    this.popoverjs.toggle(isOpen);
   }
 
   createPopover() {
@@ -161,12 +165,15 @@ export default class Popover extends Component {
       this.popoverContentElement = element.children[1];
       if (this.props.disabled) { return; }
       this.popoverjs = new Popoverjs(this.popoverOptions);
+
+      this.togglePopover(this.props.open);
+      this.update();
     }
   }
 
   render() {
     return (
-      <div className={classnames("popoverjs--wrapper", { "popoverjs--expanded-wrapper": this.isWithoutTrigger })}>
+      <div className={classnames('popoverjs--wrapper', { 'popoverjs--expanded-wrapper': this.isWithoutTrigger })}>
         { this.triggerContent }
 
         <div className="popoverjs">
