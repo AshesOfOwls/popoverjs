@@ -5,6 +5,13 @@
   $arrow_middle: $arrow / 2;
   $content_offset: $arrow_middle + $content_offset;
 
+
+  // Conver to pixels
+  $arrow: $arrow + 0px;
+  $content_offset: $arrow + 0px;
+  $arrow_offset: $arrow + 0px;
+  $attachment_margin: $arrow + 0px;
+
   @include popoverjs-arrows($arrow, $arrow_middle);
   @include popoverjs-positioning($attachment_margin, $arrow_offset, $content_offset, $arrow_middle);
 }
