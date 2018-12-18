@@ -37,9 +37,22 @@ const setHalfPointsOnOrigin = (origin) => {
   });
 };
 
+const getWindow = () => {
+  if (typeof window) {
+    return window;
+  }
+
+  return {
+    innerHeight: 0,
+    innerWidth: 0,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+  };
+};
+
 const getWindowOrigin = () => {
-  const height = window.innerHeight;
-  const width = window.innerWidth;
+  const height = getWindow().innerHeight;
+  const width = getWindow().innerWidth;
 
   const origin = {
     bottom: height,
@@ -164,4 +177,5 @@ export {
   getScrollParent,
   toggleClassesOnElement,
   generateOptionClassnames,
+  getWindow,
 };

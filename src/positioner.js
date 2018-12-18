@@ -1,5 +1,5 @@
 import documentOffset from 'document-offset';
-import { toggleClassesOnElement, getScrollParent, getElementOrigin, getWindowOrigin, throttle, generateOptionClassnames } from './utils';
+import { getWindow, toggleClassesOnElement, getScrollParent, getElementOrigin, getWindowOrigin, throttle, generateOptionClassnames } from './utils';
 
 const sides = ['top', 'bottom', 'left', 'right', 'center', 'middle'];
 const sidesReversed = ['bottom', 'top', 'right', 'left', 'center', 'middle'];
@@ -158,7 +158,7 @@ class Positioner {
   }
 
   cacheCssOffsets() {
-    const bodyStyle = window.getComputedStyle(document.body);
+    const bodyStyle = getWindow().getComputedStyle(document.body);
 
     this.toggleSizerClasses(true);
 
@@ -292,12 +292,12 @@ class Positioner {
 
   listenForResize() {
     if (!this.options.resizePositioning) { return; }
-    window.addEventListener('resize', this.onDomEvent);
+    getWindow().addEventListener('resize', this.onDomEvent);
   }
 
   listenForScroll() {
     if (!this.options.scrollPositioning) { return; }
-    window.addEventListener('scroll', this.onDomEvent);
+    getWindow().addEventListener('scroll', this.onDomEvent);
 
     this.scrollParent = this.getScrollParent();
     if (this.scrollParent) {
@@ -306,8 +306,8 @@ class Positioner {
   }
 
   destroyListeners() {
-    window.removeEventListener('resize', this.onDomEvent);
-    window.removeEventListener('scroll', this.onDomEvent);
+    getWindow().removeEventListener('resize', this.onDomEvent);
+    getWindow().removeEventListener('scroll', this.onDomEvent);
 
     if (this.scrollParent) {
       this.scrollParent.removeEventListener('scroll', this.onDomEvent);

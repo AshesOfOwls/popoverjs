@@ -3,7 +3,7 @@ import './polyfills';
 import Renderer from './renderer';
 import Positioner from './positioner';
 
-import { error, generateOptionClassnames } from './utils';
+import { error, generateOptionClassnames, getWindow } from './utils';
 
 import './styles/_main.scss';
 
@@ -141,6 +141,6 @@ class Popoverjs {
   }
 }
 
-window.Popoverjs = Popoverjs;
+getWindow().Popoverjs = Popoverjs;
 
 export default Popoverjs;
